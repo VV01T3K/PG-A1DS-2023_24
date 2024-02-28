@@ -14,7 +14,6 @@ enum Operator {
     MULTIPLY = '*',
     DIVIDE = '/',
 };
-const char operators[] = "+-*/";
 
 int resloveIntCalculation(char operator, int a, int b) {
     switch (operator) {
@@ -33,6 +32,7 @@ int resloveIntCalculation(char operator, int a, int b) {
 
 int calculate(char* input) {
     Stack* stack = createStack();
+    const char operators[] = "+-*/";
 
     int i = 0;
 

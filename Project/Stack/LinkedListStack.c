@@ -10,10 +10,10 @@ Stack *createStack() {
 }
 
 void push(Stack *stack, int newData) {
-    Node *node = (Node *)malloc(sizeof(Node));
-    node->data = newData;
-    node->next = stack->top;
-    stack->top = node;
+    Node *new_node = (Node *)malloc(sizeof(Node));
+    new_node->data = newData;
+    new_node->next = stack->top;
+    stack->top = new_node;
     stack->size++;
 }
 
@@ -23,13 +23,13 @@ int isStackEmpty(Stack *stack) {
 }
 
 int pop(Stack *stack) {
-    Node *node = stack->top;
     if (isStackEmpty(stack)) return -1;
-    int data = node->data;
-    stack->top = node->next;
-    free(node);
+    Node *top_node = stack->top;
+    const int data_tmp = top_node->data;
+    stack->top = top_node->next;
+    free(top_node);
     stack->size--;
-    return data;
+    return data_tmp;
 }
 
 void clearStack(Stack *stack) {
@@ -52,9 +52,9 @@ int getTop(Stack *stack) {
 
 int get(Stack *stack, int index) {
     if (index < 0 || index >= stack->size) return -1;
-    Node *node = stack->top;
+    const Node *top_node = stack->top;
     for (int i = 0; i < index; i++) {
-        node = node->next;
+        top_node = top_node->next;
     }
-    return node->data;
+    return top_node->data;
 }
