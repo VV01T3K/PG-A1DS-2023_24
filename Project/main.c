@@ -1,16 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-#include "Stack/LinkedListStack.h"
+#include "Calc/ONPcalc.h"
 
 int main() {
-    Stack *myStack = createStack();
-    push(myStack, 1);
-    push(myStack, 2);
-    push(myStack, 3);
-    printf("%d\n", pop(myStack));
-    printf("%d\n", pop(myStack));
-    printf("%d\n", pop(myStack));
-    deleteStack(myStack);
+    char* input = "3 4 + 5 *";  // (3 + 4) * 5 = 35
+
+    printf("Result: %d\n", calculate(input));
+
     return 0;
 }

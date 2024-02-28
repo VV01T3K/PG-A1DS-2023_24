@@ -2,14 +2,14 @@
 #ifndef LinkedListStack_H
 #define LinkedListStack_H
 
-typedef struct {
+typedef struct Node {
     int data;
     struct Node *next;
 } Node;
 
 typedef struct Stack {
     int size;
-    struct node *top;
+    Node *top;
 } Stack;
 
 Stack *createStack();
@@ -21,5 +21,11 @@ int pop(Stack *stack);
 void deleteStack(Stack *stack);
 
 void clearStack(Stack *stack);
+
+int isStackEmpty(Stack *stack);
+
+int getTop(Stack *stack);
+
+int get(Stack *stack, int index);
 
 #endif  // LinkedListStack_H
