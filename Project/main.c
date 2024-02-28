@@ -1,10 +1,16 @@
-// Project/main.c
 #include <stdio.h>
+#include <stdlib.h>
 
-#include "Stack/test.h"  // adjust the path as needed
+#include "Stack/LinkedListStack.h"
 
 int main() {
-    int result = add(5, 7);
-    printf("The result is %d\n", result);
+    Stack *myStack = createStack();
+    push(myStack, 1);
+    push(myStack, 2);
+    push(myStack, 3);
+    printf("%d\n", pop(myStack));
+    printf("%d\n", pop(myStack));
+    printf("%d\n", pop(myStack));
+    deleteStack(myStack);
     return 0;
 }
