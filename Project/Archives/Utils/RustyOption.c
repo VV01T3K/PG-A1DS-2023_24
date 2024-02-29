@@ -1,5 +1,8 @@
 #include "RustyOption.h"
 
+#include <stdbool.h>
+#include <stdio.h>
+
 // ----------------- Option_INT -----------------
 
 Option_INT Some_INT(int value) {
@@ -39,11 +42,6 @@ Option_INT map_INT(Option_INT option, int (*func)(int)) {
 
 // ----------------- Option_FLOAT -----------------
 
-typedef struct {
-    bool has_value;
-    float value;
-} Option_FLOAT;
-
 Option_FLOAT Some_FLOAT(float value) {
     Option_FLOAT option;
     option.has_value = true;
@@ -69,10 +67,6 @@ Option_FLOAT map_FLOAT(Option_FLOAT option, float (*func)(float)) {
 }
 
 // ----------------- Option_STRING -----------------
-typedef struct {
-    bool has_value;
-    char* value;
-} Option_STRING;
 
 Option_STRING Some_STRING(char* value) {
     Option_STRING option;

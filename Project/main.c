@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "Calc/ONPcalc.h"
+#include "ONPcalc.h"
 
 int main() {
     char* input = "3 4 + 5 *";  // (3 + 4) * 5 = 35

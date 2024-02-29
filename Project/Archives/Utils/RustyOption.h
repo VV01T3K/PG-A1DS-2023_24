@@ -4,7 +4,6 @@
 #define OPTION_H
 
 #include <stdbool.h>
-#include <stdio.h>
 
 // ----------------- Option_INT -----------------
 typedef struct {

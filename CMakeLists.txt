@@ -8,4 +8,6 @@ file(GLOB_RECURSE SOURCES
         "Project/*.c"
 )
 
+list(FILTER SOURCES EXCLUDE REGEX "Project/Archives/.*")
+
 add_executable(AISD ${SOURCES})

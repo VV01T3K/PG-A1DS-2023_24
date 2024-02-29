@@ -1,12 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "FixedSizeArrayStack.h"
 
 #define MAX_STACK_SIZE 100
-
-typedef struct {
-    int elements[MAX_STACK_SIZE];
-    int top;
-} Stack;
 
 void clearStack(Stack *stack) { stack->top = -1; }
 
@@ -32,9 +26,6 @@ int pop(Stack *stack) {
     }
     return stack->elements[stack->top--];
 }
-
-// for dynamic stack???
-// void deleteStack(Stack *stack) { free(stack); }
 
 int getTop(Stack *stack) {
     if (isStackEmpty(stack)) return -1;
