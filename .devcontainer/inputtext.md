@@ -1,0 +1,1 @@
+/workspaces/OOP-PG-2024/build/OOP < ../Project/input.txt

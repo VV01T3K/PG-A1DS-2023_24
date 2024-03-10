@@ -15,7 +15,8 @@
 				"eamodio.gitlens",
 				"ms-vscode.hexeditor",
 				"mintlify.document",
-				"adpyke.codesnap"
+				"adpyke.codesnap",
+				"aaron-bond.better-comments"
 			]
 		}
 	}
