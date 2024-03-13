@@ -24,7 +24,7 @@ class ONPcalc {
      * @return The `calculate` method does not return any value. It performs
      * calculations on the input stack and outputs the result to the console.
      * The final result of the calculations is printed to the console using
-     * `std::cout` at the end of the method.
+     * `printf` at the end of the method.
      */
     void calculate(Stack<Token>& stack);
 };

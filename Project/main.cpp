@@ -14,11 +14,11 @@ int main() {
 
     for (int i = 0; i < n; i++) {
         converter.convertOneFormula();
-        stack.print("  ");
+        stack.specialprint("  ");
 
         ONPcalc calc;
         calc.calculate(stack);
-        cout << endl;
+        printf("\n");
     }
 
     return 0;

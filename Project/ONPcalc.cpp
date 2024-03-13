@@ -14,7 +14,7 @@
  *
  * @return The `calculate` method does not return any value. It performs
  * calculations on the input stack and outputs the result to the console. The
- * final result of the calculations is printed to the console using `std::cout`
+ * final result of the calculations is printed to the console using `printf`
  * at the end of the method.
  */
 void ONPcalc::calculate(Stack<Token>& stack) {
@@ -24,8 +24,11 @@ void ONPcalc::calculate(Stack<Token>& stack) {
             tmp_stack.push(token.value);
         } else {
             int a, b, c;
-            if (!tmp_stack.isEmpty())
-                std::cout << token << ' ' << tmp_stack << std::endl;
+            if (!tmp_stack.isEmpty()) {
+                token.print();
+                printf(" ");
+                tmp_stack.print(" ");
+            }
             switch (token.value) {
                 case ADD:
                     a = tmp_stack.pop();
@@ -46,7 +49,7 @@ void ONPcalc::calculate(Stack<Token>& stack) {
                     a = tmp_stack.pop();
                     b = tmp_stack.pop();
                     if (a == 0) {
-                        std::cout << "ERROR" << std::endl;
+                        printf("ERROR\n");
                         tmp_stack.clear();
                         stack.clear();
                         return;
@@ -64,11 +67,6 @@ void ONPcalc::calculate(Stack<Token>& stack) {
                     tmp_stack.push(-a);
                     break;
                 case MAX:
-                    if (token.arg_count == 0) break;
-                    if (tmp_stack.isEmpty()) {
-                        throw std::invalid_argument("somthing no bueno");
-                        break;
-                    }
                     if (token.arg_count == 1) {
                         tmp_stack.push(tmp_stack.pop());
                         break;
@@ -80,11 +78,6 @@ void ONPcalc::calculate(Stack<Token>& stack) {
                     }
                     break;
                 case MIN:
-                    if (token.arg_count == 0) break;
-                    if (tmp_stack.isEmpty()) {
-                        throw std::invalid_argument("somthing no bueno");
-                        break;
-                    }
                     if (token.arg_count == 1) {
                         tmp_stack.push(tmp_stack.pop());
                         break;
@@ -100,5 +93,5 @@ void ONPcalc::calculate(Stack<Token>& stack) {
             }
         }
     }
-    std::cout << tmp_stack.pop() << std::endl;
+    printf("%d\n", tmp_stack.pop());
 };

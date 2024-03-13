@@ -82,7 +82,6 @@ void DoublyLinkedList<T>::insertAtEnd(T data) {
 
 template <typename T>
 T DoublyLinkedList<T>::removeAtBeginning() {
-    if (isEmpty()) throw std::out_of_range("List is empty");
     Node<T> *tmp = head;
     T data = tmp->data;
     head = head->next;
@@ -93,7 +92,6 @@ T DoublyLinkedList<T>::removeAtBeginning() {
 
 template <typename T>
 T DoublyLinkedList<T>::removeAtEnd() {
-    if (isEmpty()) throw std::out_of_range("List is empty");
     Node<T> *tmp = tail;
     T data = tmp->data;
     tail = tail->prev;
@@ -104,7 +102,6 @@ T DoublyLinkedList<T>::removeAtEnd() {
 
 template <typename T>
 void DoublyLinkedList<T>::insertAtPos(size_t pos, T data) {
-    if (pos > getSize()) throw std::out_of_range("Index is out of range");
     Node<T> *newNode = new Node<T>(data);
     if (isEmpty()) {
         head = tail = newNode;
@@ -132,9 +129,6 @@ void DoublyLinkedList<T>::insertAtPos(size_t pos, T data) {
 
 template <typename T>
 T DoublyLinkedList<T>::removeAtPos(size_t pos) {
-    if (isEmpty()) throw std::out_of_range("List is empty");
-    if (pos >= getSize()) throw std::out_of_range("Index is out of range");
-
     Node<T> *tmp;
     T data;
     if (pos == 0) {
@@ -160,7 +154,6 @@ T DoublyLinkedList<T>::removeAtPos(size_t pos) {
 
 template <typename T>
 void DoublyLinkedList<T>::print(const char *separator) const {
-    if (isEmpty()) fprintf(stderr, "List is empty (print)\n");
     Node<T> *tmp = getHead();
     while (tmp != nullptr) {
         printf("%d", tmp->data);
@@ -174,7 +167,6 @@ void DoublyLinkedList<T>::print(const char *separator) const {
 
 template <typename T>
 std::ostream &operator<<(std::ostream &out, const DoublyLinkedList<T> &list) {
-    if (list.isEmpty()) std::cerr << "List is empty (<<)";
     Node<T> *tmp = list.getHead();
     while (tmp != nullptr) {
         out << tmp->data;
@@ -198,8 +190,6 @@ bool DoublyLinkedList<T>::isEmpty() const {
 
 template <typename T>
 T &DoublyLinkedList<T>::getAtPos(size_t pos) {
-    if (isEmpty()) throw std::out_of_range("List is empty");
-    if (pos >= getSize()) throw std::out_of_range("Index is out of range");
     Node<T> *tmp = head;
     for (size_t i = 0; i < pos; i++) tmp = tmp->next;
     return tmp->data;
@@ -207,13 +197,11 @@ T &DoublyLinkedList<T>::getAtPos(size_t pos) {
 
 template <typename T>
 T &DoublyLinkedList<T>::getAtBeginning() {
-    if (isEmpty()) throw std::out_of_range("List is empty");
     return head->data;
 };
 
 template <typename T>
 T &DoublyLinkedList<T>::getAtEnd() {
-    if (isEmpty()) throw std::out_of_range("List is empty");
     return tail->data;
 };
 

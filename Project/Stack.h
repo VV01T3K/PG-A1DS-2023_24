@@ -20,6 +20,7 @@ class Stack {
     ~Stack();
     void push(T data);
     void print(const char *separator) const;
+    void specialprint(const char *separator) const;
     T pop();
     T &peek() {
         if (isEmpty()) throw std::out_of_range("Stack is empty");
@@ -35,6 +36,19 @@ class Stack {
 template <typename T>
 void Stack<T>::print(const char *separator) const {
     list.print(separator);
+};
+
+template <typename T>
+void Stack<T>::specialprint(const char *separator) const {
+    Node<T> *tmp = list.getHead();
+    while (tmp != nullptr) {
+        tmp->data.print();
+        if (tmp->next != nullptr) {
+            printf("%s", separator);
+        }
+        tmp = tmp->next;
+    }
+    printf("\n");
 };
 
 template <typename T>

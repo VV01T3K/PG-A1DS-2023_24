@@ -37,10 +37,6 @@ void Converter::convertOneFormula() {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET) {
                 output.insertAtEnd(stack.pop());
             }
-            if (stack.isEmpty()) {
-                cerr << "Error: Unmatched parenthesis" << endl;
-                return;
-            }
             stack.pop();
             if (!stack.isEmpty() && stack.peek().type == FUNCTION) {
                 output.insertAtEnd(stack.pop());

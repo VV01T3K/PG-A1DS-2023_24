@@ -79,4 +79,5 @@ class Token {
      * returns 0.
      */
     int getPrecedence() const;
+    void print() const;
 };
