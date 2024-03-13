@@ -27,7 +27,7 @@ void ONPcalc::calculate(Stack<Token>& stack) {
             if (!tmp_stack.isEmpty()) {
                 token.print();
                 printf(" ");
-                tmp_stack.print(" ");
+                tmp_stack.printINT(" ");
             }
             switch (token.value) {
                 case ADD:

@@ -30,7 +30,7 @@ class Converter {
      *
      * @param stack A reference to a `Stack` of `Token` objects.
      */
-    Converter(Stack<Token>& stack) : stack(stack){};
+    explicit Converter(Stack<Token>& stack) : stack(stack){};
 
     // The `Converter` destructor.
     ~Converter(){};

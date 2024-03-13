@@ -19,7 +19,7 @@ class Stack {
     Stack();
     ~Stack();
     void push(T data);
-    void print(const char *separator) const;
+    void printINT(const char *separator) const;
     void specialprint(const char *separator) const;
     T pop();
     T &peek() {
@@ -34,8 +34,14 @@ class Stack {
 };
 
 template <typename T>
-void Stack<T>::print(const char *separator) const {
-    list.print(separator);
+void Stack<T>::printINT(const char *separator) const {
+    Node<T> *tmp = list.getHead();
+    while (tmp != nullptr) {
+        printf("%d", (int)tmp->data);
+        if (tmp->next != nullptr) printf("%s", separator);
+        tmp = tmp->next;
+    }
+    printf("\n");
 };
 
 template <typename T>

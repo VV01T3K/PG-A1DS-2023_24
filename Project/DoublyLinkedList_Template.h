@@ -37,7 +37,6 @@ class DoublyLinkedList {
     T &getAtBeginning();
     T &getAtEnd();
     void clear();
-    void print(const char *separator) const;
     template <typename T2>
     friend std::ostream &operator<<(std::ostream &out,
                                     const DoublyLinkedList<T2> &list);
@@ -45,7 +44,7 @@ class DoublyLinkedList {
 
 template <typename T>
 DoublyLinkedList<T>::DoublyLinkedList()
-    : size(0), head(nullptr), tail(nullptr) {}
+    : head(nullptr), tail(nullptr), size(0) {}
 
 template <typename T>
 DoublyLinkedList<T>::~DoublyLinkedList() {
@@ -150,19 +149,6 @@ T DoublyLinkedList<T>::removeAtPos(size_t pos) {
         size--;
     }
     return data;
-};
-
-template <typename T>
-void DoublyLinkedList<T>::print(const char *separator) const {
-    Node<T> *tmp = getHead();
-    while (tmp != nullptr) {
-        printf("%d", tmp->data);
-        if (tmp->next != nullptr) {
-            printf("%s", separator);
-        }
-        tmp = tmp->next;
-    }
-    printf("\n");
 };
 
 template <typename T>
