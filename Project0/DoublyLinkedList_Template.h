@@ -160,16 +160,16 @@ T DoublyLinkedList<T>::removeAtPos(size_t pos) {
 
 template <typename T>
 void DoublyLinkedList<T>::print(const char *separator) const {
-    if (isEmpty()) fprintf(stderr, "List is empty (print)\n");
+    if (isEmpty()) std::cerr << "List is empty (print)" << std::endl;
     Node<T> *tmp = getHead();
     while (tmp != nullptr) {
-        printf("%d", tmp->data);
+        std::cout << tmp->data;
         if (tmp->next != nullptr) {
-            printf("%s", separator);
+            std::cout << separator;
         }
         tmp = tmp->next;
     }
-    printf("\n");
+    std::cout << std::endl;
 };
 
 template <typename T>

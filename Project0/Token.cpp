@@ -2,17 +2,6 @@
 
 #include <iostream>
 
-#include "ONPcalc.h"
-
-/**
- * The function `getPrecedence` returns the precedence level of an operator
- * token.
- *
- * @return The `getPrecedence` function returns an integer value representing
- * the precedence of the token. If the token type is an operator, it checks the
- * value of the operator and returns a precedence value based on the operator
- * type. If the token is not an operator, it returns 0.
- */
 int Token::getPrecedence() const {
     if (type == OPERATOR) {
         switch (value) {
@@ -35,14 +24,6 @@ int Token::getPrecedence() const {
 }
 
 // Translaiting to token
-/**
- * The Token constructor parses a given string to determine the type and value
- * of the token.
- *
- * @param string The constructor checks the first character of the `string`
- * to determine the type of the token (whether it's a number or an
- * operator/function).
- */
 Token::Token(const char* string) {
     if (isdigit(string[0])) {
         type = Type::NUMBER;
@@ -82,13 +63,6 @@ Token::Token(const char* string) {
 };
 
 // Przeciążenie operatora << dla klasy Token
-/**
- * The function overloads the << operator to output a Token object based on its
- * type and value.
- *
- * @return The overloaded << operator function is returning a reference to the
- * std::ostream object 'out'.
- */
 std::ostream& operator<<(std::ostream& out, const Token& token) {
     if (token.type == NUMBER) {
         out << token.value;
