@@ -4,7 +4,7 @@
         {
             "label": "build and run with input.txt",
             "type": "shell",
-            "command": "cppcheck --enable=all --template=\"> {file}:{line}\n-> {message}\n\" main.cpp &> warnings.txt && g++ -o code main.cpp && ./code < input.txt > output.txt && diff output.txt win.txt",
+            "command": "cppcheck --enable=all --template=\"> {file}:{line}\n-> {message}\n\" main.cpp &> warnings.txt && g++ -o code main.cpp && ./code < input.txt > output.txt && cat output.txt",
             "group": "build"
         },
         {
