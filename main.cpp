@@ -111,9 +111,12 @@ int main() {
                 break;
         }
     }
-    if (stack.count > 0)
+    if (stack.count > 0) {
         cout << "error:" << znak_nr + 2 << ": expected statement before '"
              << getznak(stack.peek()) << "' token\n";
-    else if (!stack.overflow && !stop)
+        // cout << "error:" << znak_nr << ": expected '" <<
+        // getznak(stack.peek())
+        //      << "' before end of file\n";
+    } else if (!stack.overflow && !stop)
         cout << "ok\n";
 }
