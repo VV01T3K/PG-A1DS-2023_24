@@ -1,8 +1,5 @@
 #pragma once
-#include <cstddef>
-#include <iostream>
-#include <stdexcept>
-#include <utility>
+#include <cstdio>
 
 template <typename T, template <typename...> class Container>
 class Stack {
@@ -11,14 +8,8 @@ class Stack {
 
    public:
     void push(const T& value) { container.push_front(value); }
-    T pop() {
-        if (container.isEmpty()) throw std::out_of_range("Stack is empty");
-        return container.pop_front();
-    }
-    T& peek() {
-        if (container.isEmpty()) throw std::out_of_range("Stack is empty");
-        return container.front();
-    }
+    T pop() { return container.pop_front(); }
+    T& peek() { return container.front(); }
 
     void clear() { container.clear(); }
 

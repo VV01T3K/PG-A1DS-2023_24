@@ -1,8 +1,5 @@
 #pragma once
-#include <cstddef>
-#include <iostream>
-#include <stdexcept>
-#include <utility>
+#include <cstdio>
 
 template <typename T, template <typename...> class Container>
 class Queue {
@@ -11,21 +8,12 @@ class Queue {
 
    public:
     void put(const T& value) { container.push_back(value); }
-    T get() {
-        if (container.isEmpty()) throw std::out_of_range("Queue is empty");
-        return container.pop_front();
-    }
+    T get() { return container.pop_front(); }
 
     void clear() { container.clear(); }
 
-    T& front() {
-        if (container.isEmpty()) throw std::out_of_range("Queue is empty");
-        return container.front();
-    }
-    T& back() {
-        if (container.isEmpty()) throw std::out_of_range("Queue is empty");
-        return container.back();
-    }
+    T& front() { return container.front(); }
+    T& back() { return container.back(); }
 
     bool isEmpty() const { return container.isEmpty(); }
     size_t getSize() const { return container.getSize(); }

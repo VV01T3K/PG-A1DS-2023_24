@@ -1,6 +1,8 @@
 #include "Token.h"
 
-#include <iostream>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 /**
  * The function `getPrecedence` returns the precedence level of an operator

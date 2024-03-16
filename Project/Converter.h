@@ -1,15 +1,12 @@
 #pragma once
 
-#include <cstring>
-#include <iostream>
+#include <cstdio>
 
 #include "ForwardList.h"
 #include "ONPcalc.h"
 #include "Queue.h"
 #include "Stack.h"
 #include "Token.h"
-
-using namespace std;
 
 #define MAX_STR_LENGTH 15
 

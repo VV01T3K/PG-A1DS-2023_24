@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <cstdio>
 
 #include "ForwardList.h"
 #include "Stack.h"
@@ -11,7 +11,7 @@
  */
 class ONPcalc {
    private:
-    Stack<int, ForwardList> calc_stack;
+    Stack<int, ForwardList> int_stack;
 
    public:
     /**

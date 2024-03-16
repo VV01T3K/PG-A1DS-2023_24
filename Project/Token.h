@@ -1,5 +1,7 @@
 #pragma once
-#include <iostream>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 enum Operands : char {
     ADD = '+',

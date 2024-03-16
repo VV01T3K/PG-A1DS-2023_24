@@ -1,7 +1,6 @@
 #pragma once
-#include <cstddef>
+#include <cstdio>
 #include <initializer_list>
-#include <iostream>
 #include <utility>
 
 template <typename T>
@@ -45,9 +44,6 @@ class ForwardList {
     void print(const char* seperator = ">") const;
     void printInt(const char* seperator = " ") const;
     void printToken(const char* seperator = " ") const;
-    template <typename U>
-    friend std::ostream& operator<<(std::ostream& out,
-                                    const ForwardList<U>& list);
     void clear();
     void swap(ForwardList& other);
     T& front() { return head->data; };
@@ -176,20 +172,6 @@ void ForwardList<T>::printToken(const char* seperator) const {
         current = current->next;
     }
     printf("\n");
-};
-
-template <typename T>
-std::ostream& operator<<(std::ostream& out, const ForwardList<T>& list) {
-    if (list.isEmpty()) {
-        out << "EmptyList";
-    } else {
-        typename ForwardList<T>::Node* current = list.head;
-        while (current != nullptr) {
-            out << current->data << " ";
-            current = current->next;
-        }
-    }
-    return out;
 };
 
 template <typename T>
