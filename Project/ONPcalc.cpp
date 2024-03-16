@@ -19,7 +19,7 @@
  * final result of the calculations is printed to the console using `std::cout`
  * at the end of the method.
  */
-void ONPcalc::calculate(Stack<Token, ForwardList>& stack) {
+void ONPcalc::calculate() {
     while (!stack.isEmpty()) {
         Token token = stack.pop();
         if (token.type == Type::NUMBER) {
@@ -28,8 +28,7 @@ void ONPcalc::calculate(Stack<Token, ForwardList>& stack) {
             int a, b, c;
             if (!int_stack.isEmpty()) {
                 token.print();
-                printf(" ");
-                int_stack.printInt(" ");
+                int_stack.printInt();
             }
             switch (token.value) {
                 case ADD:

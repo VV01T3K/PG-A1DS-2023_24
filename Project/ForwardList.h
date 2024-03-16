@@ -42,8 +42,8 @@ class ForwardList {
     T& operator[](std::size_t index);
     const T& operator[](std::size_t index) const;
     void print(const char* seperator = ">") const;
-    void printInt(const char* seperator = " ") const;
-    void printToken(const char* seperator = " ") const;
+    void printInt() const;
+    void printToken() const;
     void clear();
     void swap(ForwardList& other);
     T& front() { return head->data; };
@@ -153,22 +153,28 @@ const T& ForwardList<T>::operator[](size_t index) const {
 };
 
 template <typename T>
-void ForwardList<T>::printInt(const char* seperator) const {
+void ForwardList<T>::printInt() const {
     Node* current = head;
+    if (current != nullptr) {
+        printf("%d", current->data);
+        current = current->next;
+    }
     while (current != nullptr) {
-        printf("%d", (int)current->data);
-        if (current->next != nullptr) printf("%s", seperator);
+        printf(" %d", current->data);
         current = current->next;
     }
     printf("\n");
 };
 
 template <typename T>
-void ForwardList<T>::printToken(const char* seperator) const {
+void ForwardList<T>::printToken() const {
     Node* current = head;
+    if (current != nullptr) {
+        current->data.print();
+        current = current->next;
+    }
     while (current != nullptr) {
         current->data.print();
-        if (current->next != nullptr) printf("%s", seperator);
         current = current->next;
     }
     printf("\n");

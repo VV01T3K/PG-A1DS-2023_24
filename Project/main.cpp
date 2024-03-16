@@ -7,16 +7,16 @@ using namespace std;
 
 int main() {
     Stack<Token, ForwardList> stack;
+    Converter converter(stack);
+    ONPcalc calculator(stack);
 
     int n;
     scanf("%d", &n);
-    Converter converter(stack);
 
     for (int i = 0; i < n; i++) {
         converter.convertOneFormula();
-        stack.printToken("  ");
-        ONPcalc calc;
-        calc.calculate(stack);
+        stack.printToken();
+        calculator.calculate();
     }
 
     return 0;

@@ -13,13 +13,9 @@ class Stack {
 
     void clear() { container.clear(); }
 
-    void printInt(const char* seperator = " ") const {
-        container.printInt(seperator);
-    }
+    void printInt() const { container.printInt(); }
 
-    void printToken(const char* seperator = " ") const {
-        container.printToken(seperator);
-    }
+    void printToken() const { container.printToken(); }
 
     bool isEmpty() const { return container.isEmpty(); }
     size_t getSize() const { return container.getSize(); }

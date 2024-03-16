@@ -11,9 +11,11 @@
  */
 class ONPcalc {
    private:
+    Stack<Token, ForwardList>& stack;
     Stack<int, ForwardList> int_stack;
 
    public:
+    explicit ONPcalc(Stack<Token, ForwardList>& stack) : stack(stack){};
     /**
      * The function `calculate` processes a stack of tokens representing a
      * Reverse Polish Notation expression and performs arithmetic operations
@@ -27,5 +29,5 @@ class ONPcalc {
      * The final result of the calculations is printed to the console using
      * `std::cout` at the end of the method.
      */
-    void calculate(Stack<Token, ForwardList>& stack);
+    void calculate();
 };

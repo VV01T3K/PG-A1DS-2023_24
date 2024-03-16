@@ -83,23 +83,23 @@ Token::Token(const char* string) {
 
 void Token::print() const {
     if (type == NUMBER) {
-        printf("%d", value);
+        printf("%d ", value);
     } else {
         switch (value) {
             case IF:
-                printf("IF");
+                printf("IF ");
                 break;
             case NOT:
-                printf("N");
+                printf("N ");
                 break;
             case MAX:
-                printf("MAX%d", arg_count);
+                printf("MAX%d ", arg_count);
                 break;
             case MIN:
-                printf("MIN%d", arg_count);
+                printf("MIN%d ", arg_count);
                 break;
             default:
-                printf("%c", (char)value);
+                printf("%c ", (char)value);
                 break;
         }
     }
