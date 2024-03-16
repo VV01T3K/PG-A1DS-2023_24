@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#define MAX_STR_LENGTH 20
+#define MAX_STR_LENGTH 15
 
 /**
  * The `Converter` class is defined with three private member variables:

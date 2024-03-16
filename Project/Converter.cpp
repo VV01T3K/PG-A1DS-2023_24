@@ -18,7 +18,7 @@
  */
 void Converter::convertOneFormula() {
     char str[MAX_STR_LENGTH];
-    while (cin >> str) {
+    while (scanf("%s", str) != EOF) {
         if (str[0] == '.') break;
         Token token(str);
         if (token.type == NUMBER) {
