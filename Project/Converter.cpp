@@ -8,7 +8,16 @@
 #include "Stack.h"
 #include "Token.h"
 
-#define MAX_TOKEN_LENGTH 12
+#define MAX_TOKEN_LENGTH 15
+
+void Converter::readToken(char* str) {
+    int i = 0;
+    char c = '\0';
+    while (c != ' ' && c != '\n') {
+        str[i++] = c = (char)getc(stdin);
+    }
+    str[i - 1] = '\0';
+}
 
 /**
  * The function `convertOneFormula` reads input tokens and converts them into
@@ -20,7 +29,9 @@
  */
 void Converter::convertOneFormula() {
     char str[MAX_TOKEN_LENGTH];
-    while (scanf("%s", str)) {
+
+    while (true) {
+        readToken(str);
         if (str[0] == '.') break;
         Token token(str);
         if (token.type == NUMBER) {
@@ -57,6 +68,7 @@ void Converter::convertOneFormula() {
             output.back().arg_count = arg_counts.pop();
         }
     }
+    getchar();
     while (!stack.isEmpty()) {
         output.put(stack.pop());
     }

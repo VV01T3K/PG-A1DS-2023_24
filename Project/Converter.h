@@ -19,6 +19,8 @@ class Converter {
     Queue<Token, ForwardList> output;
     Stack<short, ForwardList> arg_counts;
 
+    static void readToken(char* str);
+
    public:
     /**
      * The `Converter` constructor initializes the `stack` member with the

@@ -11,7 +11,7 @@ int main() {
     ONPcalc calculator(stack);
 
     int n;
-    scanf("%d", &n);
+    scanf("%d\n", &n);
 
     for (int i = 0; i < n; i++) {
         converter.convertOneFormula();
