@@ -8,8 +8,7 @@
 #include "Stack.h"
 #include "Token.h"
 
-#define MAX_TOKEN_LENGTH 15
-#define SCANF_FORMAT "%14s"
+#define MAX_TOKEN_LENGTH 12
 
 /**
  * The function `convertOneFormula` reads input tokens and converts them into
@@ -21,7 +20,7 @@
  */
 void Converter::convertOneFormula() {
     char str[MAX_TOKEN_LENGTH];
-    while (scanf(SCANF_FORMAT, str) != EOF) {
+    while (scanf("%s", str)) {
         if (str[0] == '.') break;
         Token token(str);
         if (token.type == NUMBER) {
