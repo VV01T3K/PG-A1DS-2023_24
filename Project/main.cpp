@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "Containers/Stack.h"
 #include "Converter.h"
 #include "ONPcalc.h"
+#include "Stack.h"
 using namespace std;
 
 int main() {

@@ -3,10 +3,10 @@
 #include <cstring>
 #include <iostream>
 
-#include "Containers/ForwardList.h"
-#include "Containers/Queue.h"
-#include "Containers/Stack.h"
+#include "ForwardList.h"
 #include "ONPcalc.h"
+#include "Queue.h"
+#include "Stack.h"
 #include "Token.h"
 
 using namespace std;

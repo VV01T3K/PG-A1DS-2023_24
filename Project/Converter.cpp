@@ -3,9 +3,9 @@
 #include <cstring>
 #include <iostream>
 
-#include "Containers/ForwardList.h"
-#include "Containers/Stack.h"
+#include "ForwardList.h"
 #include "ONPcalc.h"
+#include "Stack.h"
 #include "Token.h"
 
 /**
