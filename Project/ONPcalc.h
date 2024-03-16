@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
 
-#include "ForwardList.h"
-#include "Stack.h"
+#include "Containers/ForwardList.h"
+#include "Containers/Stack.h"
 #include "Token.h"
 
 /**
