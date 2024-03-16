@@ -5,36 +5,41 @@
 #include <utility>
 
 template <typename T, template <typename...> class Container>
-class Stack {
+class Queue {
    private:
     Container<T> container;
 
    public:
-    void push(const T& value) { container.push_front(value); }
-    T pop() {
-        if (container.isEmpty()) throw std::out_of_range("Stack is empty");
+    void put(const T& value) { container.push_back(value); }
+    T get() {
+        if (container.isEmpty()) throw std::out_of_range("Queue is empty");
         return container.pop_front();
-    }
-    T& peek() {
-        if (container.isEmpty()) throw std::out_of_range("Stack is empty");
-        return container.front();
     }
 
     void clear() { container.clear(); }
 
-    void print(const char* seperator = ">") const {
+    T& front() {
+        if (container.isEmpty()) throw std::out_of_range("Queue is empty");
+        return container.front();
+    }
+    T& back() {
+        if (container.isEmpty()) throw std::out_of_range("Queue is empty");
+        return container.back();
+    }
+
+    void print(const char* seperator = "<") const {
         container.print(seperator);
     }
 
     friend std::ostream& operator<<(std::ostream& out,
-                                    const Stack<T, Container>& stack) {
-        return out << stack.container;
+                                    const Queue<T, Container>& queue) {
+        return out << queue.container;
     }
 
     bool isEmpty() const { return container.isEmpty(); }
     size_t getSize() const { return container.getSize(); }
 
-    void swap(Stack& other) { container.swap(other.container); }
+    void swap(Queue& other) { container.swap(other.container); }
     void swap(Container<T>& other) { container.swap(other); }
     template <typename U>
     void swap(U& other) {

@@ -3,14 +3,15 @@
 #include <cstring>
 #include <iostream>
 
-#include "DoublyLinkedList_Template.h"
+#include "ForwardList.h"
 #include "ONPcalc.h"
+#include "Queue.h"
 #include "Stack.h"
 #include "Token.h"
 
 using namespace std;
 
-#define MAX_STR_LENGTH 100
+#define MAX_STR_LENGTH 20
 
 /**
  * The `Converter` class is defined with three private member variables:
@@ -19,9 +20,9 @@ using namespace std;
  * - `arg_counts`: a `Stack` of `short` integers
  */
 class Converter {
-    Stack<Token>& stack;
-    DoublyLinkedList<Token> output;
-    Stack<short> arg_counts;
+    Stack<Token, ForwardList>& stack;
+    Queue<Token, ForwardList> output;
+    Stack<short, ForwardList> arg_counts;
 
    public:
     /**
@@ -30,7 +31,7 @@ class Converter {
      *
      * @param stack A reference to a `Stack` of `Token` objects.
      */
-    explicit Converter(Stack<Token>& stack) : stack(stack){};
+    Converter(Stack<Token, ForwardList>& stack) : stack(stack){};
 
     // The `Converter` destructor.
     ~Converter(){};

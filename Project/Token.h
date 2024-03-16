@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+
 enum Operands : char {
     ADD = '+',
     SUBTRACT = '-',
@@ -49,14 +50,14 @@ class Token {
      * to -1.
      */
     Token(Type type, int value, short arg_count = -1)
-        : value(value), type(type), associativity(LEFT), arg_count(arg_count){};
+        : type(type), value(value), arg_count(arg_count), associativity(LEFT){};
 
     /**
      * Default constructor. Constructs a Token of type NUMBER, with a value of 0
      * and argument count of -1.
      */
     Token()
-        : value(0), type(Type::NUMBER), associativity(LEFT), arg_count(-1){};
+        : type(Type::NUMBER), value(0), arg_count(-1), associativity(LEFT){};
 
     /**
      * The Token constructor parses a given string to determine the type and
@@ -66,7 +67,7 @@ class Token {
      * to determine the type of the token (whether it's a number or an
      * operator/function).
      */
-    explicit Token(const char* string);
+    Token(const char* string);
 
     /**
      * The function `getPrecedence` returns the precedence level of an operator
@@ -79,5 +80,4 @@ class Token {
      * returns 0.
      */
     int getPrecedence() const;
-    void print() const;
 };

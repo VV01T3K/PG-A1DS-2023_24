@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-    Stack<Token> stack;
+    Stack<Token, ForwardList> stack;
 
     int n;
     cin >> n;
@@ -14,11 +14,11 @@ int main() {
 
     for (int i = 0; i < n; i++) {
         converter.convertOneFormula();
-        stack.specialprint("  ");
+        stack.print("  ");
 
         ONPcalc calc;
         calc.calculate(stack);
-        printf("\n");
+        cout << endl;
     }
 
     return 0;

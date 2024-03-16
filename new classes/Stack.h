@@ -11,16 +11,14 @@ class Stack {
 
    public:
     void push(const T& value) { container.push_front(value); }
-    T pop() {
+    void pop() {
         if (container.isEmpty()) throw std::out_of_range("Stack is empty");
-        return container.pop_front();
+        container.pop_front();
     }
-    T& peek() {
-        if (container.isEmpty()) throw std::out_of_range("Stack is empty");
+    T& top() {
+        if (container.empty()) throw std::out_of_range("Stack is empty");
         return container.front();
     }
-
-    void clear() { container.clear(); }
 
     void print(const char* seperator = ">") const {
         container.print(seperator);

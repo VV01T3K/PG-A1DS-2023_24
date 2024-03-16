@@ -14,78 +14,85 @@
  *
  * @return The `calculate` method does not return any value. It performs
  * calculations on the input stack and outputs the result to the console. The
- * final result of the calculations is printed to the console using `printf`
+ * final result of the calculations is printed to the console using `std::cout`
  * at the end of the method.
  */
-void ONPcalc::calculate(Stack<Token>& stack) {
+void ONPcalc::calculate(Stack<Token, ForwardList>& stack) {
     while (!stack.isEmpty()) {
         Token token = stack.pop();
         if (token.type == Type::NUMBER) {
-            tmp_stack.push(token.value);
+            calc_stack.push(token.value);
         } else {
             int a, b, c;
-            if (!tmp_stack.isEmpty()) {
-                token.print();
-                printf(" ");
-                tmp_stack.printINT(" ");
-            }
+            if (!calc_stack.isEmpty())
+                std::cout << token << ' ' << calc_stack << std::endl;
             switch (token.value) {
                 case ADD:
-                    a = tmp_stack.pop();
-                    b = tmp_stack.pop();
-                    tmp_stack.push(a + b);
+                    a = calc_stack.pop();
+                    b = calc_stack.pop();
+                    calc_stack.push(a + b);
                     break;
                 case SUBTRACT:
-                    a = tmp_stack.pop();
-                    b = tmp_stack.pop();
-                    tmp_stack.push(b - a);
+                    a = calc_stack.pop();
+                    b = calc_stack.pop();
+                    calc_stack.push(b - a);
                     break;
                 case MULTIPLY:
-                    a = tmp_stack.pop();
-                    b = tmp_stack.pop();
-                    tmp_stack.push(a * b);
+                    a = calc_stack.pop();
+                    b = calc_stack.pop();
+                    calc_stack.push(a * b);
                     break;
                 case DIVIDE:
-                    a = tmp_stack.pop();
-                    b = tmp_stack.pop();
+                    a = calc_stack.pop();
+                    b = calc_stack.pop();
                     if (a == 0) {
-                        printf("ERROR\n");
-                        tmp_stack.clear();
+                        std::cout << "ERROR" << std::endl;
+                        calc_stack.clear();
                         stack.clear();
                         return;
                     }
-                    tmp_stack.push(b / a);
+                    calc_stack.push(b / a);
                     break;
                 case IF:
-                    c = tmp_stack.pop();
-                    b = tmp_stack.pop();
-                    a = tmp_stack.pop();
-                    tmp_stack.push(a > 0 ? b : c);
+                    c = calc_stack.pop();
+                    b = calc_stack.pop();
+                    a = calc_stack.pop();
+                    calc_stack.push(a > 0 ? b : c);
                     break;
                 case NOT:
-                    a = tmp_stack.pop();
-                    tmp_stack.push(-a);
+                    a = calc_stack.pop();
+                    calc_stack.push(-a);
                     break;
                 case MAX:
+                    if (token.arg_count == 0) break;
+                    if (calc_stack.isEmpty()) {
+                        throw std::invalid_argument("somthing no bueno");
+                        break;
+                    }
                     if (token.arg_count == 1) {
-                        tmp_stack.push(tmp_stack.pop());
+                        calc_stack.push(calc_stack.pop());
                         break;
                     }
                     while (token.arg_count-- > 1) {
-                        a = tmp_stack.pop();
-                        b = tmp_stack.pop();
-                        tmp_stack.push(a > b ? a : b);
+                        a = calc_stack.pop();
+                        b = calc_stack.pop();
+                        calc_stack.push(a > b ? a : b);
                     }
                     break;
                 case MIN:
+                    if (token.arg_count == 0) break;
+                    if (calc_stack.isEmpty()) {
+                        throw std::invalid_argument("somthing no bueno");
+                        break;
+                    }
                     if (token.arg_count == 1) {
-                        tmp_stack.push(tmp_stack.pop());
+                        calc_stack.push(calc_stack.pop());
                         break;
                     }
                     while (token.arg_count-- > 1) {
-                        a = tmp_stack.pop();
-                        b = tmp_stack.pop();
-                        tmp_stack.push(a < b ? a : b);
+                        a = calc_stack.pop();
+                        b = calc_stack.pop();
+                        calc_stack.push(a < b ? a : b);
                     }
                     break;
                 default:
@@ -93,5 +100,5 @@ void ONPcalc::calculate(Stack<Token>& stack) {
             }
         }
     }
-    printf("%d\n", tmp_stack.pop());
+    std::cout << calc_stack.pop() << std::endl;
 };

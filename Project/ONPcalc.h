@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 
+#include "ForwardList.h"
 #include "Stack.h"
 #include "Token.h"
 
@@ -10,7 +11,7 @@
  */
 class ONPcalc {
    private:
-    Stack<int> tmp_stack;
+    Stack<int, ForwardList> calc_stack;
 
    public:
     /**
@@ -24,7 +25,7 @@ class ONPcalc {
      * @return The `calculate` method does not return any value. It performs
      * calculations on the input stack and outputs the result to the console.
      * The final result of the calculations is printed to the console using
-     * `printf` at the end of the method.
+     * `std::cout` at the end of the method.
      */
-    void calculate(Stack<Token>& stack);
+    void calculate(Stack<Token, ForwardList>& stack);
 };
