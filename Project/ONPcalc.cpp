@@ -90,8 +90,6 @@ void ONPcalc::calculate(Stack<Token, ForwardList>& stack) {
                         int_stack.push(a < b ? a : b);
                     }
                     break;
-                default:
-                    break;
             }
         }
     }

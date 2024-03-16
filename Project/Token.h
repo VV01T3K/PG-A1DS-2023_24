@@ -36,6 +36,13 @@ class Token {
     short arg_count;
 
     /**
+     * Default constructor. Constructs a Token of type NUMBER, with a value of 0
+     * and argument count of -1.
+     */
+    Token()
+        : value(0), type(Type::NUMBER), associativity(LEFT), arg_count(-1){};
+
+    /**
      * Constructs a Token with the specified type, value, and argument count.
      *
      * @param type The type of the token.
@@ -44,14 +51,7 @@ class Token {
      * to -1.
      */
     Token(Type type, int value, short arg_count = -1)
-        : type(type), value(value), arg_count(arg_count), associativity(LEFT){};
-
-    /**
-     * Default constructor. Constructs a Token of type NUMBER, with a value of 0
-     * and argument count of -1.
-     */
-    Token()
-        : type(Type::NUMBER), value(0), arg_count(-1), associativity(LEFT){};
+        : value(value), type(type), associativity(LEFT), arg_count(arg_count){};
 
     /**
      * The Token constructor parses a given string to determine the type and
@@ -61,7 +61,7 @@ class Token {
      * to determine the type of the token (whether it's a number or an
      * operator/function).
      */
-    Token(const char* string);
+    explicit Token(const char* string);
 
     /**
      * The function `getPrecedence` returns the precedence level of an operator

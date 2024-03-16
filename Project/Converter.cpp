@@ -8,6 +8,9 @@
 #include "Stack.h"
 #include "Token.h"
 
+#define MAX_TOKEN_LENGTH 15
+#define SCANF_FORMAT "%14s"
+
 /**
  * The function `convertOneFormula` reads input tokens and converts them into
  * Reverse Polish Notation (RPN) using a stack and output queue.
@@ -17,8 +20,8 @@
  * not return any specific value or result.
  */
 void Converter::convertOneFormula() {
-    char str[MAX_STR_LENGTH];
-    while (scanf("%s", str) != EOF) {
+    char str[MAX_TOKEN_LENGTH];
+    while (scanf(SCANF_FORMAT, str) != EOF) {
         if (str[0] == '.') break;
         Token token(str);
         if (token.type == NUMBER) {

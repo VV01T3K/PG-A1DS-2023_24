@@ -8,8 +8,6 @@
 #include "Stack.h"
 #include "Token.h"
 
-#define MAX_STR_LENGTH 15
-
 /**
  * The `Converter` class is defined with three private member variables:
  * - `stack`: a reference to a `Stack` of `Token` objects
@@ -28,7 +26,7 @@ class Converter {
      *
      * @param stack A reference to a `Stack` of `Token` objects.
      */
-    Converter(Stack<Token, ForwardList>& stack) : stack(stack){};
+    explicit Converter(Stack<Token, ForwardList>& stack) : stack(stack){};
 
     // The `Converter` destructor.
     ~Converter(){};
