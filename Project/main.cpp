@@ -17,6 +17,7 @@ int main() {
         stack.print("  ");
         ONPcalc calc;
         calc.calculate(stack);
+        printf("\n");
     }
 
     return 0;
