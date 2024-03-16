@@ -24,8 +24,11 @@ void ONPcalc::calculate(Stack<Token, ForwardList>& stack) {
             calc_stack.push(token.value);
         } else {
             int a, b, c;
-            if (!calc_stack.isEmpty())
-                std::cout << token << ' ' << calc_stack << std::endl;
+            if (!calc_stack.isEmpty()) {
+                token.print();
+                printf(" ");
+                calc_stack.printInt(" ");
+            }
             switch (token.value) {
                 case ADD:
                     a = calc_stack.pop();

@@ -26,6 +26,14 @@ class Stack {
         container.print(seperator);
     }
 
+    void printInt(const char* seperator = " ") const {
+        container.printInt(seperator);
+    }
+
+    void printToken(const char* seperator = " ") const {
+        container.printToken(seperator);
+    }
+
     friend std::ostream& operator<<(std::ostream& out,
                                     const Stack<T, Container>& stack) {
         return out << stack.container;

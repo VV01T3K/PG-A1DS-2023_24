@@ -111,3 +111,27 @@ std::ostream& operator<<(std::ostream& out, const Token& token) {
     }
     return out;
 }
+
+void Token::print() const {
+    if (type == NUMBER) {
+        printf("%d", value);
+    } else {
+        switch (value) {
+            case IF:
+                printf("IF");
+                break;
+            case NOT:
+                printf("N");
+                break;
+            case MAX:
+                printf("MAX%d", (int)arg_count);
+                break;
+            case MIN:
+                printf("MIN%d", (int)arg_count);
+                break;
+            default:
+                printf("%c", (char)value);
+                break;
+        }
+    }
+}

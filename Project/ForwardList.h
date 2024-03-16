@@ -43,27 +43,20 @@ class ForwardList {
     T& operator[](std::size_t index);
     const T& operator[](std::size_t index) const;
     void print(const char* seperator = ">") const;
+    void printInt(const char* seperator = " ") const;
+    void printToken(const char* seperator = " ") const;
     template <typename U>
     friend std::ostream& operator<<(std::ostream& out,
                                     const ForwardList<U>& list);
     void clear();
     void swap(ForwardList& other);
-    T& front() {
-        if (isEmpty())
-            throw std::out_of_range("List is empty and can't peek()");
-        return head->data;
-    };
-    T& back() {
-        if (isEmpty())
-            throw std::out_of_range("List is empty and can't peekTail()");
-        return tail->data;
-    };
+    T& front() { return head->data; };
+    T& back() { return tail->data; };
 };
 
 // typename to tell the compiler that SingleLinkedList<T>::Node is a type
 template <typename T>
 typename ForwardList<T>::Node* ForwardList<T>::getNodeAt(size_t index) const {
-    if (index >= size) throw std::out_of_range("Index is out of range");
     Node* current = head;
     for (std::size_t i = 0; i < index; i++) current = current->next;
     return current;
@@ -133,7 +126,6 @@ void ForwardList<T>::push_back(U&& data) {
 
 template <typename T>
 T ForwardList<T>::pop_front() {
-    if (isEmpty()) throw std::out_of_range("List is empty and can't pop()");
     T data = std::move(head->data);
     Node* oldHead = head;
     head = head->next;
@@ -145,8 +137,6 @@ T ForwardList<T>::pop_front() {
 template <typename T>
 template <typename U>
 void ForwardList<T>::insert(U&& data, size_t index) {
-    if (index > size)
-        throw std::out_of_range("Index is out of range and can't insert()");
     if (index == 0) {
         push_front(std::forward<U>(data));
         return;
@@ -179,6 +169,28 @@ void ForwardList<T>::print(const char* seperator) const {
         current = current->next;
     }
     std::cout << std::endl;
+};
+
+template <typename T>
+void ForwardList<T>::printInt(const char* seperator) const {
+    Node* current = head;
+    while (current != nullptr) {
+        printf("%d", (int)current->data);
+        if (current->next != nullptr) printf("%s", seperator);
+        current = current->next;
+    }
+    printf("\n");
+};
+
+template <typename T>
+void ForwardList<T>::printToken(const char* seperator) const {
+    Node* current = head;
+    while (current != nullptr) {
+        current->data.print();
+        if (current->next != nullptr) printf("%s", seperator);
+        current = current->next;
+    }
+    printf("\n");
 };
 
 template <typename T>
