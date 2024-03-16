@@ -124,10 +124,10 @@ void Token::print() const {
                 printf("N");
                 break;
             case MAX:
-                printf("MAX%d", (int)arg_count);
+                printf("MAX%d", arg_count);
                 break;
             case MIN:
-                printf("MIN%d", (int)arg_count);
+                printf("MIN%d", arg_count);
                 break;
             default:
                 printf("%c", (char)value);
