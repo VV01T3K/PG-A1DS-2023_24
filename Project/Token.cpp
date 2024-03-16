@@ -79,39 +79,6 @@ Token::Token(const char* string) {
     }
 };
 
-// Przeciążenie operatora << dla klasy Token
-/**
- * The function overloads the << operator to output a Token object based on its
- * type and value.
- *
- * @return The overloaded << operator function is returning a reference to the
- * std::ostream object 'out'.
- */
-std::ostream& operator<<(std::ostream& out, const Token& token) {
-    if (token.type == NUMBER) {
-        out << token.value;
-    } else {
-        switch (token.value) {
-            case IF:
-                out << "IF";
-                break;
-            case NOT:
-                out << 'N';
-                break;
-            case MAX:
-                out << "MAX" << (int)token.arg_count;
-                break;
-            case MIN:
-                out << "MIN" << (int)token.arg_count;
-                break;
-            default:
-                out << (char)token.value;
-                break;
-        }
-    }
-    return out;
-}
-
 void Token::print() const {
     if (type == NUMBER) {
         printf("%d", value);

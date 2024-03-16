@@ -157,21 +157,6 @@ const T& ForwardList<T>::operator[](size_t index) const {
 };
 
 template <typename T>
-void ForwardList<T>::print(const char* seperator) const {
-    if (isEmpty()) {
-        std::cout << "EmptyList" << std::endl;
-        return;
-    }
-    Node* current = head;
-    while (current != nullptr) {
-        std::cout << current->data;
-        if (current->next != nullptr) std::cout << seperator;
-        current = current->next;
-    }
-    std::cout << std::endl;
-};
-
-template <typename T>
 void ForwardList<T>::printInt(const char* seperator) const {
     Node* current = head;
     while (current != nullptr) {

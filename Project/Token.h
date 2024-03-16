@@ -32,14 +32,6 @@ class Token {
     Type type;
     Associativity associativity;
     short arg_count;
-    /**
-     * The function overloads the << operator to output a Token object based on
-     * its type and value.
-     *
-     * @return The overloaded << operator function is returning a reference to
-     * the std::ostream object 'out'.
-     */
-    friend std::ostream& operator<<(std::ostream& out, const Token& token);
 
     /**
      * Constructs a Token with the specified type, value, and argument count.

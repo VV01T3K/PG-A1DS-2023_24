@@ -14,10 +14,9 @@ int main() {
 
     for (int i = 0; i < n; i++) {
         converter.convertOneFormula();
-        stack.print("  ");
+        stack.printToken("  ");
         ONPcalc calc;
         calc.calculate(stack);
-        printf("\n");
     }
 
     return 0;

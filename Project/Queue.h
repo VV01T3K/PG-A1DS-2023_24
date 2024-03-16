@@ -27,15 +27,6 @@ class Queue {
         return container.back();
     }
 
-    void print(const char* seperator = "<") const {
-        container.print(seperator);
-    }
-
-    friend std::ostream& operator<<(std::ostream& out,
-                                    const Queue<T, Container>& queue) {
-        return out << queue.container;
-    }
-
     bool isEmpty() const { return container.isEmpty(); }
     size_t getSize() const { return container.getSize(); }
 
