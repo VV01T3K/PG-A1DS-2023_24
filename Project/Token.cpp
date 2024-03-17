@@ -69,7 +69,7 @@ Token::Token(const char* string) {
         switch (string[0]) {
             case 'I':
                 type = Type::FUNCTION;
-                arg_count = 0;
+                arg_count = -1;
                 value = IF;
                 break;
             case 'N':
@@ -78,7 +78,7 @@ Token::Token(const char* string) {
                 break;
             case 'M':
                 type = Type::FUNCTION;
-                arg_count = 0;
+                arg_count = -1;
                 if (string[1] == 'A')
                     value = MAX;
                 else

@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdio>
 #include <initializer_list>
+#include <iostream>
 #include <utility>
 
 template <typename T>
@@ -165,10 +166,6 @@ void ForwardList<T>::printInt() const {
 template <typename T>
 void ForwardList<T>::printToken() const {
     Node* current = head;
-    if (current != nullptr) {
-        current->data.print();
-        current = current->next;
-    }
     while (current != nullptr) {
         current->data.print();
         current = current->next;

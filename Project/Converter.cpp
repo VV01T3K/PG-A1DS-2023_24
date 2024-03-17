@@ -12,10 +12,11 @@
 
 void Converter::readToken(char* str) {
     int i = 0;
-    char c;
-    while ((str[i++] = c = (char)getc(stdin)) != ' ')
-        ;
-    str[i] = '\0';
+    char c = '\0';
+    while (c != ' ' && c != '\n') {
+        str[i++] = c = (char)getc(stdin);
+    }
+    str[i - 1] = '\0';
 }
 
 /**
@@ -28,7 +29,7 @@ void Converter::readToken(char* str) {
  */
 void Converter::convertOneFormula() {
     char str[MAX_TOKEN_LENGTH];
-
+    const short ONE = 1;
     while (true) {
         readToken(str);
         if (str[0] == '.') break;
@@ -36,8 +37,8 @@ void Converter::convertOneFormula() {
         if (token.type == NUMBER) {
             output.put(std::move(token));
         } else if (token.type == FUNCTION) {
-            arg_counts.push((char)1);
-            stack.push(token);
+            arg_counts.push(ONE);
+            stack.push(std::move(token));
         } else if (token.type == OPERATOR) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET &&
                    (stack.peek().getPrecedence() > token.getPrecedence() ||
@@ -63,7 +64,7 @@ void Converter::convertOneFormula() {
             }
         }
         if (!output.isEmpty() && !arg_counts.isEmpty() &&
-            output.back().type == FUNCTION && output.back().arg_count == 0) {
+            output.back().type == FUNCTION && output.back().arg_count == -1) {
             output.back().arg_count = arg_counts.pop();
         }
     }

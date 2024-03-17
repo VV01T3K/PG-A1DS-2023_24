@@ -25,7 +25,7 @@ enum Associativity : char { LEFT, RIGHT };
  * - `type`: an enum `Type` representing the type of a token
  * - `associativity`: an enum `Associativity` representing the associativity of
  * an operator token
- * - `arg_count`: a unsigned char representing the number of arguments that the
+ * - `arg_count`: a short integer representing the number of arguments that the
  * token takes
  */
 class Token {
@@ -33,13 +33,14 @@ class Token {
     int value;
     Type type;
     Associativity associativity;
-    unsigned char arg_count;
+    short arg_count;
 
     /**
      * Default constructor. Constructs a Token of type NUMBER, with a value of 0
-     * and argument count of 0.
+     * and argument count of -1.
      */
-    Token() : value(0), type(Type::NUMBER), associativity(LEFT), arg_count(0){};
+    Token()
+        : value(0), type(Type::NUMBER), associativity(LEFT), arg_count(-1){};
 
     /**
      * Constructs a Token with the specified type, value, and argument count.
@@ -47,9 +48,9 @@ class Token {
      * @param type The type of the token.
      * @param value The value of the token.
      * @param arg_count The number of arguments that the token takes. Defaults
-     * to 0.
+     * to -1.
      */
-    Token(Type type, int value, unsigned char arg_count = 0)
+    Token(Type type, int value, short arg_count = -1)
         : value(value), type(type), associativity(LEFT), arg_count(arg_count){};
 
     /**

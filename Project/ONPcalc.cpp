@@ -32,9 +32,7 @@ void ONPcalc::calculate() {
             }
             switch (token.value) {
                 case ADD:
-                    a = int_stack.pop();
-                    b = int_stack.pop();
-                    int_stack.push(a + b);
+                    int_stack.push(int_stack.pop() + int_stack.pop());
                     break;
                 case SUBTRACT:
                     a = int_stack.pop();
@@ -42,9 +40,7 @@ void ONPcalc::calculate() {
                     int_stack.push(b - a);
                     break;
                 case MULTIPLY:
-                    a = int_stack.pop();
-                    b = int_stack.pop();
-                    int_stack.push(a * b);
+                    int_stack.push(int_stack.pop() * int_stack.pop());
                     break;
                 case DIVIDE:
                     a = int_stack.pop();

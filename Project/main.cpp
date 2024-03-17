@@ -1,8 +1,11 @@
 #include <cstdio>
+#include <iostream>
 
 #include "Converter.h"
+#include "ForwardList.h"
 #include "ONPcalc.h"
 #include "Stack.h"
+#include "Token.h"
 using namespace std;
 
 int main() {
