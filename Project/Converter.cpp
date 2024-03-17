@@ -12,11 +12,10 @@
 
 void Converter::readToken(char* str) {
     int i = 0;
-    char c = '\0';
-    while (c != ' ' && c != '\n') {
-        str[i++] = c = (char)getc(stdin);
-    }
-    str[i - 1] = '\0';
+    char c;
+    while ((str[i++] = c = (char)getc(stdin)) != ' ')
+        ;
+    str[i] = '\0';
 }
 
 /**
@@ -35,9 +34,9 @@ void Converter::convertOneFormula() {
         if (str[0] == '.') break;
         Token token(str);
         if (token.type == NUMBER) {
-            output.put(token);
+            output.put(std::move(token));
         } else if (token.type == FUNCTION) {
-            arg_counts.push(1);
+            arg_counts.push((char)1);
             stack.push(token);
         } else if (token.type == OPERATOR) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET &&
@@ -46,14 +45,14 @@ void Converter::convertOneFormula() {
                      token.associativity == LEFT))) {
                 output.put(stack.pop());
             }
-            stack.push(token);
+            stack.push(std::move(token));
         } else if (token.value == COMMA) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET) {
                 output.put(stack.pop());
             }
             if (!arg_counts.isEmpty()) arg_counts.peek()++;
         } else if (token.value == LEFT_BRACKET) {
-            stack.push(token);
+            stack.push(std::move(token));
         } else if (token.value == RIGHT_BRACKET) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET) {
                 output.put(stack.pop());
@@ -64,11 +63,11 @@ void Converter::convertOneFormula() {
             }
         }
         if (!output.isEmpty() && !arg_counts.isEmpty() &&
-            output.back().type == FUNCTION && output.back().arg_count == -1) {
+            output.back().type == FUNCTION && output.back().arg_count == 0) {
             output.back().arg_count = arg_counts.pop();
         }
     }
-    getchar();
+    getc(stdin);
     while (!stack.isEmpty()) {
         output.put(stack.pop());
     }

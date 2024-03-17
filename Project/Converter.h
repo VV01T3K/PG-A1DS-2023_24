@@ -12,12 +12,12 @@
  * The `Converter` class is defined with three private member variables:
  * - `stack`: a reference to a `Stack` of `Token` objects
  * - `output`: a `DoublyLinkedList` of `Token` objects
- * - `arg_counts`: a `Stack` of `short` integers
+ * - `arg_counts`: a `Stack` of `unsigned char` integers
  */
 class Converter {
     Stack<Token, ForwardList>& stack;
     Queue<Token, ForwardList> output;
-    Stack<short, ForwardList> arg_counts;
+    Stack<unsigned char, ForwardList> arg_counts;
 
     static void readToken(char* str);
 

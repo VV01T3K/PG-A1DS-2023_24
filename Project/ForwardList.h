@@ -155,10 +155,6 @@ const T& ForwardList<T>::operator[](size_t index) const {
 template <typename T>
 void ForwardList<T>::printInt() const {
     Node* current = head;
-    if (current != nullptr) {
-        printf("%d", current->data);
-        current = current->next;
-    }
     while (current != nullptr) {
         printf(" %d", current->data);
         current = current->next;

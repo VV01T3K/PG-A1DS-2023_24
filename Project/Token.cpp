@@ -3,15 +3,31 @@
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
+#include <utility>
+
+// Copy constructor
+Token::Token(const Token& orig)
+    : value(orig.value),
+      type(orig.type),
+      associativity(orig.associativity),
+      arg_count(orig.arg_count) {}
+
+// Move constructor
+Token::Token(Token&& orig)
+    : value(std::move(orig.value)),
+      type(std::move(orig.type)),
+      associativity(std::move(orig.associativity)),
+      arg_count(std::move(orig.arg_count)) {}
 
 /**
  * The function `getPrecedence` returns the precedence level of an operator
  * token.
  *
- * @return The `getPrecedence` function returns an integer value representing
- * the precedence of the token. If the token type is an operator, it checks the
- * value of the operator and returns a precedence value based on the operator
- * type. If the token is not an operator, it returns 0.
+ * @return The `getPrecedence` function returns an integer value
+ * representing the precedence of the token. If the token type is an
+ * operator, it checks the value of the operator and returns a precedence
+ * value based on the operator type. If the token is not an operator, it
+ * returns 0.
  */
 int Token::getPrecedence() const {
     if (type == OPERATOR) {
@@ -53,7 +69,7 @@ Token::Token(const char* string) {
         switch (string[0]) {
             case 'I':
                 type = Type::FUNCTION;
-                arg_count = -1;
+                arg_count = 0;
                 value = IF;
                 break;
             case 'N':
@@ -62,7 +78,7 @@ Token::Token(const char* string) {
                 break;
             case 'M':
                 type = Type::FUNCTION;
-                arg_count = -1;
+                arg_count = 0;
                 if (string[1] == 'A')
                     value = MAX;
                 else

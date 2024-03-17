@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdio>
+#include <iostream>
 
 template <typename T, template <typename...> class Container>
 class Stack {
@@ -7,7 +8,10 @@ class Stack {
     Container<T> container;
 
    public:
-    void push(const T& value) { container.push_front(value); }
+    template <typename U>
+    void push(U&& data) {
+        container.push_front(std::forward<U>(data));
+    }
     T pop() { return container.pop_front(); }
     T& peek() { return container.front(); }
 

@@ -7,7 +7,10 @@ class Queue {
     Container<T> container;
 
    public:
-    void put(const T& value) { container.push_back(value); }
+    template <typename U>
+    void put(U&& data) {
+        container.push_back(std::forward<U>(data));
+    }
     T get() { return container.pop_front(); }
 
     void clear() { container.clear(); }
