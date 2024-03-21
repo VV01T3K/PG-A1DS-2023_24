@@ -2,6 +2,8 @@
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
+#include <utility>
 
 enum Operands : char {
     ADD = '+',
@@ -78,4 +80,6 @@ class Token {
      */
     int getPrecedence() const;
     void print() const;
+
+    friend std::ostream& operator<<(std::ostream& out, const Token& token);
 };

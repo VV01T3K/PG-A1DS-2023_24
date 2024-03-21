@@ -2,9 +2,7 @@
 
 #include <cstdio>
 
-#include "ForwardList.h"
-#include "ONPcalc.h"
-#include "Queue.h"
+#include "List.h"
 #include "Stack.h"
 #include "Token.h"
 
@@ -15,9 +13,9 @@
  * - `arg_counts`: a `Stack` of `short` integers
  */
 class Converter {
-    Stack<Token, ForwardList>& stack;
-    Queue<Token, ForwardList> output;
-    Stack<short, ForwardList> arg_counts;
+    Stack<Token, List>& stack;
+    List<Token> output;
+    Stack<short, List> arg_counts;
 
     static void readToken(char* str);
 
@@ -28,7 +26,7 @@ class Converter {
      *
      * @param stack A reference to a `Stack` of `Token` objects.
      */
-    explicit Converter(Stack<Token, ForwardList>& stack) : stack(stack){};
+    explicit Converter(Stack<Token, List>& stack) : stack(stack){};
 
     // The `Converter` destructor.
     ~Converter(){};
@@ -42,4 +40,5 @@ class Converter {
      * does not return any specific value or result.
      */
     void convertOneFormula();
+    void calculate(Token& token);
 };

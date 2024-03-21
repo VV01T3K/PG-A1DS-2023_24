@@ -2,9 +2,7 @@
 
 #include <cstdio>
 
-#include "ForwardList.h"
-#include "ONPcalc.h"
-#include "Queue.h"
+#include "List.h"
 #include "Stack.h"
 #include "Token.h"
 
@@ -73,4 +71,73 @@ void Converter::convertOneFormula() {
         output.put(stack.pop());
     }
     stack.swap(output);
+}
+
+void Converter::calculate(Token& token) {
+    Token token = stack.pop();
+    if (token.type == Type::NUMBER) {
+        int_stack.push(token.value);
+    } else {
+        int a, b, c;
+        if (!int_stack.isEmpty()) {
+            token.print();
+            int_stack.printInt();
+        }
+        switch (token.value) {
+            case ADD:
+                int_stack.push(int_stack.pop() + int_stack.pop());
+                break;
+            case SUBTRACT:
+                a = int_stack.pop();
+                b = int_stack.pop();
+                int_stack.push(b - a);
+                break;
+            case MULTIPLY:
+                int_stack.push(int_stack.pop() * int_stack.pop());
+                break;
+            case DIVIDE:
+                a = int_stack.pop();
+                b = int_stack.pop();
+                if (a == 0) {
+                    printf("ERROR\n");
+                    int_stack.clear();
+                    stack.clear();
+                    return;
+                }
+                int_stack.push(b / a);
+                break;
+            case IF:
+                c = int_stack.pop();
+                b = int_stack.pop();
+                a = int_stack.pop();
+                int_stack.push(a > 0 ? b : c);
+                break;
+            case NOT:
+                a = int_stack.pop();
+                int_stack.push(-a);
+                break;
+            case MAX:
+                if (token.arg_count == 1) {
+                    int_stack.push(int_stack.pop());
+                    break;
+                }
+                while (token.arg_count-- > 1) {
+                    a = int_stack.pop();
+                    b = int_stack.pop();
+                    int_stack.push(a > b ? a : b);
+                }
+                break;
+            case MIN:
+                if (token.arg_count == 1) {
+                    int_stack.push(int_stack.pop());
+                    break;
+                }
+                while (token.arg_count-- > 1) {
+                    a = int_stack.pop();
+                    b = int_stack.pop();
+                    int_stack.push(a < b ? a : b);
+                }
+                break;
+        }
+    }
 }
