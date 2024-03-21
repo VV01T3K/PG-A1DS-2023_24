@@ -3,7 +3,6 @@
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
-#include <iostream>
 #include <utility>
 
 // Copy constructor
@@ -120,29 +119,4 @@ void Token::print() const {
                 break;
         }
     }
-}
-
-std::ostream& operator<<(std::ostream& out, const Token& token) {
-    if (token.type == NUMBER) {
-        out << token.value;
-    } else {
-        switch (token.value) {
-            case IF:
-                out << "IF";
-                break;
-            case NOT:
-                out << 'N';
-                break;
-            case MAX:
-                out << "MAX" << (int)token.arg_count;
-                break;
-            case MIN:
-                out << "MIN" << (int)token.arg_count;
-                break;
-            default:
-                out << (char)token.value;
-                break;
-        }
-    }
-    return out;
 }

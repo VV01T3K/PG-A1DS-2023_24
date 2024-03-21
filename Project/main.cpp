@@ -8,6 +8,7 @@
 using namespace std;
 
 int main() {
+    std::ios::sync_with_stdio(false);
     Stack<Token, ForwardList> stack;
     Converter converter(stack);
 
