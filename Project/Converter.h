@@ -3,6 +3,8 @@
 #include <cstdio>
 
 #include "ForwardList.h"
+#include "ONPcalc.h"
+#include "Queue.h"
 #include "Stack.h"
 #include "Token.h"
 
@@ -14,9 +16,8 @@
  */
 class Converter {
     Stack<Token, ForwardList>& stack;
-    Stack<Token, ForwardList> output;
+    Queue<Token, ForwardList> output;
     Stack<short, ForwardList> arg_counts;
-    bool divideByZero = false;
 
     static void readToken(char* str);
 
@@ -41,5 +42,4 @@ class Converter {
      * does not return any specific value or result.
      */
     void convertOneFormula();
-    void calculate();
 };

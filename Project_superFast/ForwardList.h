@@ -1,7 +1,6 @@
 #pragma once
 #include <cstdio>
 #include <initializer_list>
-#include <iostream>
 #include <utility>
 
 template <typename T>
@@ -42,7 +41,6 @@ class ForwardList {
     void insert(U&& data, std::size_t index);
     T& operator[](std::size_t index);
     const T& operator[](std::size_t index) const;
-    void print(const char* seperator = ">") const;
     void printInt() const;
     void printToken() const;
     void clear();
@@ -104,7 +102,7 @@ ForwardList<T>::~ForwardList() {
 template <typename T>
 template <typename U>
 void ForwardList<T>::push_front(U&& data) {
-    head = new Node(std::forward<U>(data), head);
+    head = new Node(static_cast<T>(std::forward<U>(data)), head);
     if (isEmpty()) tail = head;
     size++;
 };
@@ -113,10 +111,10 @@ template <typename T>
 template <typename U>
 void ForwardList<T>::push_back(U&& data) {
     if (isEmpty()) {
-        push_front(std::forward<U>(data));
+        push_front(static_cast<T>(std::forward<U>(data)));
         return;
     }
-    tail->next = new Node(std::forward<U>(data), nullptr);
+    tail->next = new Node(static_cast<T>(std::forward<U>(data)), nullptr);
     tail = tail->next;
     size++;
 };

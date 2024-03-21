@@ -2,6 +2,7 @@
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
+#include <utility>
 
 enum Operands : char {
     ADD = '+',
@@ -78,4 +79,10 @@ class Token {
      */
     int getPrecedence() const;
     void print() const;
+
+    explicit Token(int value)
+        : value(value),
+          type(Type::NUMBER),
+          associativity(LEFT),
+          arg_count(-1){};
 };
