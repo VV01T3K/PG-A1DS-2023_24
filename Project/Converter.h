@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "List.h"
+#include "ForwardList.h"
 #include "Stack.h"
 #include "Token.h"
 
@@ -13,9 +13,10 @@
  * - `arg_counts`: a `Stack` of `short` integers
  */
 class Converter {
-    Stack<Token, List>& stack;
-    List<Token> output;
-    Stack<short, List> arg_counts;
+    Stack<Token, ForwardList>& stack;
+    Stack<Token, ForwardList> output;
+    Stack<short, ForwardList> arg_counts;
+    bool divideByZero = false;
 
     static void readToken(char* str);
 
@@ -26,7 +27,7 @@ class Converter {
      *
      * @param stack A reference to a `Stack` of `Token` objects.
      */
-    explicit Converter(Stack<Token, List>& stack) : stack(stack){};
+    explicit Converter(Stack<Token, ForwardList>& stack) : stack(stack){};
 
     // The `Converter` destructor.
     ~Converter(){};

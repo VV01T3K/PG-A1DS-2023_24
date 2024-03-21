@@ -2,13 +2,13 @@
 #include <iostream>
 
 #include "Converter.h"
-#include "List.h"
+#include "ForwardList.h"
 #include "Stack.h"
 #include "Token.h"
 using namespace std;
 
 int main() {
-    Stack<Token, List> stack;
+    Stack<Token, ForwardList> stack;
     Converter converter(stack);
 
     int n;

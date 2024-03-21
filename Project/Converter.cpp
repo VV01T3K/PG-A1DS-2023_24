@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "List.h"
+#include "ForwardList.h"
 #include "Stack.h"
 #include "Token.h"
 
@@ -31,109 +31,124 @@ void Converter::convertOneFormula() {
     while (true) {
         readToken(str);
         if (str[0] == '.') break;
+        if (divideByZero) continue;
         Token token(str);
         if (token.type == NUMBER) {
-            output.push_back(std::move(token));
+            output.push(token);
         } else if (token.type == FUNCTION) {
             arg_counts.push(ONE);
-            stack.push(std::move(token));
+            stack.push(token);
         } else if (token.type == OPERATOR) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET &&
                    (stack.peek().getPrecedence() > token.getPrecedence() ||
                     (stack.peek().getPrecedence() == token.getPrecedence() &&
                      token.associativity == LEFT))) {
-                output.push_back(stack.pop());
+                output.push(stack.pop());
+                calculate();
             }
-            stack.push(std::move(token));
+            stack.push(token);
         } else if (token.value == COMMA) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET) {
-                output.push_back(stack.pop());
+                output.push(stack.pop());
+                calculate();
             }
             if (!arg_counts.isEmpty()) arg_counts.peek()++;
         } else if (token.value == LEFT_BRACKET) {
-            stack.push(std::move(token));
+            stack.push(token);
         } else if (token.value == RIGHT_BRACKET) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET) {
-                output.push_back(stack.pop());
+                output.push(stack.pop());
+                calculate();
             }
             stack.pop();
             if (!stack.isEmpty() && stack.peek().type == FUNCTION) {
-                output.push_back(stack.pop());
+                output.push(stack.pop());
+                calculate();
             }
         }
         if (!output.isEmpty() && !arg_counts.isEmpty() &&
-            output.back().type == FUNCTION && output.back().arg_count == -1) {
-            output.back().arg_count = arg_counts.pop();
+            output.peek().type == FUNCTION && output.peek().arg_count == -1) {
+            output.peek().arg_count = arg_counts.pop();
+            calculate();
         }
     }
     getc(stdin);
     while (!stack.isEmpty()) {
-        output.push_back(stack.pop());
+        output.push(stack.pop());
+        calculate();
     }
+    if (!divideByZero) printf("%d\n", output.pop().value);
+    output.clear();
+    arg_counts.clear();
+    stack.clear();
+    divideByZero = false;
 }
 
 void Converter::calculate() {
-    Token token = output.pop_back();
+    if (output.isEmpty()) return;
+    if (output.peek().type == FUNCTION && output.peek().arg_count == -1) {
+        return;
+    }
+    if (divideByZero) return;
+    Token token = output.pop();
     if (token.type == Type::NUMBER) {
-        output.push_back(token.value);
+        output.push(token.value);
     } else {
         int a, b, c;
         switch (token.value) {
             case ADD:
-                output.push_back(output.pop_back().value +
-                                 output.pop_back().value);
+                a = output.pop().value;
+                b = output.pop().value;
+                output.push(a + b);
                 break;
             case SUBTRACT:
-                a = output.pop_back().value;
-                b = output.pop_back().value;
-                output.push_back(b - a);
+                a = output.pop().value;
+                b = output.pop().value;
+                output.push(b - a);
                 break;
             case MULTIPLY:
-                output.push_back(output.pop_back().value *
-                                 output.pop_back().value);
+                output.push(output.pop().value * output.pop().value);
                 break;
             case DIVIDE:
-                a = output.pop_back().value;
-                b = output.pop_back().value;
+                a = output.pop().value;
                 if (a == 0) {
                     printf("ERROR\n");
-                    output.clear();
-                    stack.clear();
-                    arg_counts.clear();
+                    divideByZero = true;
                     return;
                 }
-                output.push_back(b / a);
+                b = output.pop().value;
+                output.push(b / a);
                 break;
             case IF:
-                c = output.pop_back().value;
-                b = output.pop_back().value;
-                a = output.pop_back().value;
-                output.push_back(a > 0 ? b : c);
+                c = output.pop().value;
+                b = output.pop().value;
+                a = output.pop().value;
+                output.push(a > 0 ? b : c);
                 break;
             case NOT:
-                a = output.pop_back().value;
-                output.push_back(-a);
+                a = output.pop().value;
+                output.push(-a);
                 break;
             case MAX:
                 if (token.arg_count == 1) {
-                    output.push_back(output.pop_back().value);
+                    output.push(output.pop().value);
                     break;
                 }
                 while (token.arg_count-- > 1) {
-                    a = output.pop_back().value;
-                    b = output.pop_back().value;
-                    output.push_back(a > b ? a : b);
+                    a = output.pop().value;
+                    b = output.pop().value;
+                    output.push(a > b ? a : b);
                 }
                 break;
             case MIN:
                 if (token.arg_count == 1) {
-                    output.push_back(output.pop_back().value);
+                    output.push(output.pop().value);
                     break;
                 }
                 while (token.arg_count-- > 1) {
-                    a = output.pop_back().value;
-                    b = output.pop_back().value;
-                    output.push_back(a < b ? a : b);
+                    a = output.pop().value;
+                    b = output.pop().value;
+                    output.push(a < b ? a : b);
                 }
                 break;
         }
