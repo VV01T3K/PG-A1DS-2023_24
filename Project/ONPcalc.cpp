@@ -20,6 +20,7 @@
  * at the end of the method.
  */
 void ONPcalc::calculate() {
+    int_stack.clear();
     while (!stack.isEmpty()) {
         Token token = stack.pop();
         if (token.type == Type::NUMBER) {
