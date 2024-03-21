@@ -33,7 +33,7 @@ void Converter::convertOneFormula() {
         if (str[0] == '.') break;
         Token token(str);
         if (token.type == NUMBER) {
-            output.put(std::move(token));
+            output.push_back(std::move(token));
         } else if (token.type == FUNCTION) {
             arg_counts.push(ONE);
             stack.push(std::move(token));
@@ -42,23 +42,23 @@ void Converter::convertOneFormula() {
                    (stack.peek().getPrecedence() > token.getPrecedence() ||
                     (stack.peek().getPrecedence() == token.getPrecedence() &&
                      token.associativity == LEFT))) {
-                output.put(stack.pop());
+                output.push_back(stack.pop());
             }
             stack.push(std::move(token));
         } else if (token.value == COMMA) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET) {
-                output.put(stack.pop());
+                output.push_back(stack.pop());
             }
             if (!arg_counts.isEmpty()) arg_counts.peek()++;
         } else if (token.value == LEFT_BRACKET) {
             stack.push(std::move(token));
         } else if (token.value == RIGHT_BRACKET) {
             while (!stack.isEmpty() && stack.peek().value != LEFT_BRACKET) {
-                output.put(stack.pop());
+                output.push_back(stack.pop());
             }
             stack.pop();
             if (!stack.isEmpty() && stack.peek().type == FUNCTION) {
-                output.put(stack.pop());
+                output.push_back(stack.pop());
             }
         }
         if (!output.isEmpty() && !arg_counts.isEmpty() &&
@@ -68,74 +68,72 @@ void Converter::convertOneFormula() {
     }
     getc(stdin);
     while (!stack.isEmpty()) {
-        output.put(stack.pop());
+        output.push_back(stack.pop());
     }
-    stack.swap(output);
 }
 
-void Converter::calculate(Token& token) {
-    Token token = stack.pop();
+void Converter::calculate() {
+    Token token = output.pop_back();
     if (token.type == Type::NUMBER) {
-        int_stack.push(token.value);
+        output.push_back(token.value);
     } else {
         int a, b, c;
-        if (!int_stack.isEmpty()) {
-            token.print();
-            int_stack.printInt();
-        }
         switch (token.value) {
             case ADD:
-                int_stack.push(int_stack.pop() + int_stack.pop());
+                output.push_back(output.pop_back().value +
+                                 output.pop_back().value);
                 break;
             case SUBTRACT:
-                a = int_stack.pop();
-                b = int_stack.pop();
-                int_stack.push(b - a);
+                a = output.pop_back().value;
+                b = output.pop_back().value;
+                output.push_back(b - a);
                 break;
             case MULTIPLY:
-                int_stack.push(int_stack.pop() * int_stack.pop());
+                output.push_back(output.pop_back().value *
+                                 output.pop_back().value);
                 break;
             case DIVIDE:
-                a = int_stack.pop();
-                b = int_stack.pop();
+                a = output.pop_back().value;
+                b = output.pop_back().value;
                 if (a == 0) {
                     printf("ERROR\n");
-                    int_stack.clear();
+                    output.clear();
                     stack.clear();
+                    arg_counts.clear();
                     return;
                 }
-                int_stack.push(b / a);
+                output.push_back(b / a);
                 break;
             case IF:
-                c = int_stack.pop();
-                b = int_stack.pop();
-                a = int_stack.pop();
-                int_stack.push(a > 0 ? b : c);
+                c = output.pop_back().value;
+                b = output.pop_back().value;
+                a = output.pop_back().value;
+                output.push_back(a > 0 ? b : c);
                 break;
             case NOT:
-                a = int_stack.pop();
-                int_stack.push(-a);
+                a = output.pop_back().value;
+                output.push_back(-a);
                 break;
             case MAX:
                 if (token.arg_count == 1) {
-                    int_stack.push(int_stack.pop());
+                    output.push_back(output.pop_back().value);
                     break;
                 }
                 while (token.arg_count-- > 1) {
-                    a = int_stack.pop();
-                    b = int_stack.pop();
-                    int_stack.push(a > b ? a : b);
+                    a = output.pop_back().value;
+                    b = output.pop_back().value;
+                    output.push_back(a > b ? a : b);
                 }
                 break;
             case MIN:
                 if (token.arg_count == 1) {
-                    int_stack.push(int_stack.pop());
+                    output.push_back(output.pop_back().value);
                     break;
                 }
                 while (token.arg_count-- > 1) {
-                    a = int_stack.pop();
-                    b = int_stack.pop();
-                    int_stack.push(a < b ? a : b);
+                    a = output.pop_back().value;
+                    b = output.pop_back().value;
+                    output.push_back(a < b ? a : b);
                 }
                 break;
         }

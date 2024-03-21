@@ -40,5 +40,5 @@ class Converter {
      * does not return any specific value or result.
      */
     void convertOneFormula();
-    void calculate(Token& token);
+    void calculate();
 };

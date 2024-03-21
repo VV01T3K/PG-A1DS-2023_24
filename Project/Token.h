@@ -81,5 +81,11 @@ class Token {
     int getPrecedence() const;
     void print() const;
 
+    Token(int value)
+        : value(value),
+          type(Type::NUMBER),
+          associativity(LEFT),
+          arg_count(-1){};
+
     friend std::ostream& operator<<(std::ostream& out, const Token& token);
 };
