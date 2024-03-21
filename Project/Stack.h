@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdio>
-#include <iostream>
 
 template <typename T, template <typename...> class Container>
 class Stack {
