@@ -10,9 +10,7 @@
 
 class HexBoard {
    private:
-    char tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
-
-    void readBoardFromInput() {
+    void readBoardFromInput(Hex::State *tmp) {
         int index = 0;
         int width = 0;
         char c;
@@ -23,7 +21,7 @@ class HexBoard {
                 width++;
                 std::cin >> c;
                 if (c == '>') c = 'x';
-                tmp[index++] = c;
+                tmp[index++] = static_cast<Hex::State>(c);
             }
             if (c == '\n') {
                 size = std::max(size, width);
@@ -62,7 +60,7 @@ class HexBoard {
             for (int q = 0; q < size; q++) {
                 Hex *hex = getHex(q, r);
                 if (hex != nullptr) {
-                    std::cout << hex->symbol;
+                    std::cout << static_cast<char>(hex->state);
                 } else {
                     std::cout << '.';
                 }
@@ -72,7 +70,8 @@ class HexBoard {
     }
 
     void loadBoard() {
-        readBoardFromInput();
+        Hex::State tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
+        readBoardFromInput(tmp);
         int index = 0;
         int q = 0;
         int r = 0;
@@ -80,7 +79,7 @@ class HexBoard {
             int tmp_q = q;
             int tmp_r = r;
             for (int j = 0; j < std::abs(q - r) + 1; j++) {
-                getHex(tmp_q, tmp_r)->symbol = tmp[index++];
+                getHex(tmp_q, tmp_r)->state = tmp[index++];
                 tmp_q++;
                 tmp_r--;
             }

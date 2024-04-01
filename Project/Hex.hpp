@@ -11,7 +11,13 @@ enum class Direction { N, NE, SE, S, SW, NW };
 class HexBoard;
 class Hex {
    public:
-    char symbol = 129;
+    enum class State : char {
+        RED = 'r',
+        BLUE = 'b',
+        EMPTY = ' ',
+        UNDEFINED = 'x'
+    };
+    State state = State::EMPTY;
     Position position;
     HexBoard& board;
 
