@@ -1,8 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include <iostream>
-#include <queue>
+#include <cstdint>
 #include <vector>
 
 class Position {
