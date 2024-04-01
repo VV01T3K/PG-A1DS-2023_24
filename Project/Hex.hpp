@@ -11,7 +11,7 @@ enum class Direction { N, NE, SE, S, SW, NW };
 class HexBoard;
 class Hex {
    public:
-    char symbol = 'X';
+    char symbol = 129;
     Position position;
     HexBoard& board;
 
