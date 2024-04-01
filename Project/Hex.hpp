@@ -3,41 +3,23 @@
 #include <cmath>
 #include <vector>
 
+// #include "HexBoard.hpp"
 #include "Position.hpp"
 
-enum class Direction { N, NE, SE, S, SW, NW };
+enum class Direction { N, NW, NE, S, SW, SE };
+
+class HexBoard;
 class Hex {
    public:
     char symbol = 'X';
     Position position;
+    HexBoard& board;
 
-    Hex(int q, int r) : position(q, r) {}
+    Hex(int q, int r, HexBoard& board);
 
-    int distance(const Hex& other) const {
-        return position.distance(other.position);
-    }
+    int distance(const Hex& other) const;
 
-    std::vector<Hex> neighbors() const {
-        return {
-            {position.q, position.r - 1},     {position.q + 1, position.r - 1},
-            {position.q + 1, position.r},     {position.q, position.r + 1},
-            {position.q - 1, position.r + 1}, {position.q - 1, position.r}};
-    }
+    Hex* neighbor(Direction direction) const;
 
-    Hex neighbor(Direction direction) const {
-        switch (direction) {
-            case Direction::N:
-                return {position.q, position.r - 1};
-            case Direction::NE:
-                return {position.q + 1, position.r - 1};
-            case Direction::SE:
-                return {position.q + 1, position.r};
-            case Direction::S:
-                return {position.q, position.r + 1};
-            case Direction::SW:
-                return {position.q - 1, position.r + 1};
-            case Direction::NW:
-                return {position.q - 1, position.r};
-        }
-    }
+    std::vector<Hex*> neighbors() const;
 };
