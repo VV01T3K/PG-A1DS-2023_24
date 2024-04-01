@@ -14,13 +14,13 @@ int main() {
     // // board.getHex(2, 2)->symbol = '8';
 
     Hex* current = board.getHex(1, 1);
-    current->symbol = '0';
-    // current->neighbor(Direction::N)->symbol = 'N';
-    // current->neighbor(Direction::NE)->symbol = '0';
-    // current->neighbor(Direction::SE)->symbol = '1';
-    current->neighbor(Direction::SE)->symbol = '1';
-    // current->neighbor(Direction::SW)->symbol = '2';
-    // current->neighbor(Direction::NW)->symbol = '3';
+    current->symbol = 'S';
+    for (int i = 0; i < 6; i++) {
+        current->neighbor(i)->symbol = 49 + i;
+    }
+    // 12X
+    // 6S3
+    // X54
 
     board.print();
 

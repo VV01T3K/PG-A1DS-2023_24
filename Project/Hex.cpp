@@ -8,6 +8,11 @@ int Hex::distance(const Hex& other) const {
     return position.distance(other.position);
 }
 
+Hex* Hex::neighbor(int direct) const {
+    Direction direction = static_cast<Direction>(direct);
+    return neighbor(direction);
+}
+
 Hex* Hex::neighbor(Direction direction) const {
     int q = position.q;
     int r = position.r;

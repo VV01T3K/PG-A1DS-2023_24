@@ -6,7 +6,7 @@
 // #include "HexBoard.hpp"
 #include "Position.hpp"
 
-enum class Direction { N, NW, NE, S, SW, SE };
+enum class Direction { N, NE, SE, S, SW, NW };
 
 class HexBoard;
 class Hex {
@@ -20,6 +20,7 @@ class Hex {
     int distance(const Hex& other) const;
 
     Hex* neighbor(Direction direction) const;
+    Hex* neighbor(int direct) const;
 
     std::vector<Hex*> neighbors() const;
 };
