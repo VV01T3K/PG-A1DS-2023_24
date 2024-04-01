@@ -36,7 +36,7 @@ int main() {
     //     }
     //     cout << endl;
     // }
-    // HexBoard board(11);
+    HexBoard board(11);
 
     // size = 3;
     // board.getHex(0, 0)->symbol = tmp[0][0];
@@ -53,21 +53,26 @@ int main() {
 
     // board.getHex(2, 2)->symbol = tmp[4][0];
 
-    int size = 3;
+    int size = 4;
     int q = 0;
     int r = 0;
-    for (int i = 0; i < size; i++) {
+    int index = 0;
+    for (int i = 0; i < 2 * size - 1; i++) {
         int tmp_q = q;
         int tmp_r = r;
         for (int j = 0; j < abs(q - r) + 1; j++) {
-            cout << tmp_q++ << " " << tmp_r-- << ", ";
+            board.getHex(tmp_q, tmp_r)->symbol = 48 + index++;
+            tmp_q++;
+            tmp_r--;
         }
-        cout << endl;
-        r++;
+        if (i < size - 1)
+            r++;
+        else
+            q++;
     }
 
     // cout << endl << "==================" << endl;
-    // board.print();
+    board.print();
 
     return 0;
 }
