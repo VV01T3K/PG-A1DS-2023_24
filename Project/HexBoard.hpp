@@ -8,6 +8,17 @@
 
 #define MAX_BOARD_SIZE 11
 
+enum class Info {
+    BOARD_SIZE,
+    PAWNS_NUMBER,
+    IS_BOARD_CORRECT,
+    IS_GAME_OVER,
+    IS_BOARD_POSSIBLE,
+    CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT,
+    CAN_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT,
+    STOP
+};
+
 class HexBoard {
    private:
     void readBoardFromInput(Hex::State *tmp) {
@@ -27,12 +38,15 @@ class HexBoard {
                 size = std::max(size, width);
                 width = 0;
             }
+            if (c >= 'A' && c <= 'B') break;
         }
     }
 
    public:
     int size = 0;
     std::vector<Hex *> hexes;
+    int Red_Stones = 0;
+    int Blue_Stones = 0;
 
     HexBoard() {
         hexes.reserve(MAX_BOARD_SIZE * MAX_BOARD_SIZE);
@@ -46,6 +60,13 @@ class HexBoard {
         for (auto hex : hexes) {
             delete hex;
         }
+    }
+
+    void reset() {
+        for (auto hex : hexes) {
+            hex->state = Hex::State::EMPTY;
+        }
+        size = 0;
     }
 
     Hex *getHex(int q, int r) const {
@@ -79,6 +100,8 @@ class HexBoard {
             int tmp_q = q;
             int tmp_r = r;
             for (int j = 0; j < std::abs(q - r) + 1; j++) {
+                if (tmp[index] == Hex::State::RED) Red_Stones++;
+                if (tmp[index] == Hex::State::BLUE) Blue_Stones++;
                 getHex(tmp_q, tmp_r)->state = tmp[index++];
                 tmp_q++;
                 tmp_r--;
@@ -87,6 +110,38 @@ class HexBoard {
                 r++;
             else
                 q++;
+        }
+    }
+
+    void fetchInfo(Info info) {
+        using namespace std;
+        switch (info) {
+            case Info::BOARD_SIZE:
+                cout << size << endl;
+                break;
+            case Info::PAWNS_NUMBER:
+                cout << Red_Stones + Blue_Stones << endl;
+                break;
+            case Info::IS_BOARD_CORRECT:
+                if ((Red_Stones == Blue_Stones ||
+                     Red_Stones == Blue_Stones + 1 ||
+                     Red_Stones + 1 == Blue_Stones))
+                    cout << "YES" << endl;
+                else
+                    cout << "NO" << endl;
+                break;
+            case Info::IS_GAME_OVER:
+                // TODO: Implement this
+                break;
+            case Info::IS_BOARD_POSSIBLE:
+                // TODO: Implement this
+                break;
+            case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
+                // TODO: Implement this
+                break;
+            case Info::CAN_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT:
+                // TODO: Implement this
+                break;
         }
     }
 };
