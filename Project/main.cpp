@@ -9,31 +9,23 @@ using namespace std;
 
 Info getQuery() {
     string query;
-    char c;
-    while (cin.get(c)) {
-        if (c >= 'A' && c <= 'B') break;
-        if (c == EOF) return Info::STOP;
-    }
     cin >> query;
-    cin.ignore();
-    if (query == "RD_SIZE") return Info::BOARD_SIZE;
-    if (query == "NS_NUMBER") return Info::PAWNS_NUMBER;
-    if (query == "BOARD_CORRECT") return Info::IS_BOARD_CORRECT;
-    if (query == "GAME_OVER") return Info::IS_GAME_OVER;
-    if (query == "BOARD_POSSIBLE") return Info::IS_BOARD_POSSIBLE;
-    if (query == "_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT")
+    cin.ignore(2);
+    if (query == "OARD_SIZE") return Info::BOARD_SIZE;
+    if (query == "WNS_NUMBER") return Info::PAWNS_NUMBER;
+    if (query == "OARD_CORRECT") return Info::IS_BOARD_CORRECT;
+    if (query == "ME_OVER") return Info::IS_GAME_OVER;
+    if (query == "OARD_POSSIBLE") return Info::IS_BOARD_POSSIBLE;
+    if (query == "N_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT")
         return Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT;
-    if (query == "_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT")
+    if (query == "N_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT")
         return Info::CAN_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT;
     return Info::STOP;
 }
 
 int main() {
+    ios_base::sync_with_stdio(false);
     HexBoard board;
-    board.loadBoard();
-    Info query = getQuery();
-    board.fetchInfo(query);
-    board.reset();
 
     while (true) {
         board.loadBoard();

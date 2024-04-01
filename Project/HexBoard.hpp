@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -45,8 +46,8 @@ class HexBoard {
    public:
     int size = 0;
     std::vector<Hex *> hexes;
-    int Red_Stones = 0;
-    int Blue_Stones = 0;
+    int red_stones = 0;
+    int blue_stones = 0;
 
     HexBoard() {
         hexes.reserve(MAX_BOARD_SIZE * MAX_BOARD_SIZE);
@@ -67,6 +68,8 @@ class HexBoard {
             hex->state = Hex::State::EMPTY;
         }
         size = 0;
+        red_stones = 0;
+        blue_stones = 0;
     }
 
     Hex *getHex(int q, int r) const {
@@ -86,7 +89,7 @@ class HexBoard {
                     std::cout << '.';
                 }
             }
-            std::cout << std::endl;
+            std::cout << '\n';
         }
     }
 
@@ -100,8 +103,8 @@ class HexBoard {
             int tmp_q = q;
             int tmp_r = r;
             for (int j = 0; j < std::abs(q - r) + 1; j++) {
-                if (tmp[index] == Hex::State::RED) Red_Stones++;
-                if (tmp[index] == Hex::State::BLUE) Blue_Stones++;
+                if (tmp[index] == Hex::State::RED) red_stones++;
+                if (tmp[index] == Hex::State::BLUE) blue_stones++;
                 getHex(tmp_q, tmp_r)->state = tmp[index++];
                 tmp_q++;
                 tmp_r--;
@@ -117,18 +120,17 @@ class HexBoard {
         using namespace std;
         switch (info) {
             case Info::BOARD_SIZE:
-                cout << size << endl;
+                cout << size << '\n';
                 break;
             case Info::PAWNS_NUMBER:
-                cout << Red_Stones + Blue_Stones << endl;
+                cout << red_stones + blue_stones << '\n';
                 break;
             case Info::IS_BOARD_CORRECT:
-                if ((Red_Stones == Blue_Stones ||
-                     Red_Stones == Blue_Stones + 1 ||
-                     Red_Stones + 1 == Blue_Stones))
-                    cout << "YES" << endl;
+                if ((red_stones == blue_stones ||
+                     red_stones == blue_stones + 1))
+                    cout << "YES" << '\n';
                 else
-                    cout << "NO" << endl;
+                    cout << "NO" << '\n';
                 break;
             case Info::IS_GAME_OVER:
                 // TODO: Implement this
