@@ -1,28 +1,28 @@
-#pragma once
-
-#include <cmath>
-#include <memory>
-#include <stdexcept>
-#include <vector>
+#include "Position.hpp"
 
 class Hex {
    public:
-    Hex() : q(0), r(0), s(0) {}
-    Hex(int q, int r, int s) : q(q), r(r), s(s) {
-        if (q + r + s != 0) {
+    Position position;
+    char color = 'X';
+
+    Hex() : position(0, 0, 0) {}
+    Hex(int q, int r, int s) : position(q, r, s) {
+        if (position.q + position.r + position.s != 0) {
             throw std::invalid_argument("q + r + s must be 0");
         }
     }
 
-    int q, r, s;
-
-    char color = 'X';
-
-    Hex operator+(const Hex &b) const { return Hex(q + b.q, r + b.r, s + b.s); }
-
-    Hex operator-(const Hex &b) const { return Hex(q - b.q, r - b.r, s - b.s); }
-
-    Hex operator*(int k) const { return Hex(q * k, r * k, s * k); }
+    Hex operator+(const Hex &b) const {
+        return Hex(position.q + b.position.q, position.r + b.position.r,
+                   position.s + b.position.s);
+    }
+    Hex operator-(const Hex &b) const {
+        return Hex(position.q - b.position.q, position.r - b.position.r,
+                   position.s - b.position.s);
+    }
+    Hex operator*(int k) const {
+        return Hex(position.q * k, position.r * k, position.s * k);
+    }
 
     Hex neighbor(int direction) const { return *this + directions[direction]; }
 
@@ -35,10 +35,17 @@ class Hex {
         return result;
     }
 
-    int length() const { return (std::abs(q) + std::abs(r) + std::abs(s)) / 2; }
+    int length() const {
+        return (std::abs(position.q) + std::abs(position.r) +
+                std::abs(position.s)) /
+               2;
+    }
 
     int distance(const Hex &b) const {
-        return (std::abs(q - b.q) + std::abs(r - b.r) + std::abs(s - b.s)) / 2;
+        return (std::abs(position.q - b.position.q) +
+                std::abs(position.r - b.position.r) +
+                std::abs(position.s - b.position.s)) /
+               2;
     }
 
     static const std::vector<Hex> directions;
