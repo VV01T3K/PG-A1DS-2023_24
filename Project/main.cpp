@@ -12,13 +12,13 @@ int main() {
     HexBoard board;
     board.load();
 
-    Hex* start = board.getHex(0, 0);
-    Hex* end = board.getHex(1, 2);
+    // Hex* start = board.getHex(0, 0);
+    // Hex* end = board.getHex(1, 2);
 
-    start->state = Hex::State::RED;
-    end->state = Hex::State::RED;
+    // start->state = Hex::State::RED;
+    // end->state = Hex::State::RED;
 
-    cout << start->distance(end) << endl;
+    // cout << start->distance(end) << endl;
 
     // board.print();
     // while (true) {

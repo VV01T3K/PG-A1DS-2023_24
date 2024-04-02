@@ -17,9 +17,16 @@ class Hex {
         EMPTY = 'x',
         UNDEFINED = '.'
     };
+    enum class Edge : char {
+        RED = 'r',
+        BLUE = 'b',
+        BOTH = '.',
+        NOT_EDGE = '!',
+    };
     State state = State::UNDEFINED;
     Position position;
     HexBoard& board;
+    Edge edge = Edge::NOT_EDGE;
 
     Hex(int q, int r, HexBoard& board);
 

@@ -114,6 +114,17 @@ class HexBoard {
             else
                 q++;
         }
+
+        for (int i = 0; i < size; i++) {
+            getHex(size - 1, i)->edge = Hex::Edge::RED;
+            getHex(0, i)->edge = Hex::Edge::RED;
+            getHex(i, size - 1)->edge = Hex::Edge::BLUE;
+            getHex(i, 0)->edge = Hex::Edge::BLUE;
+        }
+        getHex(0, 0)->edge = Hex::Edge::BOTH;
+        getHex(size - 1, 0)->edge = Hex::Edge::BOTH;
+        getHex(0, size - 1)->edge = Hex::Edge::BOTH;
+        getHex(size - 1, size - 1)->edge = Hex::Edge::BOTH;
     }
 
     void fetchInfo(Info info) {
