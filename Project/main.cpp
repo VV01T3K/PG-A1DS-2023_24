@@ -11,15 +11,24 @@ Info getQuery();
 int main() {
     ios_base::sync_with_stdio(false);
     HexBoard board;
-    while (true) {
-        board.load();
-        // board.print();
-        Info query = getQuery();
-        if (query == Info::STOP) break;
-        board.fetchInfo(query);
-        // cout << '\n';
-        board.reset();
+    board.load();
+    board.print();
+    Path path = board.shortestWiningPath(Player::BLUE);
+    for (auto hex : path.path) {
+        cout << hex->position.q << ' ' << hex->position.r << '\n';
+        hex->state = Hex::State::UNDEFINED;
+        cout << '\n';
+        board.print();
     }
+    // while (true) {
+    //     board.load();
+    //     // board.print();
+    //     Info query = getQuery();
+    //     if (query == Info::STOP) break;
+    //     board.fetchInfo(query);
+    //     // cout << '\n';
+    //     board.reset();
+    // }
 
     return 0;
 }
