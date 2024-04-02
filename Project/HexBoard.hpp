@@ -131,7 +131,7 @@ class HexBoard {
             blue_edge_2.push_back(getHex(i, size - 1));
         }
     }
-    Path shortestPath(Hex* start, Hex* end, Player player) {
+    Path shortestPath(Hex* start, Hex* end, Hex::State player) {
         std::unordered_map<Hex*, Hex*> cameFrom;
         std::unordered_map<Hex*, int> costSoFar;
         std::priority_queue<std::pair<int, Hex*>,
@@ -141,6 +141,14 @@ class HexBoard {
         cameFrom[start] = nullptr;
         costSoFar[start] = 0;
         frontier.emplace(0, start);
+
+        if (player == Hex::State::RED && start->state == Hex::State::BLUE) {
+            return Path({}, 10000, 10000);
+        }
+        if (player == Hex::State::BLUE && start->state == Hex::State::RED) {
+            return Path({}, 10000, 10000);
+        }
+        if (start->state != player) costSoFar[start] = 1;
 
         while (!frontier.empty()) {
             Hex* current = frontier.top().second;
@@ -154,11 +162,7 @@ class HexBoard {
                 int newCost = costSoFar[current];
                 if (next->state == Hex::State::EMPTY) {
                     newCost += 1;
-                } else if (next->state == Hex::State::RED &&
-                           player == Player::RED) {
-                    newCost += 0;
-                } else if (next->state == Hex::State::BLUE &&
-                           player == Player::BLUE) {
+                } else if (next->state == player) {
                     newCost += 0;
                 } else {
                     continue;
@@ -177,7 +181,7 @@ class HexBoard {
         for (Hex* hex = end; hex != nullptr; hex = cameFrom[hex]) {
             path.push_back(hex);
         }
-        std::reverse(path.begin(), pat h.end());
+        std::reverse(path.begin(), path.end());
 
         int length = path.size();
         int cost = costSoFar[end];
@@ -185,12 +189,12 @@ class HexBoard {
         return Path(path, length, cost);
     }
 
-    Path findShortestPathToConectEdges(Player player) {
+    Path findShortestPathToConectEdges(Hex::State player) {
         Path path;
-        if (player == Player::RED) {
+        if (player == Hex::State::RED) {
             for (auto hex : red_edge_1) {
                 for (auto hex2 : red_edge_2) {
-                    Path tmp = shortestPath(hex, hex2, Player::RED);
+                    Path tmp = shortestPath(hex, hex2, Hex::State::RED);
                     // if (path.cost == 0) return tmp;
                     std::cout << "Cost: " << tmp.cost << std::endl;
 

@@ -12,7 +12,7 @@ int main() {
     HexBoard board;
     board.load();
 
-    board.findShortestPathToConectEdges(Player::RED);
+    board.findShortestPathToConectEdges(Hex::State::RED);
     // for (auto hex : board.findShortestPathToConectEdges(Player::RED).path) {
     //     cout << hex->position.q << " " << hex->position.r << endl;
     //     hex->state = Hex::State::UNDEFINED;
