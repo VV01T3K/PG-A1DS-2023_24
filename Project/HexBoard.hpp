@@ -243,7 +243,14 @@ class HexBoard {
                     cout << "NO" << '\n';
                     break;
                 }
-
+                if (!win_red && win_blue) {
+                    if (red_stones == blue_stones) {
+                        cout << "YES" << '\n';
+                        break;
+                    }
+                    cout << "NO" << '\n';
+                    break;
+                }
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
                 // TODO: Implement this
