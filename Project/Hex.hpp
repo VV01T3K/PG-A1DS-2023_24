@@ -18,9 +18,11 @@ class Hex {
         UNDEFINED = '.'
     };
     State state = State::UNDEFINED;
-    Position position;
+    Position position = Position(-1, -1);
     HexBoard& board;
+    std::vector<Hex*> neighbors;
 
+    Hex(HexBoard& board);
     Hex(int q, int r, HexBoard& board);
 
     int distance(const Hex* other) const;
@@ -29,5 +31,11 @@ class Hex {
     Hex* neighbor(Direction direction) const;
     Hex* neighbor(int direct) const;
 
-    std::vector<Hex*> neighbors() const;
+    std::vector<Hex*> findNeighbors();
+
+    void reset() {
+        state = State::UNDEFINED;
+        position = Position(-1, -1);
+        neighbors.clear();
+    }
 };

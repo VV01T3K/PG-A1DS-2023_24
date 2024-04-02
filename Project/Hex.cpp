@@ -2,6 +2,7 @@
 
 #include "HexBoard.hpp"
 
+Hex::Hex(HexBoard& board) : board(board) {}
 Hex::Hex(int q, int r, HexBoard& board) : position(q, r), board(board) {}
 
 int Hex::distance(const Hex& other) const {
@@ -36,13 +37,13 @@ Hex* Hex::neighbor(Direction direction) const {
     return nullptr;
 }
 
-std::vector<Hex*> Hex::neighbors() const {
-    std::vector<Hex*> result;
+std::vector<Hex*> Hex::findNeighbors() {
+    if (!neighbors.empty()) return neighbors;
     for (int i = 0; i < 6; ++i) {
         Hex* neighbor_hex = neighbor(i);
         if (neighbor_hex != nullptr) {
-            result.push_back(neighbor_hex);
+            neighbors.push_back(neighbor_hex);
         }
     }
-    return result;
+    return neighbors;
 }
