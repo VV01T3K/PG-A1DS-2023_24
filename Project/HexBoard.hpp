@@ -195,7 +195,8 @@ class HexBoard {
 
     void fetchInfo(Info info) {
         using namespace std;
-        Path path;
+        bool win_red;
+        bool win_blue;
         switch (info) {
             case Info::BOARD_SIZE:
                 cout << size << '\n';
@@ -220,7 +221,28 @@ class HexBoard {
                     cout << "NO" << '\n';
                 break;
             case Info::IS_BOARD_POSSIBLE:
-                if (!is_correct()) cout << "NO" << '\n';
+                if (!is_correct()) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+                win_red = has_win(Player::RED);
+                win_blue = has_win(Player::BLUE);
+                if (win_red && win_blue) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+                if (!win_red && !win_blue) {
+                    cout << "YES" << '\n';
+                    break;
+                }
+                if (win_red && !win_blue) {
+                    if (red_stones == blue_stones + 1) {
+                        cout << "YES" << '\n';
+                        break;
+                    }
+                    cout << "NO" << '\n';
+                    break;
+                }
 
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
