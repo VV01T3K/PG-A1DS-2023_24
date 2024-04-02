@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "Hex.hpp"
+#include "Path.hpp"
 
 #define MAX_BOARD_SIZE 11
 
@@ -52,6 +53,10 @@ class HexBoard {
     std::vector<Hex*> hexes;
     int red_stones = 0;
     int blue_stones = 0;
+    std::vector<Hex*> red_edge_1;
+    std::vector<Hex*> red_edge_2;
+    std::vector<Hex*> blue_edge_1;
+    std::vector<Hex*> blue_edge_2;
 
     HexBoard() {
         hexes.reserve(MAX_BOARD_SIZE * MAX_BOARD_SIZE);
@@ -120,17 +125,13 @@ class HexBoard {
         }
 
         for (int i = 0; i < size; i++) {
-            getHex(size - 1, i)->edge = Hex::Edge::RED;
-            getHex(0, i)->edge = Hex::Edge::RED;
-            getHex(i, size - 1)->edge = Hex::Edge::BLUE;
-            getHex(i, 0)->edge = Hex::Edge::BLUE;
+            red_edge_1.push_back(getHex(0, i));
+            red_edge_2.push_back(getHex(size - 1, i));
+            blue_edge_1.push_back(getHex(i, 0));
+            blue_edge_2.push_back(getHex(i, size - 1));
         }
-        getHex(0, 0)->edge = Hex::Edge::BOTH;
-        getHex(size - 1, 0)->edge = Hex::Edge::BOTH;
-        getHex(0, size - 1)->edge = Hex::Edge::BOTH;
-        getHex(size - 1, size - 1)->edge = Hex::Edge::BOTH;
     }
-    std::vector<Hex*> shortestPath(Hex* start, Hex* end, Player player) {
+    Path shortestPath(Hex* start, Hex* end, Player player) {
         std::unordered_map<Hex*, Hex*> cameFrom;
         std::unordered_map<Hex*, int> costSoFar;
         std::priority_queue<std::pair<int, Hex*>,
@@ -151,10 +152,16 @@ class HexBoard {
 
             for (Hex* next : current->neighbors()) {
                 int newCost = costSoFar[current];
-                if ((player == Player::RED && next->state != Hex::State::RED) ||
-                    (player == Player::BLUE &&
-                     next->state != Hex::State::BLUE)) {
+                if (next->state == Hex::State::EMPTY) {
                     newCost += 1;
+                } else if (next->state == Hex::State::RED &&
+                           player == Player::RED) {
+                    newCost += 0;
+                } else if (next->state == Hex::State::BLUE &&
+                           player == Player::BLUE) {
+                    newCost += 0;
+                } else {
+                    continue;
                 }
 
                 if (!costSoFar.count(next) || newCost < costSoFar[next]) {
@@ -170,8 +177,34 @@ class HexBoard {
         for (Hex* hex = end; hex != nullptr; hex = cameFrom[hex]) {
             path.push_back(hex);
         }
-        std::reverse(path.begin(), path.end());
+        std::reverse(path.begin(), pat h.end());
 
+        int length = path.size();
+        int cost = costSoFar[end];
+
+        return Path(path, length, cost);
+    }
+
+    Path findShortestPathToConectEdges(Player player) {
+        Path path;
+        if (player == Player::RED) {
+            for (auto hex : red_edge_1) {
+                for (auto hex2 : red_edge_2) {
+                    Path tmp = shortestPath(hex, hex2, Player::RED);
+                    // if (path.cost == 0) return tmp;
+                    std::cout << "Cost: " << tmp.cost << std::endl;
+
+                    for (auto hex : tmp.path) {
+                        std::cout << hex->position.q << " " << hex->position.r
+                                  << std::endl;
+                    }
+
+                    if (tmp.cost > path.cost) {
+                        path = tmp;
+                    }
+                }
+            }
+        }
         return path;
     }
 

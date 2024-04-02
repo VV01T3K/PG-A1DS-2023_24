@@ -12,18 +12,24 @@ int main() {
     HexBoard board;
     board.load();
 
-    Hex* start = board.getHex(0, 0);
-    Hex* end = board.getHex(3, 3);
+    board.findShortestPathToConectEdges(Player::RED);
+    // for (auto hex : board.findShortestPathToConectEdges(Player::RED).path) {
+    //     cout << hex->position.q << " " << hex->position.r << endl;
+    //     hex->state = Hex::State::UNDEFINED;
+    // }
 
-    start->state = Hex::State::RED;
-    end->state = Hex::State::RED;
+    // Hex* start = board.getHex(0, 0);
+    // Hex* end = board.getHex(3, 3);
+
+    // start->state = Hex::State::RED;
+    // end->state = Hex::State::RED;
 
     // cout << start->distance(end) << endl;
 
-    vector<Hex*> path = board.shortestPath(start, end, Player::RED);
-    for (auto hex : path) {
-        cout << hex->position.q << " " << hex->position.r << endl;
-    }
+    // vector<Hex*> path = board.shortestPath(start, end, Player::RED);
+    // for (auto hex : path) {
+    //     cout << hex->position.q << " " << hex->position.r << endl;
+    // }
 
     // board.print();
     // while (true) {
@@ -33,7 +39,7 @@ int main() {
     //     board.fetchInfo(query);
     //     board.reset();
     // }
-    board.print();
+    // board.print();
 
     return 0;
 }
