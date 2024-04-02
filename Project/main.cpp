@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "HexBoard.hpp"
+#include "Path.hpp"
 using namespace std;
 
 Info getQuery();
@@ -12,11 +13,16 @@ int main() {
     HexBoard board;
     board.load();
 
-    board.findShortestPathToConectEdges(Hex::State::RED);
-    // for (auto hex : board.findShortestPathToConectEdges(Player::RED).path) {
-    //     cout << hex->position.q << " " << hex->position.r << endl;
-    //     hex->state = Hex::State::UNDEFINED;
-    // }
+    board.print();
+    Path path = board.findShortestPathToConectEdges(Hex::State::RED);
+    // cout << path.cost << endl;
+    // cout << path.length << endl;
+
+    for (auto hex : path.path) {
+        cout << hex->position.q << " " << hex->position.r << endl;
+        hex->state = Hex::State::UNDEFINED;
+    }
+    board.print();
 
     // Hex* start = board.getHex(0, 0);
     // Hex* end = board.getHex(3, 3);

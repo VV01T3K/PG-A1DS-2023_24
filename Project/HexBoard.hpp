@@ -191,23 +191,25 @@ class HexBoard {
 
     Path findShortestPathToConectEdges(Hex::State player) {
         Path path;
-        if (player == Hex::State::RED) {
-            for (auto hex : red_edge_1) {
-                for (auto hex2 : red_edge_2) {
-                    Path tmp = shortestPath(hex, hex2, Hex::State::RED);
-                    // if (path.cost == 0) return tmp;
-                    std::cout << "Cost: " << tmp.cost << std::endl;
-
-                    for (auto hex : tmp.path) {
-                        std::cout << hex->position.q << " " << hex->position.r
-                                  << std::endl;
-                    }
-
-                    if (tmp.cost > path.cost) {
-                        path = tmp;
-                    }
+        for (auto hex : red_edge_1) {
+            for (auto hex2 : red_edge_2) {
+                Path tmp = shortestPath(hex, hex2, Hex::State::RED);
+                if (tmp.cost == 0) return tmp;
+                if (tmp.cost < path.cost) {
+                    path = tmp;
                 }
             }
+        }
+        // std::cout << "Cost: " << path.cost << std::endl;
+
+        // for (auto hex : path.path) {
+        //     std::cout << hex->position.q << " " << hex->position.r <<
+        //     std::endl;
+        // }
+        std::cout << "Cost: " << path.cost << std::endl;
+
+        for (auto hex : path.path) {
+            std::cout << hex->position.q << " " << hex->position.r << std::endl;
         }
         return path;
     }
