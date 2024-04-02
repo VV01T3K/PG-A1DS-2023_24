@@ -36,7 +36,7 @@ Hex* Hex::neighbor(Direction direction) const {
 std::vector<Hex*> Hex::neighbors() const {
     std::vector<Hex*> result;
     for (int i = 0; i < 6; ++i) {
-        Hex* neighbor_hex = neighbor(static_cast<Direction>(i));
+        Hex* neighbor_hex = neighbor(i);
         if (neighbor_hex != nullptr) {
             result.push_back(neighbor_hex);
         }

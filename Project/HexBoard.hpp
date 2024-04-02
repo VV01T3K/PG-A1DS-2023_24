@@ -65,7 +65,7 @@ class HexBoard {
 
     void reset() {
         for (auto hex : hexes) {
-            hex->state = Hex::State::EMPTY;
+            hex->state = Hex::State::UNDEFINED;
         }
         size = 0;
         red_stones = 0;
@@ -93,7 +93,7 @@ class HexBoard {
         }
     }
 
-    void loadBoard() {
+    void load() {
         Hex::State tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
         readBoardFromInput(tmp);
         int index = 0;

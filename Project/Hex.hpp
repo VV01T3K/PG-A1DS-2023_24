@@ -14,10 +14,10 @@ class Hex {
     enum class State : char {
         RED = 'r',
         BLUE = 'b',
-        EMPTY = ' ',
-        UNDEFINED = 'x'
+        EMPTY = 'x',
+        UNDEFINED = '.'
     };
-    State state = State::EMPTY;
+    State state = State::UNDEFINED;
     Position position;
     HexBoard& board;
 

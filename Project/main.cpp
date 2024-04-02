@@ -5,7 +5,24 @@
 #include "HexBoard.hpp"
 using namespace std;
 
-#define MAX_BOARD_SIZE 11
+Info getQuery();
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    HexBoard board;
+    board.load();
+
+    board.print();
+    // while (true) {
+    //     board.load();
+    //     Info query = getQuery();
+    //     if (query == Info::STOP) break;
+    //     board.fetchInfo(query);
+    //     board.reset();
+    // }
+
+    return 0;
+}
 
 Info getQuery() {
     string query;
@@ -21,19 +38,4 @@ Info getQuery() {
     if (query == "N_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT")
         return Info::CAN_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT;
     return Info::STOP;
-}
-
-int main() {
-    ios_base::sync_with_stdio(false);
-    HexBoard board;
-
-    while (true) {
-        board.loadBoard();
-        Info query = getQuery();
-        if (query == Info::STOP) break;
-        board.fetchInfo(query);
-        board.reset();
-    }
-
-    return 0;
 }
