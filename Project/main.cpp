@@ -12,36 +12,14 @@ int main() {
     ios_base::sync_with_stdio(false);
     HexBoard board;
     board.load();
-
-    Path path = board.findShortestPathToConectEdges(Player::RED);
-
-    for (auto hex : path.path) {
-        hex->state = Hex::State::UNDEFINED;
+    while (true) {
+        board.load();
+        Info query = getQuery();
+        if (query == Info::STOP) break;
+        board.fetchInfo(query);
+        cout << '\n';
+        board.reset();
     }
-    board.print();
-
-    // Hex* start = board.getHex(0, 0);
-    // Hex* end = board.getHex(3, 3);
-
-    // start->state = Hex::State::RED;
-    // end->state = Hex::State::RED;
-
-    // cout << start->distance(end) << endl;
-
-    // vector<Hex*> path = board.shortestPath(start, end, Player::RED);
-    // for (auto hex : path) {
-    //     cout << hex->position.q << " " << hex->position.r << endl;
-    // }
-
-    // board.print();
-    // while (true) {
-    //     board.load();
-    //     Info query = getQuery();
-    //     if (query == Info::STOP) break;
-    //     board.fetchInfo(query);
-    //     board.reset();
-    // }
-    // board.print();
 
     return 0;
 }

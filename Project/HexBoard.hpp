@@ -23,7 +23,7 @@ enum class Info {
     STOP
 };
 
-enum class Player { RED, BLUE };
+enum class Player { RED, BLUE, NONE };
 
 class HexBoard {
    private:
@@ -57,6 +57,7 @@ class HexBoard {
     std::vector<Hex*> red_edge_2;
     std::vector<Hex*> blue_edge_1;
     std::vector<Hex*> blue_edge_2;
+    Player won = Player::NONE;
 
     HexBoard() {
         hexes.reserve(MAX_BOARD_SIZE * MAX_BOARD_SIZE);
@@ -73,6 +74,7 @@ class HexBoard {
     void reset() {
         for (auto hex : hexes) {
             hex->state = Hex::State::UNDEFINED;
+            hex->position = Position(-1, -1);
         }
         size = 0;
         red_stones = 0;
@@ -112,9 +114,9 @@ class HexBoard {
             for (int j = 0; j < std::abs(q - r) + 1; j++) {
                 if (tmp[index] == Hex::State::RED) red_stones++;
                 if (tmp[index] == Hex::State::BLUE) blue_stones++;
-                getHex(tmp_q, tmp_r)->state = tmp[index++];
-                getHex(tmp_q, tmp_r)->position.q = tmp_q;
-                getHex(tmp_q, tmp_r)->position.r = tmp_r;
+                Hex* hex = getHex(tmp_q, tmp_r);
+                hex->state = tmp[index++];
+                hex->position = Position(tmp_q, tmp_r);
                 tmp_q++;
                 tmp_r--;
             }
@@ -132,6 +134,9 @@ class HexBoard {
         }
     }
     Path shortestPath(Hex* start, Hex* end, Hex::State player) {
+        // TODO if found path with 0 cost return immediately
+        // TODO use less data structures
+        // TODO oparate on Path and not on vactor + int
         std::unordered_map<Hex*, Hex*> cameFrom;
         std::unordered_map<Hex*, int> costSoFar;
         std::priority_queue<std::pair<int, Hex*>,
@@ -227,7 +232,15 @@ class HexBoard {
                     cout << "NO" << '\n';
                 break;
             case Info::IS_GAME_OVER:
-                // TODO: Implement this
+                if (findShortestPathToConectEdges(Player::RED).cost == 0) {
+                    cout << "YES RED" << '\n';
+                    break;
+                }
+                if (findShortestPathToConectEdges(Player::RED).cost == 0) {
+                    cout << "YES BLUE" << '\n';
+                    break;
+                }
+                cout << "NO" << '\n';
                 break;
             case Info::IS_BOARD_POSSIBLE:
                 // TODO: Implement this
