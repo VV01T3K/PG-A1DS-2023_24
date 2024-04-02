@@ -220,12 +220,13 @@ class HexBoard {
                     cout << "NO" << '\n';
                 break;
             case Info::IS_BOARD_POSSIBLE:
-                if (!is_correct() || has_win(Player::RED) ||
-                    has_win(Player::BLUE)) {
+                if (!is_correct())
                     cout << "NO" << '\n';
-                } else {
+                else if (red_stones <= size && blue_stones <= size)
                     cout << "YES" << '\n';
-                }
+                else
+                    cout << "NO" << '\n';
+
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
                 // TODO: Implement this
