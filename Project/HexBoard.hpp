@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <queue>
+#include <unordered_map>
 #include <vector>
 
 #include "Hex.hpp"
@@ -20,9 +22,11 @@ enum class Info {
     STOP
 };
 
+enum class Player { RED, BLUE };
+
 class HexBoard {
    private:
-    void readBoardFromInput(Hex::State *tmp) {
+    void readBoardFromInput(Hex::State* tmp) {
         int index = 0;
         int width = 0;
         char c;
@@ -45,7 +49,7 @@ class HexBoard {
 
    public:
     int size = 0;
-    std::vector<Hex *> hexes;
+    std::vector<Hex*> hexes;
     int red_stones = 0;
     int blue_stones = 0;
 
@@ -70,7 +74,7 @@ class HexBoard {
         blue_stones = 0;
     }
 
-    Hex *getHex(int q, int r) const {
+    Hex* getHex(int q, int r) const {
         if (q < 0 || r < 0 || q >= size || r >= size) {
             return nullptr;
         }
@@ -80,7 +84,7 @@ class HexBoard {
     void print() const {
         for (int r = 0; r < size; r++) {
             for (int q = 0; q < size; q++) {
-                Hex *hex = getHex(q, r);
+                Hex* hex = getHex(q, r);
                 if (hex != nullptr) {
                     std::cout << static_cast<char>(hex->state);
                 } else {
@@ -125,6 +129,51 @@ class HexBoard {
         getHex(size - 1, 0)->edge = Hex::Edge::BOTH;
         getHex(0, size - 1)->edge = Hex::Edge::BOTH;
         getHex(size - 1, size - 1)->edge = Hex::Edge::BOTH;
+    }
+    std::vector<Hex*> dijkstraShortestPath(Hex* start, Hex* end,
+                                           Player player) {
+        std::unordered_map<Hex*, Hex*> cameFrom;
+        std::unordered_map<Hex*, int> costSoFar;
+        std::priority_queue<std::pair<int, Hex*>,
+                            std::vector<std::pair<int, Hex*>>, std::greater<>>
+            frontier;
+
+        cameFrom[start] = nullptr;
+        costSoFar[start] = 0;
+        frontier.emplace(0, start);
+
+        while (!frontier.empty()) {
+            Hex* current = frontier.top().second;
+            frontier.pop();
+
+            if (current == end) {
+                break;
+            }
+
+            for (Hex* next : current->neighbors()) {
+                int newCost = costSoFar[current];
+                if ((player == Player::RED && next->state != Hex::State::RED) ||
+                    (player == Player::BLUE &&
+                     next->state != Hex::State::BLUE)) {
+                    newCost += 1;
+                }
+
+                if (!costSoFar.count(next) || newCost < costSoFar[next]) {
+                    costSoFar[next] = newCost;
+                    int priority = newCost + next->distance(end);
+                    frontier.emplace(priority, next);
+                    cameFrom[next] = current;
+                }
+            }
+        }
+
+        std::vector<Hex*> path;
+        for (Hex* hex = end; hex != nullptr; hex = cameFrom[hex]) {
+            path.push_back(hex);
+        }
+        std::reverse(path.begin(), path.end());
+
+        return path;
     }
 
     void fetchInfo(Info info) {

@@ -12,13 +12,18 @@ int main() {
     HexBoard board;
     board.load();
 
-    // Hex* start = board.getHex(0, 0);
-    // Hex* end = board.getHex(1, 2);
+    Hex* start = board.getHex(0, 0);
+    Hex* end = board.getHex(3, 3);
 
-    // start->state = Hex::State::RED;
-    // end->state = Hex::State::RED;
+    start->state = Hex::State::RED;
+    end->state = Hex::State::RED;
 
     // cout << start->distance(end) << endl;
+
+    vector<Hex*> path = board.dijkstraShortestPath(start, end, Player::RED);
+    for (auto hex : path) {
+        cout << hex->position.q << " " << hex->position.r << endl;
+    }
 
     // board.print();
     // while (true) {
