@@ -7,6 +7,9 @@ Hex::Hex(int q, int r, HexBoard& board) : position(q, r), board(board) {}
 int Hex::distance(const Hex& other) const {
     return position.distance(other.position);
 }
+int Hex::distance(const Hex* other) const {
+    return position.distance(other->position);
+}
 
 Hex* Hex::neighbor(int direct) const {
     Direction direction = static_cast<Direction>(direct);

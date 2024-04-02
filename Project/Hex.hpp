@@ -23,6 +23,7 @@ class Hex {
 
     Hex(int q, int r, HexBoard& board);
 
+    int distance(const Hex* other) const;
     int distance(const Hex& other) const;
 
     Hex* neighbor(Direction direction) const;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 
 // axial position for hexagonal grid
@@ -11,8 +12,9 @@ class Position {
     int r;
 
     int distance(const Position& other) const {
-        return (std::abs(q - other.q) + std::abs(r - other.r) +
-                std::abs(-q - r + other.q + other.r)) /
-               2;
+        int diff_q = std::abs(q - other.q);
+        int diff_r = std::abs(r - other.r);
+        int diff_s = std::abs((q + r) - (other.q + other.r));
+        return std::min(std::max(diff_q, diff_r), diff_s);
     }
 };

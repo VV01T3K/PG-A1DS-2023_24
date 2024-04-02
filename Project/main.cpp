@@ -12,7 +12,15 @@ int main() {
     HexBoard board;
     board.load();
 
-    board.print();
+    Hex* start = board.getHex(0, 0);
+    Hex* end = board.getHex(1, 2);
+
+    start->state = Hex::State::RED;
+    end->state = Hex::State::RED;
+
+    cout << start->distance(end) << endl;
+
+    // board.print();
     // while (true) {
     //     board.load();
     //     Info query = getQuery();
@@ -20,6 +28,7 @@ int main() {
     //     board.fetchInfo(query);
     //     board.reset();
     // }
+    board.print();
 
     return 0;
 }

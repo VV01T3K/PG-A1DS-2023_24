@@ -52,9 +52,7 @@ class HexBoard {
     HexBoard() {
         hexes.reserve(MAX_BOARD_SIZE * MAX_BOARD_SIZE);
         for (int i = 0; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
-            int q = i % MAX_BOARD_SIZE;
-            int r = i / MAX_BOARD_SIZE;
-            hexes.push_back(new Hex(q, r, *this));
+            hexes.push_back(new Hex(-1, -1, *this));
         }
     }
     ~HexBoard() {
@@ -106,6 +104,8 @@ class HexBoard {
                 if (tmp[index] == Hex::State::RED) red_stones++;
                 if (tmp[index] == Hex::State::BLUE) blue_stones++;
                 getHex(tmp_q, tmp_r)->state = tmp[index++];
+                getHex(tmp_q, tmp_r)->position.q = tmp_q;
+                getHex(tmp_q, tmp_r)->position.r = tmp_r;
                 tmp_q++;
                 tmp_r--;
             }
