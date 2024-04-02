@@ -232,6 +232,11 @@ class HexBoard {
                     cout << "NO" << '\n';
                 break;
             case Info::IS_GAME_OVER:
+                if ((red_stones != blue_stones &&
+                     red_stones != blue_stones + 1)) {
+                    cout << "NO" << '\n';
+                    break;
+                }
                 if (findShortestPathToConectEdges(Player::RED).cost == 0) {
                     cout << "YES RED" << '\n';
                     break;
