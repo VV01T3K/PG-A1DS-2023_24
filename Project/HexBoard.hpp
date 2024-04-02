@@ -181,7 +181,6 @@ class HexBoard {
         for (Hex* hex = end; hex != nullptr; hex = cameFrom[hex]) {
             path.push_back(hex);
         }
-        std::reverse(path.begin(), path.end());
 
         int length = path.size();
         int cost = costSoFar[end];
@@ -189,27 +188,24 @@ class HexBoard {
         return Path(path, length, cost);
     }
 
-    Path findShortestPathToConectEdges(Hex::State player) {
+    Path findShortestPathToConectEdges(Player player) {
         Path path;
-        for (auto hex : red_edge_1) {
-            for (auto hex2 : red_edge_2) {
-                Path tmp = shortestPath(hex, hex2, Hex::State::RED);
-                if (tmp.cost == 0) return tmp;
-                if (tmp.cost < path.cost) {
-                    path = tmp;
+        if (player == Player::RED) {
+            for (auto hex : red_edge_1) {
+                for (auto hex2 : red_edge_2) {
+                    Path tmp = shortestPath(hex, hex2, Hex::State::RED);
+                    if (tmp.cost == 0) return tmp;
+                    if (tmp.cost < path.cost) path = tmp;
                 }
             }
-        }
-        // std::cout << "Cost: " << path.cost << std::endl;
-
-        // for (auto hex : path.path) {
-        //     std::cout << hex->position.q << " " << hex->position.r <<
-        //     std::endl;
-        // }
-        std::cout << "Cost: " << path.cost << std::endl;
-
-        for (auto hex : path.path) {
-            std::cout << hex->position.q << " " << hex->position.r << std::endl;
+        } else {
+            for (auto hex : red_edge_1) {
+                for (auto hex2 : red_edge_2) {
+                    Path tmp = shortestPath(hex, hex2, Hex::State::BLUE);
+                    if (tmp.cost == 0) return tmp;
+                    if (tmp.cost < path.cost) path = tmp;
+                }
+            }
         }
         return path;
     }

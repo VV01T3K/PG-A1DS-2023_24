@@ -14,13 +14,6 @@ class Path {
     Path(std::vector<Hex*> path, int length, int cost)
         : path(path), length(length), cost(cost) {}
     Path(const Path& other) = default;
-    Path& operator=(const Path& other) {
-        if (this != &other) {
-            cost = other.cost;
-            length = other.length;
-            path = other.path;
-        }
-        return *this;
-    }
+    Path& operator=(const Path& other) = default;
     ~Path() = default;
 };

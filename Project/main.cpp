@@ -13,13 +13,9 @@ int main() {
     HexBoard board;
     board.load();
 
-    board.print();
-    Path path = board.findShortestPathToConectEdges(Hex::State::RED);
-    // cout << path.cost << endl;
-    // cout << path.length << endl;
+    Path path = board.findShortestPathToConectEdges(Player::RED);
 
     for (auto hex : path.path) {
-        cout << hex->position.q << " " << hex->position.r << endl;
         hex->state = Hex::State::UNDEFINED;
     }
     board.print();
