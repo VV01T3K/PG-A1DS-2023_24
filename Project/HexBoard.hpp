@@ -130,8 +130,7 @@ class HexBoard {
         getHex(0, size - 1)->edge = Hex::Edge::BOTH;
         getHex(size - 1, size - 1)->edge = Hex::Edge::BOTH;
     }
-    std::vector<Hex*> dijkstraShortestPath(Hex* start, Hex* end,
-                                           Player player) {
+    std::vector<Hex*> shortestPath(Hex* start, Hex* end, Player player) {
         std::unordered_map<Hex*, Hex*> cameFrom;
         std::unordered_map<Hex*, int> costSoFar;
         std::priority_queue<std::pair<int, Hex*>,

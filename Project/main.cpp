@@ -20,7 +20,7 @@ int main() {
 
     // cout << start->distance(end) << endl;
 
-    vector<Hex*> path = board.dijkstraShortestPath(start, end, Player::RED);
+    vector<Hex*> path = board.shortestPath(start, end, Player::RED);
     for (auto hex : path) {
         cout << hex->position.q << " " << hex->position.r << endl;
     }
