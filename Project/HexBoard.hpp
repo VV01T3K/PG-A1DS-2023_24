@@ -161,12 +161,40 @@ class HexBoard {
         return Path();
     }
 
+    bool has_multiple_wins(Player player) {
+        int count = 0;
+        if (player == Player::RED) {
+            for (auto hex : red_edge_1) {
+                if (hex->state != Hex::State::RED) continue;
+                for (auto hex2 : red_edge_2) {
+                    if (hex2->state != Hex::State::RED) continue;
+                    Path path = shortestPathDfs(hex, hex2, Hex::State::RED);
+                    if (path.length != MAX_INT) {
+                        count++;
+                    }
+                }
+            }
+        } else {
+            for (auto hex : blue_edge_1) {
+                if (hex->state != Hex::State::BLUE) continue;
+                for (auto hex2 : blue_edge_2) {
+                    if (hex2->state != Hex::State::BLUE) continue;
+                    Path path = shortestPathDfs(hex, hex2, Hex::State::BLUE);
+                    if (path.length != MAX_INT) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count > 1;
+    }
+
     bool has_win(Player player) {
         if (player == Player::RED) {
             for (auto hex : red_edge_1) {
                 if (hex->state != Hex::State::RED) continue;
                 for (auto hex2 : red_edge_2) {
-                    if (hex->state != Hex::State::RED) continue;
+                    if (hex2->state != Hex::State::RED) continue;
                     Path path = shortestPathDfs(hex, hex2, Hex::State::RED);
                     if (path.length != MAX_INT) {
                         return true;
@@ -177,7 +205,7 @@ class HexBoard {
             for (auto hex : blue_edge_1) {
                 if (hex->state != Hex::State::BLUE) continue;
                 for (auto hex2 : blue_edge_2) {
-                    if (hex->state != Hex::State::BLUE) continue;
+                    if (hex2->state != Hex::State::BLUE) continue;
                     Path path = shortestPathDfs(hex, hex2, Hex::State::BLUE);
                     if (path.length != MAX_INT) {
                         return true;
@@ -196,6 +224,7 @@ class HexBoard {
 
     void fetchInfo(Info info) {
         using namespace std;
+        Path path;
         switch (info) {
             case Info::BOARD_SIZE:
                 cout << size << '\n';
@@ -222,11 +251,13 @@ class HexBoard {
             case Info::IS_BOARD_POSSIBLE:
                 if (!is_correct())
                     cout << "NO" << '\n';
-                else if ((red_stones <= size && has_win(Player::RED)) &&
-                         (blue_stones <= size && has_win(Player::BLUE)))
-                    cout << "YES" << '\n';
-                else
+                else if (has_win(Player::RED) &&
+                         red_stones == blue_stones + 1) {
                     cout << "NO" << '\n';
+                } else if (has_win(Player::BLUE) && red_stones == blue_stones) {
+                    cout << "NO" << '\n';
+                } else
+                    cout << "YES" << '\n';
 
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
