@@ -222,7 +222,8 @@ class HexBoard {
             case Info::IS_BOARD_POSSIBLE:
                 if (!is_correct())
                     cout << "NO" << '\n';
-                else if (red_stones <= size && blue_stones <= size)
+                else if ((red_stones <= size && has_win(Player::RED)) &&
+                         (blue_stones <= size && has_win(Player::BLUE)))
                     cout << "YES" << '\n';
                 else
                     cout << "NO" << '\n';
