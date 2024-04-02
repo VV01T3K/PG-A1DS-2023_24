@@ -57,7 +57,7 @@ class HexBoard {
     std::vector<Hex*> red_edge_2;
     std::vector<Hex*> blue_edge_1;
     std::vector<Hex*> blue_edge_2;
-    Player won = Player::NONE;
+    // Player won = Player::NONE;
 
     HexBoard() {
         hexes.reserve(MAX_BOARD_SIZE * MAX_BOARD_SIZE);
@@ -76,9 +76,14 @@ class HexBoard {
             hex->state = Hex::State::UNDEFINED;
             hex->position = Position(-1, -1);
         }
+        hexes.clear();
         size = 0;
         red_stones = 0;
         blue_stones = 0;
+        red_edge_1.clear();
+        red_edge_2.clear();
+        blue_edge_1.clear();
+        blue_edge_2.clear();
     }
 
     Hex* getHex(int q, int r) const {
@@ -153,6 +158,12 @@ class HexBoard {
         if (player == Hex::State::BLUE && start->state == Hex::State::RED) {
             return Path({}, 10000, 10000);
         }
+        if (player == Hex::State::RED && end->state == Hex::State::BLUE) {
+            return Path({}, 10000, 10000);
+        }
+        if (player == Hex::State::BLUE && end->state == Hex::State::RED) {
+            return Path({}, 10000, 10000);
+        }
         if (start->state != player) costSoFar[start] = 1;
 
         while (!frontier.empty()) {
@@ -204,8 +215,8 @@ class HexBoard {
                 }
             }
         } else {
-            for (auto hex : red_edge_1) {
-                for (auto hex2 : red_edge_2) {
+            for (auto hex : blue_edge_1) {
+                for (auto hex2 : blue_edge_2) {
                     Path tmp = shortestPath(hex, hex2, Hex::State::BLUE);
                     if (tmp.cost == 0) return tmp;
                     if (tmp.cost < path.cost) path = tmp;
@@ -213,6 +224,12 @@ class HexBoard {
             }
         }
         return path;
+    }
+
+    bool is_correct() {
+        if ((red_stones == blue_stones || red_stones == blue_stones + 1))
+            return true;
+        return false;
     }
 
     void fetchInfo(Info info) {
@@ -225,15 +242,13 @@ class HexBoard {
                 cout << red_stones + blue_stones << '\n';
                 break;
             case Info::IS_BOARD_CORRECT:
-                if ((red_stones == blue_stones ||
-                     red_stones == blue_stones + 1))
+                if (is_correct())
                     cout << "YES" << '\n';
                 else
                     cout << "NO" << '\n';
                 break;
             case Info::IS_GAME_OVER:
-                if ((red_stones != blue_stones &&
-                     red_stones != blue_stones + 1)) {
+                if (!is_correct()) {
                     cout << "NO" << '\n';
                     break;
                 }
@@ -241,7 +256,7 @@ class HexBoard {
                     cout << "YES RED" << '\n';
                     break;
                 }
-                if (findShortestPathToConectEdges(Player::RED).cost == 0) {
+                if (findShortestPathToConectEdges(Player::BLUE).cost == 0) {
                     cout << "YES BLUE" << '\n';
                     break;
                 }
