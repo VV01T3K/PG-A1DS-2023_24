@@ -3,12 +3,12 @@
 #include <vector>
 
 #include "Hex.hpp"
-#define MAX_INT 2000000
+#define INT_MAX 2147483647
 class Path {
    public:
     std::vector<Hex*> path;
-    int length = MAX_INT;
-    int cost = MAX_INT;
+    int length = INT_MAX;
+    int cost = INT_MAX;
 
     Path() = default;
     Path(std::vector<Hex*> path, int length, int cost)

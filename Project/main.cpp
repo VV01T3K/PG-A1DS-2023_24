@@ -13,13 +13,7 @@ int main() {
     HexBoard board;
     board.load();
     board.print();
-    Path path = board.shortestWiningPath(Player::BLUE);
-    for (auto hex : path.path) {
-        cout << hex->position.q << ' ' << hex->position.r << '\n';
-        hex->state = Hex::State::UNDEFINED;
-        cout << '\n';
-        board.print();
-    }
+
     // while (true) {
     //     board.load();
     //     // board.print();
@@ -27,7 +21,6 @@ int main() {
     //     if (query == Info::STOP) break;
     //     board.fetchInfo(query);
     //     // cout << '\n';
-    //     board.reset();
     // }
 
     return 0;
