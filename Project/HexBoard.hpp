@@ -138,7 +138,7 @@ class HexBoard {
     }
 
     Path pathDfs(Hex* start, Hex* end, Hex::State player) {
-        // if (start->visited || end->visited) return Path();
+        unVisitAll();
         std::forward_list<Hex*> stack;
         std::forward_list<Hex*> path;
         int length = 0;
@@ -150,7 +150,6 @@ class HexBoard {
             path.push_front(current);
             length++;
             if (current == end) {
-                unVisitAll();
                 return Path(path, length, 0);
             }
             std::vector<Hex*> neighbors = current->findNeighbors();
@@ -170,28 +169,31 @@ class HexBoard {
                 length--;
             }
         }
-        unVisitAll();
         return Path();
     }
 
     Path findWiningPath(Player player) {
         if (player == Player::RED) {
-            for (auto hex : red_edge_1) {
-                if (hex->state != Hex::State::RED) continue;
+            for (auto hex1 : red_edge_1) {
+                if (hex1->state != Hex::State::RED) continue;
+                if (hex1->blocked) continue;
                 for (auto hex2 : red_edge_2) {
                     if (hex2->state != Hex::State::RED) continue;
-                    Path path = pathDfs(hex, hex2, Hex::State::RED);
+                    if (hex2->blocked) continue;
+                    Path path = pathDfs(hex1, hex2, Hex::State::RED);
                     if (path.length != MAX_INT) {
                         return path;
                     }
                 }
             }
         } else {
-            for (auto hex : blue_edge_1) {
-                if (hex->state != Hex::State::BLUE) continue;
+            for (auto hex1 : blue_edge_1) {
+                if (hex1->state != Hex::State::BLUE) continue;
+                if (hex1->blocked) continue;
                 for (auto hex2 : blue_edge_2) {
                     if (hex2->state != Hex::State::BLUE) continue;
-                    Path path = pathDfs(hex, hex2, Hex::State::BLUE);
+                    if (hex2->blocked) continue;
+                    Path path = pathDfs(hex1, hex2, Hex::State::BLUE);
                     if (path.length != MAX_INT) {
                         return path;
                     }
@@ -243,48 +245,48 @@ class HexBoard {
                 if (!is_correct()) {
                     cout << "NO" << '\n';
                     break;
-                } else if (has_win(Player::RED)) {
-                    if (red_stones != blue_stones + 1) {
-                        cout << "NO" << '\n';
-                        break;
-                    } else {
-                        for (int r = 0; r < size; r++) {
-                            for (int q = 0; q < size; q++) {
-                                Hex* hex = getHex(q, r);
-                                if (hex->state == Hex::State::RED) {
-                                    hex->visited = true;
-                                    if (!has_win(Player::RED)) {
-                                        cout << "YES" << '\n';
-                                        break;
-                                    }
-                                    hex->visited = false;
+                }
+                if (red_stones != blue_stones + 1 && has_win(Player::RED)) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+                if (red_stones != blue_stones && has_win(Player::BLUE)) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+                if (has_win(Player::RED)) {
+                    for (int r = 0; r < size; r++) {
+                        for (int q = 0; q < size; q++) {
+                            Hex* hex = getHex(q, r);
+                            if (hex->state == Hex::State::RED) {
+                                hex->blocked = true;
+                                if (!has_win(Player::RED)) {
+                                    cout << "YES" << '\n';
+                                    return;
                                 }
+                                hex->blocked = false;
                             }
                         }
-                        cout << "NO" << '\n';
-                        break;
                     }
-                } else if (has_win(Player::BLUE)) {
-                    if (red_stones != blue_stones) {
-                        cout << "NO" << '\n';
-                        break;
-                    } else {
-                        for (int r = 0; r < size; r++) {
-                            for (int q = 0; q < size; q++) {
-                                Hex* hex = getHex(q, r);
-                                if (hex->state == Hex::State::BLUE) {
-                                    hex->visited = true;
-                                    if (!has_win(Player::BLUE)) {
-                                        cout << "YES" << '\n';
-                                        break;
-                                    }
-                                    hex->visited = false;
+                    cout << "NO" << '\n';
+                    break;
+                }
+                if (has_win(Player::BLUE)) {
+                    for (int r = 0; r < size; r++) {
+                        for (int q = 0; q < size; q++) {
+                            Hex* hex = getHex(q, r);
+                            if (hex->state == Hex::State::BLUE) {
+                                hex->blocked = true;
+                                if (!has_win(Player::BLUE)) {
+                                    cout << "YES" << '\n';
+                                    return;
                                 }
+                                hex->blocked = false;
                             }
                         }
-                        cout << "NO" << '\n';
-                        break;
                     }
+                    cout << "NO" << '\n';
+                    break;
                 }
                 cout << "YES" << '\n';
                 break;

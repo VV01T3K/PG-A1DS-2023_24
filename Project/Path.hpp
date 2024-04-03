@@ -3,7 +3,7 @@
 #include <forward_list>
 
 #include "Hex.hpp"
-#define MAX_INT 2000000
+#define MAX_INT 10000
 class Path {
    public:
     std::forward_list<Hex*> hexes;
@@ -15,5 +15,5 @@ class Path {
         : hexes(path), length(length), cost(cost) {}
     Path(const Path& other) = default;
     Path& operator=(const Path& other) = default;
-    ~Path() = default;
+    ~Path(){};
 };

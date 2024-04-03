@@ -23,6 +23,7 @@ class Hex {
     std::vector<Hex*> neighbors;
 
     bool visited = false;
+    bool blocked = false;
 
     Hex(HexBoard& board);
     Hex(int q, int r, HexBoard& board);
@@ -40,5 +41,6 @@ class Hex {
         position = Position(-1, -1);
         neighbors.clear();
         visited = false;
+        blocked = false;
     }
 };

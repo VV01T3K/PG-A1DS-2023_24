@@ -15,4 +15,4 @@
                 --< r >-<   >--
                    --<   >--
                       ---
-IS_GAME_OVER
+IS_BOARD_POSSIBLE
