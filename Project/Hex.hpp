@@ -22,6 +22,8 @@ class Hex {
     HexBoard& board;
     std::vector<Hex*> neighbors;
 
+    bool visited = false;
+
     Hex(HexBoard& board);
     Hex(int q, int r, HexBoard& board);
 
@@ -37,5 +39,6 @@ class Hex {
         state = State::UNDEFINED;
         position = Position(-1, -1);
         neighbors.clear();
+        visited = false;
     }
 };

@@ -129,26 +129,27 @@ class HexBoard {
         }
     }
 
-    bool findInList(Hex* hex, std::forward_list<Hex*> list) {
-        for (auto h : list) {
-            if (hex == h) return true;
+    void unVisitAll() {
+        for (int r = 0; r < size; r++) {
+            for (int q = 0; q < size; q++) {
+                getHex(q, r)->visited = false;
+            }
         }
-        return false;
     }
 
     Path pathDfs(Hex* start, Hex* end, Hex::State player) {
         std::forward_list<Hex*> stack;
-        std::forward_list<Hex*> visited;
         std::forward_list<Hex*> path;
         int length = 0;
         stack.push_front(start);
         while (!stack.empty()) {
             Hex* current = stack.front();
             stack.pop_front();
-            visited.push_front(current);
+            current->visited = true;
             path.push_front(current);
             length++;
             if (current == end) {
+                unVisitAll();
                 return Path(path, length, 0);
             }
             std::vector<Hex*> neighbors = current->findNeighbors();
@@ -158,8 +159,7 @@ class HexBoard {
                       });
             bool hasUnvisitedNeighbor = false;
             for (auto neighbor : neighbors) {
-                if (neighbor->state == player &&
-                    !findInList(neighbor, visited)) {
+                if (neighbor->state == player && !neighbor->visited) {
                     stack.push_front(neighbor);
                     hasUnvisitedNeighbor = true;
                 }
@@ -169,6 +169,7 @@ class HexBoard {
                 length--;
             }
         }
+        unVisitAll();
         return Path();
     }
 
