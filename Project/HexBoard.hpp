@@ -268,60 +268,7 @@ class HexBoard {
                     cout << "NO" << '\n';
                 break;
             case Info::IS_BOARD_POSSIBLE:
-                // 521 == no
-
-                if (!is_correct()) {
-                    cout << "NO" << '\n';
-                    break;
-                }
-                path_red = shortestWiningPath(Player::RED);
-                path_blue = shortestWiningPath(Player::BLUE);
-                win_red = path_red.length != MAX_INT;
-                win_blue = path_blue.length != MAX_INT;
-
-                if (win_red) {
-                    for (auto hex : path_red.path) {
-                        hex->state = Hex::State::EMPTY;
-                    }
-                    if (has_win(Player::RED)) {
-                        cout << "NO" << '\n';
-                        break;
-                    }
-                }
-                if (win_blue) {
-                    for (auto hex : path_blue.path) {
-                        hex->state = Hex::State::EMPTY;
-                    }
-                    if (has_win(Player::BLUE)) {
-                        cout << "NO" << '\n';
-                        break;
-                    }
-                }
-
-                if (win_red && win_blue) {
-                    cout << "NO" << '\n';
-                    break;
-                }
-                if (!win_red && !win_blue) {
-                    cout << "YES" << '\n';
-                    break;
-                }
-                if (win_red && !win_blue) {
-                    if (red_stones == blue_stones + 1) {
-                        cout << "YES" << '\n';
-                        break;
-                    }
-                    cout << "NO" << '\n';
-                    break;
-                }
-                if (!win_red && win_blue) {
-                    if (red_stones == blue_stones) {
-                        cout << "YES" << '\n';
-                        break;
-                    }
-                    cout << "NO" << '\n';
-                    break;
-                }
+                // TODO: Implement this
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
                 // TODO: Implement this
