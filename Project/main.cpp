@@ -11,31 +11,16 @@ Info getQuery();
 int main() {
     ios_base::sync_with_stdio(false);
     HexBoard board;
-    board.load();
-    board.print();
-    Path path0 = board.findWiningPath(Player::RED);
+
+    while (true) {
+        board.load();
+        Info query = getQuery();
+        if (query == Info::STOP) break;
+        board.fetchInfo(query);
+        board.reset();
+    }
+
     cout << endl;
-    Path path1 = board.findWiningPath(Player::RED);
-    board.print();
-    // if (path.length == MAX_INT) {
-    //     cout << "No path found\n";
-    //     return 0;
-    // }
-    // for (auto hex : path.hexes) {
-    //     // cout << hex->position.q << ' ' << hex->position.r << '\n';
-    //     hex->state = Hex::State::UNDEFINED;
-    //     cout << '\n';
-    //     board.print();
-    // }
-    // while (true) {
-    //     board.load();
-    //     // board.print();
-    //     Info query = getQuery();
-    //     if (query == Info::STOP) break;
-    //     board.fetchInfo(query);
-    //     // // cout << '\n';
-    //     board.reset();
-    // }
 
     return 0;
 }

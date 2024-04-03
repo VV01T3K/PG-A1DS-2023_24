@@ -164,10 +164,6 @@ class HexBoard {
                     hasUnvisitedNeighbor = true;
                 }
             }
-            if (!hasUnvisitedNeighbor) {
-                path.pop_front();
-                length--;
-            }
         }
         return Path();
     }
