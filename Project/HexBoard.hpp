@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <forward_list>
 #include <iostream>
-#include <queue>
 #include <stack>
 #include <vector>
 
@@ -128,18 +128,28 @@ class HexBoard {
             blue_edge_2.push_back(getHex(i, size - 1));
         }
     }
+
+    bool findInList(Hex* hex, std::forward_list<Hex*> list) {
+        for (auto h : list) {
+            if (hex == h) return true;
+        }
+        return false;
+    }
+
     Path pathDfs(Hex* start, Hex* end, Hex::State player) {
-        std::stack<Hex*> stack;
-        std::vector<Hex*> visited;
-        std::vector<Hex*> path;
-        stack.push(start);
+        std::forward_list<Hex*> stack;
+        std::forward_list<Hex*> visited;
+        std::forward_list<Hex*> path;
+        int length = 0;
+        stack.push_front(start);
         while (!stack.empty()) {
-            Hex* current = stack.top();
-            stack.pop();
-            visited.push_back(current);
-            path.push_back(current);
+            Hex* current = stack.front();
+            stack.pop_front();
+            visited.push_front(current);
+            path.push_front(current);
+            length++;
             if (current == end) {
-                return Path(path, path.size(), 0);
+                return Path(path, length, 0);
             }
             std::vector<Hex*> neighbors = current->findNeighbors();
             std::sort(neighbors.begin(), neighbors.end(),
@@ -149,14 +159,14 @@ class HexBoard {
             bool hasUnvisitedNeighbor = false;
             for (auto neighbor : neighbors) {
                 if (neighbor->state == player &&
-                    std::find(visited.begin(), visited.end(), neighbor) ==
-                        visited.end()) {
-                    stack.push(neighbor);
+                    !findInList(neighbor, visited)) {
+                    stack.push_front(neighbor);
                     hasUnvisitedNeighbor = true;
                 }
             }
             if (!hasUnvisitedNeighbor) {
-                path.pop_back();
+                path.pop_front();
+                length--;
             }
         }
         return Path();
