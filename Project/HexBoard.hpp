@@ -241,47 +241,50 @@ class HexBoard {
             case Info::IS_BOARD_POSSIBLE:
                 if (!is_correct()) {
                     cout << "NO" << '\n';
-                    break;
+                    return;
                 }
                 if (red_stones != blue_stones + 1 && has_win(Player::RED)) {
                     cout << "NO" << '\n';
-                    break;
+                    return;
                 }
                 if (red_stones != blue_stones && has_win(Player::BLUE)) {
                     cout << "NO" << '\n';
-                    break;
+                    return;
                 }
-
-                // path = findWiningPath(Player::RED);
-                // if (path.length != MAX_INT) {  // Red wins
-                //     if (red_stones != blue_stones + 1) {
-                //         cout << "NO" << '\n';
-                //         break;
-                //     }
-                //     for (auto hex : path.hexes) {
-                //         hex->state = Hex::State::EMPTY;
-                //         if (has_win(Player::RED)) {
-                //             cout << "NO" << '\n';
-                //             break;
-                //         }
-                //         hex->state = Hex::State::RED;
-                //     }
-                // }
-                // path = findWiningPath(Player::BLUE);
-                // if (path.length != MAX_INT) {  // Blue wins
-                //     if (red_stones != blue_stones) {
-                //         cout << "NO" << '\n';
-                //         break;
-                //     }
-                //     for (auto hex : path.hexes) {
-                //         hex->state = Hex::State::EMPTY;
-                //         if (has_win(Player::BLUE)) {
-                //             cout << "NO" << '\n';
-                //             break;
-                //         }
-                //         hex->state = Hex::State::BLUE;
-                //     }
-                // }
+                if (has_win(Player::RED)) {
+                    for (int r = 0; r < size; r++) {
+                        for (int q = 0; q < size; q++) {
+                            Hex* hex = getHex(q, r);
+                            if (hex->state == Hex::State::RED) {
+                                hex->visited = true;
+                                if (!has_win(Player::RED)) {
+                                    cout << "Yes" << '\n';
+                                    return;
+                                }
+                                hex->visited = false;
+                            }
+                        }
+                    }
+                    cout << "NO" << '\n';
+                    return;
+                }
+                if (has_win(Player::BLUE)) {
+                    for (int r = 0; r < size; r++) {
+                        for (int q = 0; q < size; q++) {
+                            Hex* hex = getHex(q, r);
+                            if (hex->state == Hex::State::BLUE) {
+                                hex->visited = true;
+                                if (!has_win(Player::BLUE)) {
+                                    cout << "Yes" << '\n';
+                                    return;
+                                }
+                                hex->visited = false;
+                            }
+                        }
+                    }
+                    cout << "NO" << '\n';
+                    return;
+                }
                 cout << "YES" << '\n';
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:

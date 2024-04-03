@@ -18,7 +18,7 @@ int main() {
     //     cout << "No path found\n";
     //     return 0;
     // }
-    // for (auto hex : path.path) {
+    // for (auto hex : path.hexes) {
     //     // cout << hex->position.q << ' ' << hex->position.r << '\n';
     //     hex->state = Hex::State::UNDEFINED;
     //     cout << '\n';
