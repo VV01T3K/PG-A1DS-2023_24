@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <queue>
@@ -137,99 +136,61 @@ class HexBoard {
             blue_edge_2.push_back(getHex(i, size - 1));
         }
     }
-    // only for win
-    int distanceToClosestEndHex(Hex* hex, std::vector<Hex*>& endHexes) {
-        int minDistance = MAX_INT;
-        for (auto endHex : endHexes) {
-            int distance = hex->distance(endHex);
-            if (distance < minDistance) {
-                minDistance = distance;
-            }
-        }
-        return minDistance;
-    }
-
-    Path shortestPathDfs(Hex* start, std::vector<Hex*>& endHexes,
-                         Hex::State player) {
-        auto comp = [this, &endHexes](Hex* a, Hex* b) {
-            return distanceToClosestEndHex(a, endHexes) >
-                   distanceToClosestEndHex(b, endHexes);
-        };
-        std::priority_queue<Hex*, std::vector<Hex*>, decltype(comp)> queue(
-            comp);
-        queue.push(start);
+    Path shortestPathDfs(Hex* start, Hex* end, Hex::State player) {
+        std::stack<Hex*> stack;
+        stack.push(start);
         std::vector<Hex*> visited;
         std::vector<Hex*> path;
-        while (!queue.empty()) {
-            Hex* current = queue.top();
-            queue.pop();
+        while (!stack.empty()) {
+            Hex* current = stack.top();
+            stack.pop();
             visited.push_back(current);
             path.push_back(current);
-            if (std::find(endHexes.begin(), endHexes.end(), current) !=
-                endHexes.end()) {
+            if (current == end) {
                 return Path(path, path.size(), 0);
             }
             for (auto neighbor : current->neighbors) {
                 if (neighbor->state == player &&
                     std::find(visited.begin(), visited.end(), neighbor) ==
                         visited.end()) {
-                    queue.push(neighbor);
+                    stack.push(neighbor);
                 }
             }
         }
         return Path();
     }
 
-    Path longestPathDfs(Hex* start, std::vector<Hex*>& endHexes,
-                        Hex::State player) {
-        auto comp = [this, &endHexes](Hex* a, Hex* b) {
-            return distanceToClosestEndHex(a, endHexes) <
-                   distanceToClosestEndHex(b, endHexes);
-        };
-        std::priority_queue<Hex*, std::vector<Hex*>, decltype(comp)> queue(
-            comp);
-        queue.push(start);
-        std::vector<Hex*> visited;
-        std::vector<Hex*> path;
-        while (!queue.empty()) {
-            Hex* current = queue.top();
-            queue.pop();
-            visited.push_back(current);
-            path.push_back(current);
-            if (std::find(endHexes.begin(), endHexes.end(), current) !=
-                endHexes.end()) {
-                return Path(path, path.size(), 0);
-            }
-            for (auto neighbor : current->neighbors) {
-                if (neighbor->state == player &&
-                    std::find(visited.begin(), visited.end(), neighbor) ==
-                        visited.end()) {
-                    queue.push(neighbor);
-                }
-            }
-        }
-        return Path();
-    }
-
-    Path shortestWiningPath(Player player) {
+    Path findWiningPath(Player player) {
         if (player == Player::RED) {
             for (auto hex : red_edge_1) {
                 if (hex->state != Hex::State::RED) continue;
-                Path path = shortestPathDfs(hex, red_edge_2, Hex::State::RED);
-                if (path.length != MAX_INT) return path;
+                for (auto hex2 : red_edge_2) {
+                    if (hex2->state != Hex::State::RED) continue;
+                    Path path = shortestPathDfs(hex, hex2, Hex::State::RED);
+                    if (path.length != MAX_INT) {
+                        return path;
+                    }
+                }
             }
         } else {
             for (auto hex : blue_edge_1) {
                 if (hex->state != Hex::State::BLUE) continue;
-                Path path = shortestPathDfs(hex, blue_edge_2, Hex::State::BLUE);
-                if (path.length != MAX_INT) return path;
+                for (auto hex2 : blue_edge_2) {
+                    if (hex2->state != Hex::State::BLUE) continue;
+                    Path path = shortestPathDfs(hex, hex2, Hex::State::BLUE);
+                    if (path.length != MAX_INT) {
+                        return path;
+                    }
+                }
             }
         }
         return Path();
     }
 
     bool has_win(Player player) {
-        return shortestWiningPath(player).length != MAX_INT;
+        Path path = findWiningPath(player);
+        if (path.length != MAX_INT) return true;
+        return false;
     }
 
     bool is_correct() {
@@ -242,8 +203,6 @@ class HexBoard {
         using namespace std;
         bool win_red;
         bool win_blue;
-        Path path_red;
-        Path path_blue;
         switch (info) {
             case Info::BOARD_SIZE:
                 cout << size << '\n';
@@ -268,7 +227,36 @@ class HexBoard {
                     cout << "NO" << '\n';
                 break;
             case Info::IS_BOARD_POSSIBLE:
-                // TODO: Implement this
+                if (!is_correct()) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+                win_red = has_win(Player::RED);
+                win_blue = has_win(Player::BLUE);
+                if (win_red && win_blue) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+                if (!win_red && !win_blue) {
+                    cout << "YES" << '\n';
+                    break;
+                }
+                if (win_red && !win_blue) {
+                    if (red_stones == blue_stones + 1) {
+                        cout << "YES" << '\n';
+                        break;
+                    }
+                    cout << "NO" << '\n';
+                    break;
+                }
+                if (!win_red && win_blue) {
+                    if (red_stones == blue_stones) {
+                        cout << "YES" << '\n';
+                        break;
+                    }
+                    cout << "NO" << '\n';
+                    break;
+                }
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
                 // TODO: Implement this

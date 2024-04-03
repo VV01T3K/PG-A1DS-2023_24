@@ -13,9 +13,13 @@ int main() {
     HexBoard board;
     board.load();
     board.print();
-    Path path = board.shortestWiningPath(Player::BLUE);
+    Path path = board.findWiningPath(Player::RED);
+    if (path.length == MAX_INT) {
+        cout << "No path found\n";
+        return 0;
+    }
     for (auto hex : path.path) {
-        cout << hex->position.q << ' ' << hex->position.r << '\n';
+        // cout << hex->position.q << ' ' << hex->position.r << '\n';
         hex->state = Hex::State::UNDEFINED;
         cout << '\n';
         board.print();
