@@ -243,36 +243,36 @@ class HexBoard {
                     cout << "NO" << '\n';
                     break;
                 }
-                path = findWiningPath(Player::RED);
-                if (path.length != MAX_INT) {  // Red wins
-                    if (red_stones != blue_stones + 1) {
-                        cout << "NO" << '\n';
-                        break;
-                    }
-                    for (auto hex : path.hexes) {
-                        hex->state = Hex::State::EMPTY;
-                        if (has_win(Player::RED)) {
-                            cout << "NO" << '\n';
-                            break;
-                        }
-                        hex->state = Hex::State::RED;
-                    }
-                }
-                path = findWiningPath(Player::BLUE);
-                if (path.length != MAX_INT) {  // Blue wins
-                    if (red_stones != blue_stones) {
-                        cout << "NO" << '\n';
-                        break;
-                    }
-                    for (auto hex : path.hexes) {
-                        hex->state = Hex::State::EMPTY;
-                        if (has_win(Player::BLUE)) {
-                            cout << "NO" << '\n';
-                            break;
-                        }
-                        hex->state = Hex::State::BLUE;
-                    }
-                }
+                // path = findWiningPath(Player::RED);
+                // if (path.length != MAX_INT) {  // Red wins
+                //     if (red_stones != blue_stones + 1) {
+                //         cout << "NO" << '\n';
+                //         break;
+                //     }
+                //     for (auto hex : path.hexes) {
+                //         hex->state = Hex::State::EMPTY;
+                //         if (!has_win(Player::RED)) {
+                //             cout << "NO" << '\n';
+                //             break;
+                //         }
+                //         hex->state = Hex::State::RED;
+                //     }
+                // }
+                // path = findWiningPath(Player::BLUE);
+                // if (path.length != MAX_INT) {  // Blue wins
+                //     if (red_stones != blue_stones) {
+                //         cout << "NO" << '\n';
+                //         break;
+                //     }
+                //     for (auto hex : path.hexes) {
+                //         hex->state = Hex::State::EMPTY;
+                //         if (!has_win(Player::BLUE)) {
+                //             cout << "NO" << '\n';
+                //             break;
+                //         }
+                //         hex->state = Hex::State::BLUE;
+                //     }
+                // }
                 cout << "YES" << '\n';
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
