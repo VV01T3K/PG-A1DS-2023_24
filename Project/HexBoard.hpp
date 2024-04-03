@@ -30,22 +30,28 @@ class HexBoard {
     Hex::State tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
     void readBoardFromInput() {
         int index = 0;
+        int width = 0;
         char c;
         while (std::cin.get(c)) {
+            if (c == EOF) break;
             if (c == '-' || c == ' ' || c == '>') continue;
             if (c == '<') {
+                width++;
                 std::cin >> c;
                 if (c == '>') c = 'x';
                 tmp[index++] = static_cast<Hex::State>(c);
             }
+            if (c == '\n') {
+                size = std::max(size, width);
+                width = 0;
+            }
             if (c >= 'A' && c <= 'B') break;
         }
-        size = sqrt(index);
     }
 
    public:
     int size = 0;
-    Hex* hexes;
+    Hex* hexes[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
     int red_stones = 0;
     int blue_stones = 0;
     std::vector<Hex*> red_edge_1;
@@ -54,12 +60,20 @@ class HexBoard {
     std::vector<Hex*> blue_edge_2;
     // Player won = Player::NONE;
 
-    HexBoard() {}
-    ~HexBoard() { delete[] hexes; }
+    HexBoard() {
+        for (int i = 0; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
+            hexes[i] = new Hex(*this);
+        }
+    }
+    ~HexBoard() {
+        for (auto hex : hexes) {
+            delete hex;
+        }
+    }
 
     void reset() {
-        for (int i = 0; i < size * size; i++) {
-            hexes[i].reset();
+        for (auto hex : hexes) {
+            hex->reset();
         }
         size = 0;
         red_stones = 0;
@@ -74,7 +88,7 @@ class HexBoard {
         if (q < 0 || r < 0 || q >= size || r >= size) {
             return nullptr;
         }
-        return &hexes[q + r * size];
+        return hexes[q + r * size];
     }
 
     void print() const {
@@ -92,9 +106,7 @@ class HexBoard {
     }
 
     void load() {
-        reset();
         readBoardFromInput();
-        hexes = new Hex[size * size];
         int index = 0;
         int q = 0;
         int r = 0;
@@ -115,18 +127,109 @@ class HexBoard {
             else
                 q++;
         }
-
-        for (int i = size - 1; i >= 0; i--) {
+        for (auto hex : hexes) {
+            hex->findNeighbors();
+        }
+        for (int i = 0; i < size; i++) {
             red_edge_1.push_back(getHex(0, i));
             red_edge_2.push_back(getHex(size - 1, i));
             blue_edge_1.push_back(getHex(i, 0));
             blue_edge_2.push_back(getHex(i, size - 1));
         }
     }
+    // only for win
+    int distanceToClosestEndHex(Hex* hex, std::vector<Hex*>& endHexes) {
+        int minDistance = MAX_INT;
+        for (auto endHex : endHexes) {
+            int distance = hex->distance(endHex);
+            if (distance < minDistance) {
+                minDistance = distance;
+            }
+        }
+        return minDistance;
+    }
+
+    Path shortestPathDfs(Hex* start, std::vector<Hex*>& endHexes,
+                         Hex::State player) {
+        auto comp = [this, &endHexes](Hex* a, Hex* b) {
+            return distanceToClosestEndHex(a, endHexes) >
+                   distanceToClosestEndHex(b, endHexes);
+        };
+        std::priority_queue<Hex*, std::vector<Hex*>, decltype(comp)> queue(
+            comp);
+        queue.push(start);
+        std::vector<Hex*> visited;
+        std::vector<Hex*> path;
+        while (!queue.empty()) {
+            Hex* current = queue.top();
+            queue.pop();
+            visited.push_back(current);
+            path.push_back(current);
+            if (std::find(endHexes.begin(), endHexes.end(), current) !=
+                endHexes.end()) {
+                return Path(path, path.size(), 0);
+            }
+            for (auto neighbor : current->neighbors) {
+                if (neighbor->state == player &&
+                    std::find(visited.begin(), visited.end(), neighbor) ==
+                        visited.end()) {
+                    queue.push(neighbor);
+                }
+            }
+        }
+        return Path();
+    }
+
+    Path longestPathDfs(Hex* start, std::vector<Hex*>& endHexes,
+                        Hex::State player) {
+        auto comp = [this, &endHexes](Hex* a, Hex* b) {
+            return distanceToClosestEndHex(a, endHexes) <
+                   distanceToClosestEndHex(b, endHexes);
+        };
+        std::priority_queue<Hex*, std::vector<Hex*>, decltype(comp)> queue(
+            comp);
+        queue.push(start);
+        std::vector<Hex*> visited;
+        std::vector<Hex*> path;
+        while (!queue.empty()) {
+            Hex* current = queue.top();
+            queue.pop();
+            visited.push_back(current);
+            path.push_back(current);
+            if (std::find(endHexes.begin(), endHexes.end(), current) !=
+                endHexes.end()) {
+                return Path(path, path.size(), 0);
+            }
+            for (auto neighbor : current->neighbors) {
+                if (neighbor->state == player &&
+                    std::find(visited.begin(), visited.end(), neighbor) ==
+                        visited.end()) {
+                    queue.push(neighbor);
+                }
+            }
+        }
+        return Path();
+    }
+
+    Path shortestWiningPath(Player player) {
+        if (player == Player::RED) {
+            for (auto hex : red_edge_1) {
+                if (hex->state != Hex::State::RED) continue;
+                Path path = shortestPathDfs(hex, red_edge_2, Hex::State::RED);
+                if (path.length != MAX_INT) return path;
+            }
+        } else {
+            for (auto hex : blue_edge_1) {
+                if (hex->state != Hex::State::BLUE) continue;
+                Path path = shortestPathDfs(hex, blue_edge_2, Hex::State::BLUE);
+                if (path.length != MAX_INT) return path;
+            }
+        }
+        return Path();
+    }
 
     bool has_win(Player player) {
-        // return shortestWiningPath(player).length != INT_MAX;
-        return false;
+        return shortestWiningPath(player).length != MAX_INT;
     }
 
     bool is_correct() {
@@ -165,14 +268,16 @@ class HexBoard {
                     cout << "NO" << '\n';
                 break;
             case Info::IS_BOARD_POSSIBLE:
+                // 521 == no
+
                 if (!is_correct()) {
                     cout << "NO" << '\n';
                     break;
                 }
-                // path_red = shortestWiningPath(Player::RED);
-                // path_blue = shortestWiningPath(Player::BLUE);
-                win_red = path_red.length != INT_MAX;
-                win_blue = path_blue.length != INT_MAX;
+                path_red = shortestWiningPath(Player::RED);
+                path_blue = shortestWiningPath(Player::BLUE);
+                win_red = path_red.length != MAX_INT;
+                win_blue = path_blue.length != MAX_INT;
 
                 if (win_red) {
                     for (auto hex : path_red.path) {

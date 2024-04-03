@@ -19,13 +19,11 @@ class Hex {
     };
     State state = State::UNDEFINED;
     Position position = Position(-1, -1);
-    HexBoard* board = nullptr;
+    HexBoard& board;
     std::vector<Hex*> neighbors;
-    std::vector<Hex*> ally_neighbors;
 
-    Hex() = default;
-    Hex(HexBoard* board) : board(board) {}
-    Hex(int q, int r, HexBoard* board) : position(q, r), board(board) {}
+    Hex(HexBoard& board);
+    Hex(int q, int r, HexBoard& board);
 
     int distance(const Hex* other) const;
     int distance(const Hex& other) const;
@@ -34,7 +32,6 @@ class Hex {
     Hex* neighbor(int direct) const;
 
     std::vector<Hex*> findNeighbors();
-    std::vector<Hex*> findAllyNeighbors();
 
     void reset() {
         state = State::UNDEFINED;
