@@ -138,6 +138,7 @@ class HexBoard {
     }
 
     Path pathDfs(Hex* start, Hex* end, Hex::State player) {
+        // if (start->visited || end->visited) return Path();
         std::forward_list<Hex*> stack;
         std::forward_list<Hex*> path;
         int length = 0;
@@ -241,49 +242,49 @@ class HexBoard {
             case Info::IS_BOARD_POSSIBLE:
                 if (!is_correct()) {
                     cout << "NO" << '\n';
-                    return;
-                }
-                if (red_stones != blue_stones + 1 && has_win(Player::RED)) {
-                    cout << "NO" << '\n';
-                    return;
-                }
-                if (red_stones != blue_stones && has_win(Player::BLUE)) {
-                    cout << "NO" << '\n';
-                    return;
-                }
-                if (has_win(Player::RED)) {
-                    for (int r = 0; r < size; r++) {
-                        for (int q = 0; q < size; q++) {
-                            Hex* hex = getHex(q, r);
-                            if (hex->state == Hex::State::RED) {
-                                hex->visited = true;
-                                if (!has_win(Player::RED)) {
-                                    cout << "Yes" << '\n';
-                                    return;
+                    break;
+                } else if (has_win(Player::RED)) {
+                    if (red_stones != blue_stones + 1) {
+                        cout << "NO" << '\n';
+                        break;
+                    } else {
+                        for (int r = 0; r < size; r++) {
+                            for (int q = 0; q < size; q++) {
+                                Hex* hex = getHex(q, r);
+                                if (hex->state == Hex::State::RED) {
+                                    hex->visited = true;
+                                    if (!has_win(Player::RED)) {
+                                        cout << "YES" << '\n';
+                                        break;
+                                    }
+                                    hex->visited = false;
                                 }
-                                hex->visited = false;
                             }
                         }
+                        cout << "NO" << '\n';
+                        break;
                     }
-                    cout << "NO" << '\n';
-                    return;
-                }
-                if (has_win(Player::BLUE)) {
-                    for (int r = 0; r < size; r++) {
-                        for (int q = 0; q < size; q++) {
-                            Hex* hex = getHex(q, r);
-                            if (hex->state == Hex::State::BLUE) {
-                                hex->visited = true;
-                                if (!has_win(Player::BLUE)) {
-                                    cout << "Yes" << '\n';
-                                    return;
+                } else if (has_win(Player::BLUE)) {
+                    if (red_stones != blue_stones) {
+                        cout << "NO" << '\n';
+                        break;
+                    } else {
+                        for (int r = 0; r < size; r++) {
+                            for (int q = 0; q < size; q++) {
+                                Hex* hex = getHex(q, r);
+                                if (hex->state == Hex::State::BLUE) {
+                                    hex->visited = true;
+                                    if (!has_win(Player::BLUE)) {
+                                        cout << "YES" << '\n';
+                                        break;
+                                    }
+                                    hex->visited = false;
                                 }
-                                hex->visited = false;
                             }
                         }
+                        cout << "NO" << '\n';
+                        break;
                     }
-                    cout << "NO" << '\n';
-                    return;
                 }
                 cout << "YES" << '\n';
                 break;

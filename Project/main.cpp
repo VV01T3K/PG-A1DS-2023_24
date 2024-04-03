@@ -26,11 +26,12 @@ int main() {
     // }
     while (true) {
         board.load();
-        // board.print();
+        board.print();
         Info query = getQuery();
-        if (query == Info::STOP) break;
-        board.fetchInfo(query);
-        // cout << '\n';
+        // std::cout << "checking\n";
+        // if (query == Info::STOP) break;
+        // board.fetchInfo(query);
+        // // cout << '\n';
         board.reset();
     }
 

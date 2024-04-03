@@ -38,7 +38,7 @@ Hex* Hex::neighbor(Direction direction) const {
 }
 
 std::vector<Hex*> Hex::findNeighbors() {
-    if (!neighbors.empty()) return neighbors;
+    // if (!neighbors.empty()) return neighbors;
     for (int i = 0; i < 6; ++i) {
         Hex* neighbor_hex = neighbor(i);
         if (neighbor_hex != nullptr) {
