@@ -20,8 +20,6 @@ int main() {
         board.reset();
     }
 
-    cout << endl;
-
     return 0;
 }
 
