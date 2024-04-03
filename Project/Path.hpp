@@ -6,13 +6,13 @@
 #define MAX_INT 2000000
 class Path {
    public:
-    std::forward_list<Hex*> path;
+    std::forward_list<Hex*> hexes;
     int length = MAX_INT;
     int cost = MAX_INT;
 
     Path() = default;
     Path(std::forward_list<Hex*> path, int length, int cost)
-        : path(path), length(length), cost(cost) {}
+        : hexes(path), length(length), cost(cost) {}
     Path(const Path& other) = default;
     Path& operator=(const Path& other) = default;
     ~Path() = default;

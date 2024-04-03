@@ -214,8 +214,7 @@ class HexBoard {
 
     void fetchInfo(Info info) {
         using namespace std;
-        bool win_red;
-        bool win_blue;
+        Path path;
         switch (info) {
             case Info::BOARD_SIZE:
                 cout << size << '\n';
@@ -244,32 +243,37 @@ class HexBoard {
                     cout << "NO" << '\n';
                     break;
                 }
-                win_red = has_win(Player::RED);
-                win_blue = has_win(Player::BLUE);
-                if (win_red && win_blue) {
-                    cout << "NO" << '\n';
-                    break;
-                }
-                if (!win_red && !win_blue) {
-                    cout << "YES" << '\n';
-                    break;
-                }
-                if (win_red && !win_blue) {
-                    if (red_stones == blue_stones + 1) {
-                        cout << "YES" << '\n';
+                path = findWiningPath(Player::RED);
+                if (path.length != MAX_INT) {  // Red wins
+                    if (red_stones != blue_stones + 1) {
+                        cout << "NO" << '\n';
                         break;
                     }
-                    cout << "NO" << '\n';
-                    break;
+                    for (auto hex : path.hexes) {
+                        hex->state = Hex::State::EMPTY;
+                        if (has_win(Player::RED)) {
+                            cout << "NO" << '\n';
+                            break;
+                        }
+                        hex->state = Hex::State::RED;
+                    }
                 }
-                if (!win_red && win_blue) {
-                    if (red_stones == blue_stones) {
-                        cout << "YES" << '\n';
+                path = findWiningPath(Player::BLUE);
+                if (path.length != MAX_INT) {  // Blue wins
+                    if (red_stones != blue_stones) {
+                        cout << "NO" << '\n';
                         break;
                     }
-                    cout << "NO" << '\n';
-                    break;
+                    for (auto hex : path.hexes) {
+                        hex->state = Hex::State::EMPTY;
+                        if (has_win(Player::BLUE)) {
+                            cout << "NO" << '\n';
+                            break;
+                        }
+                        hex->state = Hex::State::BLUE;
+                    }
                 }
+                cout << "YES" << '\n';
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
                 // TODO: Implement this
