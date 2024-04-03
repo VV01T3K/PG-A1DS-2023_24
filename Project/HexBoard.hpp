@@ -129,40 +129,35 @@ class HexBoard {
         }
     }
 
-    void unVisitAll() {
-        for (int r = 0; r < size; r++) {
-            for (int q = 0; q < size; q++) {
-                getHex(q, r)->visited = false;
-            }
-        }
-    }
-
     Path pathDfs(Hex* start, Hex* end, Hex::State player) {
-        unVisitAll();
         std::forward_list<Hex*> stack;
         std::forward_list<Hex*> path;
+        std::forward_list<Hex*> visited;
         int length = 0;
         stack.push_front(start);
         while (!stack.empty()) {
             Hex* current = stack.front();
             stack.pop_front();
             current->visited = true;
+            visited.push_front(current);
             path.push_front(current);
             length++;
             if (current == end) {
+                for (auto hex : visited) hex->visited = false;
                 return Path(path, length, 0);
             }
-            // std::vector<Hex*> neighbors = current->findNeighbors();
-            // std::sort(neighbors.begin(), neighbors.end(),
-            //           [end](Hex* a, Hex* b) {
-            //               return a->distance(end) < b->distance(end);
-            //           });
-            for (auto neighbor : current->findNeighbors()) {
+            std::vector<Hex*> neighbors = current->findNeighbors();
+            std::sort(neighbors.begin(), neighbors.end(),
+                      [end](Hex* a, Hex* b) {
+                          return a->distance(end) < b->distance(end);
+                      });
+            for (auto neighbor : neighbors) {
                 if (neighbor->state == player && !neighbor->visited) {
                     stack.push_front(neighbor);
                 }
             }
         }
+        for (auto hex : visited) hex->visited = false;
         return Path();
     }
 
@@ -198,8 +193,7 @@ class HexBoard {
     }
 
     bool has_win(Player player) {
-        Path path = findWiningPath(player);
-        if (path.length != MAX_INT) return true;
+        if (findWiningPath(player).length != MAX_INT) return true;
         return false;
     }
 
@@ -254,9 +248,9 @@ class HexBoard {
                             }
                             hex->blocked = false;
                         }
-                        std::cout << "NO\n";
-                        break;
                     }
+                    std::cout << "NO\n";
+                    break;
                 }
                 path = findWiningPath(Player::BLUE);
                 if (path.length != MAX_INT) {
@@ -272,9 +266,9 @@ class HexBoard {
                             }
                             hex->blocked = false;
                         }
-                        std::cout << "NO\n";
-                        break;
                     }
+                    std::cout << "NO\n";
+                    break;
                 }
                 std::cout << "YES\n";
                 break;
