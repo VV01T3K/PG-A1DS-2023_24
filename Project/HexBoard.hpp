@@ -243,6 +243,15 @@ class HexBoard {
                     cout << "NO" << '\n';
                     break;
                 }
+                if (red_stones != blue_stones + 1 && has_win(Player::RED)) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+                if (red_stones != blue_stones && has_win(Player::BLUE)) {
+                    cout << "NO" << '\n';
+                    break;
+                }
+
                 // path = findWiningPath(Player::RED);
                 // if (path.length != MAX_INT) {  // Red wins
                 //     if (red_stones != blue_stones + 1) {
@@ -251,7 +260,7 @@ class HexBoard {
                 //     }
                 //     for (auto hex : path.hexes) {
                 //         hex->state = Hex::State::EMPTY;
-                //         if (!has_win(Player::RED)) {
+                //         if (has_win(Player::RED)) {
                 //             cout << "NO" << '\n';
                 //             break;
                 //         }
@@ -266,7 +275,7 @@ class HexBoard {
                 //     }
                 //     for (auto hex : path.hexes) {
                 //         hex->state = Hex::State::EMPTY;
-                //         if (!has_win(Player::BLUE)) {
+                //         if (has_win(Player::BLUE)) {
                 //             cout << "NO" << '\n';
                 //             break;
                 //         }
