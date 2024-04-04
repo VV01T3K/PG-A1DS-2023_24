@@ -48,11 +48,6 @@ class HexBoard {
     Hex* hexes[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
     int red_stones = 0;
     int blue_stones = 0;
-    std::vector<Hex*> red_edge_1;
-    std::vector<Hex*> red_edge_2;
-    std::vector<Hex*> blue_edge_1;
-    std::vector<Hex*> blue_edge_2;
-    // Player won = Player::NONE;
 
     HexBoard() {
         for (int i = 0; i < MAX_BOARD_SIZE * MAX_BOARD_SIZE; i++) {
@@ -72,10 +67,6 @@ class HexBoard {
         size = 0;
         red_stones = 0;
         blue_stones = 0;
-        red_edge_1.clear();
-        red_edge_2.clear();
-        blue_edge_1.clear();
-        blue_edge_2.clear();
     }
 
     Hex* getHex(int q, int r) const {
@@ -122,10 +113,10 @@ class HexBoard {
                 q++;
         }
         for (int i = 0; i < size; i++) {
-            red_edge_1.push_back(getHex(0, i));
-            red_edge_2.push_back(getHex(size - 1, i));
-            blue_edge_1.push_back(getHex(i, 0));
-            blue_edge_2.push_back(getHex(i, size - 1));
+            getHex(0, i)->edge = Edge::RED_1;
+            getHex(size - 1, i)->edge = Edge::RED_2;
+            getHex(i, 0)->edge = Edge::BLUE_1;
+            getHex(i, size - 1)->edge = Edge::BLUE_2;
         }
     }
 
@@ -163,9 +154,11 @@ class HexBoard {
 
     Path findWiningPath(Player player) {
         if (player == Player::RED) {
-            for (auto hex1 : red_edge_1) {
+            for (int i = 0; i < size; i++) {
+                Hex* hex1 = getHex(0, i);
                 if (hex1->state != Hex::State::RED) continue;
-                for (auto hex2 : red_edge_2) {
+                for (int j = 0; j < size; j++) {
+                    Hex* hex2 = getHex(size - 1, j);
                     if (hex2->state != Hex::State::RED) continue;
                     Path path = pathDfs(hex1, hex2, Hex::State::RED);
                     if (path.length != MAX_INT) {
@@ -174,9 +167,11 @@ class HexBoard {
                 }
             }
         } else {
-            for (auto hex1 : blue_edge_1) {
+            for (int i = 0; i < size; i++) {
+                Hex* hex1 = getHex(i, 0);
                 if (hex1->state != Hex::State::BLUE) continue;
-                for (auto hex2 : blue_edge_2) {
+                for (int j = 0; j < size; j++) {
+                    Hex* hex2 = getHex(j, size - 1);
                     if (hex2->state != Hex::State::BLUE) continue;
                     Path path = pathDfs(hex1, hex2, Hex::State::BLUE);
                     if (path.length != MAX_INT) {

@@ -3,10 +3,10 @@
 #include <cmath>
 #include <vector>
 
-// #include "HexBoard.hpp"
 #include "Position.hpp"
 
 enum class Direction { N, NE, SE, S, SW, NW };
+enum class Edge { RED_1, RED_2, BLUE_1, BLUE_2, NONE };
 
 class HexBoard;
 class Hex {
@@ -23,6 +23,7 @@ class Hex {
     std::vector<Hex*> neighbors;
 
     bool visited = false;
+    Edge edge = Edge::NONE;
 
     Hex(HexBoard& board);
     Hex(int q, int r, HexBoard& board);
@@ -40,5 +41,6 @@ class Hex {
         position = Position(-1, -1);
         neighbors.clear();
         visited = false;
+        edge = Edge::NONE;
     }
 };
