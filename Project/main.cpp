@@ -12,6 +12,25 @@ int main() {
     ios_base::sync_with_stdio(false);
     HexBoard board;
 
+    // board.load();
+    // Path path = board.findWiningPath(Player::BLUE);
+    // board.print();
+    // cout << path.length << '\n';
+    // std::vector<Hex*> hexes;
+    // // for (auto hex : path.hexes) {
+    // //     hex->state = Hex::State::UNDEFINED;
+    // //     cout << '\n';
+    // //     board.print();
+    // // }
+    // for (auto hex : path.hexes) hexes.push_back(hex);
+    // std::reverse(hexes.begin(), hexes.end());
+    // for (auto hex : hexes) {
+    //     hex->state = Hex::State::UNDEFINED;
+    //     cout << '\n';
+    //     board.print();
+    // }
+
+    // 523 powinno byc NO
     while (true) {
         board.load();
         Info query = getQuery();

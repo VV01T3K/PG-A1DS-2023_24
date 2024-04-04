@@ -123,17 +123,20 @@ class HexBoard {
     Path pathDfs(Hex* start, Edge end, Hex::State player,
                  std::forward_list<Hex*>& visited) {
         std::stack<Hex*> stack;
+        std::forward_list<Hex*> path;
         stack.push(start);
         visited.push_front(start);
+        path.push_front(start);
         start->visited = true;
         int length = 0;
         while (!stack.empty()) {
             Hex* hex = stack.top();
             stack.pop();
             if (hex->edge == end && hex->state == player) {
+                path.push_front(hex);
                 for (auto hex : visited) hex->visited = false;
                 visited.clear();
-                return Path(visited, length);
+                return Path(path, length);
             }
             for (auto neighbor : hex->findNeighbors()) {
                 if (neighbor->state != player || neighbor->visited) continue;
@@ -141,8 +144,11 @@ class HexBoard {
                 visited.push_front(neighbor);
                 neighbor->visited = true;
                 length++;
+                path.push_front(neighbor);
             }
         }
+        for (auto hex : visited) hex->visited = false;
+        visited.clear();
         return Path();
     }
 
@@ -235,7 +241,7 @@ class HexBoard {
                         hex->state = Hex::State::EMPTY;
                         if (!has_win(Player::RED)) {
                             std::cout << "YES\n";
-                            hex->state = Hex::State::EMPTY;
+                            hex->state = Hex::State::RED;
                             return;
                         }
                         hex->state = Hex::State::RED;
@@ -254,7 +260,7 @@ class HexBoard {
                         hex->state = Hex::State::EMPTY;
                         if (!has_win(Player::BLUE)) {
                             std::cout << "YES\n";
-                            hex->state = Hex::State::EMPTY;
+                            hex->state = Hex::State::BLUE;
                             return;
                         }
                         hex->state = Hex::State::BLUE;
