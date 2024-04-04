@@ -3,7 +3,7 @@
 #include "HexBoard.hpp"
 
 Hex::Hex(HexBoard& board) : board(board) {}
-Hex::Hex(int q, int r, HexBoard& board) : position(q, r), board(board) {}
+Hex::Hex(int q, int r, HexBoard& board) : board(board) {}
 
 int Hex::distance(const Hex& other) const {
     return position.distance(other.position);

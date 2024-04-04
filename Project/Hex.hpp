@@ -24,6 +24,7 @@ class Hex {
 
     bool visited = false;
     Edge edge = Edge::NONE;
+    Edge alt_edge = Edge::NONE;
 
     Hex(HexBoard& board);
     Hex(int q, int r, HexBoard& board);
@@ -42,5 +43,6 @@ class Hex {
         neighbors.clear();
         visited = false;
         edge = Edge::NONE;
+        alt_edge = Edge::NONE;
     }
 };

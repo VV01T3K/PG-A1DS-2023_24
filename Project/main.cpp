@@ -13,9 +13,9 @@ int main() {
     HexBoard board;
 
     // board.load();
-    // Path path = board.findWiningPath(Player::BLUE);
+    // Path path = board.findWiningPath(Player::RED);
     // board.print();
-    // cout << path.length << '\n';
+    // // cout << path.length << '\n';
     // std::vector<Hex*> hexes;
     // // for (auto hex : path.hexes) {
     // //     hex->state = Hex::State::UNDEFINED;
