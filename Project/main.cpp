@@ -30,8 +30,9 @@ int main() {
     //     board.print();
     // }
 
-    // 589 powinno byc NO
-    // 552 powinno byc NO
+    // 518 yes red
+    // 519 yes red
+
     while (true) {
         board.load();
         Info query = getQuery();

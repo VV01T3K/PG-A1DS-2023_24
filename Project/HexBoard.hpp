@@ -116,6 +116,7 @@ class HexBoard {
     }
 
     void setEdges() {
+        if (size == 0) return;
         for (int i = 0; i < size; i++) {
             getHex(0, i)->edge = Edge::RED_1;
             getHex(size - 1, i)->edge = Edge::RED_2;
@@ -124,7 +125,6 @@ class HexBoard {
         }
         getHex(0, 0)->alt_edge = Edge::RED_1;
         getHex(0, 0)->edge = Edge::BLUE_1;
-        if (size < 1) return;
         getHex(0, size - 1)->alt_edge = Edge::RED_1;
         getHex(0, size - 1)->edge = Edge::BLUE_2;
         getHex(size - 1, size - 1)->alt_edge = Edge::RED_2;
@@ -204,6 +204,9 @@ class HexBoard {
     }
 
     bool has_win(Player player) {
+        if (player == Player::RED && red_stones < size) return false;
+        if (player == Player::BLUE && blue_stones < size) return false;
+        if (size == 1 && player == Player::RED && red_stones == 1) return true;
         if (findWiningPath(player).length != 0) return true;
         return false;
     }
