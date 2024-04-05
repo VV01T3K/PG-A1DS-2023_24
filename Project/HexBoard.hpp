@@ -99,6 +99,7 @@ class HexBoard {
     }
 
     void load() {
+        reset();
         readBoardFromInput();
         int index = 0;
         int q = 0;

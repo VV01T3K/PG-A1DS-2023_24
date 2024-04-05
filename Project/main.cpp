@@ -11,7 +11,6 @@ int main() {
         Info query = getQuery();
         if (query == Info::STOP) break;
         board.fetchInfo(query);
-        board.reset();
     }
 
     return 0;
