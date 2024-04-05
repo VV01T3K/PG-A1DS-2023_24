@@ -2,7 +2,7 @@
 
 #include <cmath>
 #include <forward_list>
-#include <iostream>
+#include <iostream>  // TODO remove later
 #include <stack>
 #include <vector>
 
@@ -221,70 +221,70 @@ class HexBoard {
     void fetchInfo(Info info) {
         switch (info) {
             case Info::BOARD_SIZE:
-                std::cout << size << '\n';
+                printf("%d\n", size);
                 break;
             case Info::PAWNS_NUMBER:
-                std::cout << red_stones + blue_stones << '\n';
+                printf("%d\n", red_stones + blue_stones);
                 break;
             case Info::IS_BOARD_CORRECT:
                 if (is_correct())
-                    std::cout << "YES\n";
+                    printf("YES\n");
                 else
-                    std::cout << "NO\n";
+                    printf("NO\n");
                 break;
             case Info::IS_GAME_OVER:
                 if (!is_correct())
-                    std::cout << "NO\n";
+                    printf("NO\n");
                 else if (has_win(Player::RED)) {
-                    std::cout << "YES RED\n";
+                    printf("YES RED\n");
                 } else if (has_win(Player::BLUE)) {
-                    std::cout << "YES BLUE\n";
+                    printf("YES BLUE\n");
                 } else
-                    std::cout << "NO\n";
+                    printf("NO\n");
                 break;
             case Info::IS_BOARD_POSSIBLE:
                 if (!is_correct()) {
-                    std::cout << "NO\n";
+                    printf("NO\n");
                     break;
                 }
 
                 if (has_win(Player::RED)) {
                     if (red_stones != blue_stones + 1) {
-                        std::cout << "NO\n";
+                        printf("NO\n");
                         break;
                     }
                     for (auto hex : red_stones_list) {
                         hex->state = Hex::State::EMPTY;
                         if (!findWiningPath(Player::RED)) {
-                            std::cout << "YES\n";
+                            printf("YES\n");
                             hex->state = Hex::State::RED;
                             return;
                         }
                         hex->state = Hex::State::RED;
                     }
-                    std::cout << "NO\n";
+                    printf("NO\n");
                     break;
                 }
 
                 if (has_win((Player::BLUE))) {
                     if (red_stones != blue_stones) {
-                        std::cout << "NO\n";
+                        printf("NO\n");
                         break;
                     }
                     for (auto hex : blue_stones_list) {
                         hex->state = Hex::State::EMPTY;
                         if (!findWiningPath(Player::BLUE)) {
-                            std::cout << "YES\n";
+                            printf("YES\n");
                             hex->state = Hex::State::BLUE;
                             return;
                         }
                         hex->state = Hex::State::BLUE;
                     }
-                    std::cout << "NO\n";
+                    printf("NO\n");
                     break;
                 }
 
-                std::cout << "YES\n";
+                printf("YES\n");
                 break;
             case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
                 // TODO: Implement this
