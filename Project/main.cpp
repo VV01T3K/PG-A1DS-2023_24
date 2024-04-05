@@ -8,29 +8,7 @@ using namespace std;
 Info getQuery();
 
 int main() {
-    ios_base::sync_with_stdio(false);
     HexBoard board;
-
-    // board.load();
-    // Path path = board.findWiningPath(Player::RED);
-    // board.print();
-    // // cout << path.length << '\n';
-    // std::vector<Hex*> hexes;
-    // // for (auto hex : path.hexes) {
-    // //     hex->state = Hex::State::UNDEFINED;
-    // //     cout << '\n';
-    // //     board.print();
-    // // }
-    // for (auto hex : path.hexes) hexes.push_back(hex);
-    // std::reverse(hexes.begin(), hexes.end());
-    // for (auto hex : hexes) {
-    //     hex->state = Hex::State::UNDEFINED;
-    //     cout << '\n';
-    //     board.print();
-    // }
-
-    // 518 yes red
-    // 519 yes red
 
     while (true) {
         board.load();

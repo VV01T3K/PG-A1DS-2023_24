@@ -32,15 +32,15 @@ class HexBoard {
     void readBoardFromInput() {
         int index = 0;
         char c;
-        while (std::cin.get(c)) {
+        while (c = getc(stdin)) {
             if (c == EOF) break;
-            if (c == '-' || c == ' ' || c == '>') continue;
             if (c == '<') {
-                std::cin >> c;
-                if (c == '>') c = 'x';
+                getc(stdin);
+                c = getc(stdin);
+                if (c == ' ') c = 'x';
                 tmp[index++] = static_cast<Hex::State>(c);
-            }
-            if (c >= 'A' && c <= 'B') break;
+            } else if (c >= 'A' && c <= 'B')
+                break;
         }
         size = std::sqrt(index);
     }
@@ -160,7 +160,7 @@ class HexBoard {
             }
             for (auto neighbor : hex->findNeighbors()) {
                 if (neighbor->state != player || neighbor->visited) continue;
-                stack.push(neighbor);
+                stack.push(neighbor);  // change stack to priority queue
                 visited.push_front(neighbor);
                 neighbor->visited = true;
             }
