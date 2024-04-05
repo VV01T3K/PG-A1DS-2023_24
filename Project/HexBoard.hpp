@@ -1,13 +1,11 @@
 #pragma once
 
-#include <algorithm>
 #include <cmath>
 #include <cstdio>
-#include <forward_list>
-#include <stack>
 #include <vector>
 
 #include "ArrayStack.hpp"
+#include "ForwardList.hpp"
 #include "Hex.hpp"
 #include "UtilityAlgorithms.hpp"
 
@@ -29,8 +27,8 @@ enum class Player { RED, BLUE, NONE };
 class HexBoard {
    private:
     Hex::State tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
-    std::forward_list<Hex*> red_stones_list;
-    std::forward_list<Hex*> blue_stones_list;
+    ForwardList<Hex*> red_stones_list;
+    ForwardList<Hex*> blue_stones_list;
     int visit_id = 0;
 
     void readBoardFromInput() {

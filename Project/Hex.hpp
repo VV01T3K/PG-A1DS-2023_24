@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cmath>
-#include <forward_list>
 
+#include "ForwardList.hpp"
 #include "Position.hpp"
 
 enum class Direction { N, NE, SE, S, SW, NW };
@@ -20,7 +20,7 @@ class Hex {
     State state = State::UNDEFINED;
     Position position = Position(-1, -1);
     HexBoard& board;
-    std::forward_list<Hex*> neighbors;
+    ForwardList<Hex*> neighbors;
 
     int visited = -1;
     Edge edge = Edge::NONE;
@@ -36,8 +36,8 @@ class Hex {
     Hex* neighbor(Direction direction) const;
     Hex* neighbor(int direct) const;
 
-    std::forward_list<Hex*>& findNeighbors();
-    std::forward_list<Hex*>& findNeighborsEdge(Edge target_edge);
+    ForwardList<Hex*>& findNeighbors();
+    ForwardList<Hex*>& findNeighborsEdge(Edge target_edge);
 
     void reset() {
         state = State::UNDEFINED;

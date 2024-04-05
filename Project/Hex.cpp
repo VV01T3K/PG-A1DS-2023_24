@@ -37,7 +37,7 @@ Hex* Hex::neighbor(Direction direction) const {
     return nullptr;
 }
 
-std::forward_list<Hex*>& Hex::findNeighbors() {
+ForwardList<Hex*>& Hex::findNeighbors() {
     if (found_neighbors) return neighbors;
     for (int i = 0; i < 6; ++i) {
         Hex* neighbor_hex = neighbor(i);
@@ -49,7 +49,7 @@ std::forward_list<Hex*>& Hex::findNeighbors() {
     return neighbors;
 }
 
-std::forward_list<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
+ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
     if (found_neighbors) return neighbors;
     Direction directions[6];
     switch (target_edge) {
