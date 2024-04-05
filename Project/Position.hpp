@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <cmath>
 
 #include "UtilityAlgorithms.hpp"
@@ -17,6 +16,6 @@ class Position {
         int diff_q = std::abs(q - other.q);
         int diff_r = std::abs(r - other.r);
         int diff_s = std::abs((q + r) - (other.q + other.r));
-        return std::min(std::max(diff_q, diff_r), diff_s);
+        return min(max(diff_q, diff_r), diff_s);
     }
 };

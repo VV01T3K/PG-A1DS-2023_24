@@ -50,7 +50,7 @@ Info getQuery() {
     char c;
     while (true) {
         c = getc(stdin);
-        if (c == '\n' || c == EOF) break;
+        if (c == '-' || c == EOF) break;
     }
     return query;
 }
