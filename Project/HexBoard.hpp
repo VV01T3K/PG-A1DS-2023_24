@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <forward_list>
@@ -153,7 +154,8 @@ class HexBoard {
     }
 
     bool pathDfs(Hex* start, Edge end, Hex::State player) {
-        ArrayStack<Hex*> stack(std::max(red_stones, blue_stones));
+        ArrayStack<Hex*> stack(player == Hex::State::RED ? red_stones
+                                                         : blue_stones);
         stack.push(start);
         start->visited = visit_id;
         while (!stack.empty()) {
