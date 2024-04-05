@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "HexBoard.hpp"
-#include "Path.hpp"
 using namespace std;
 
 Info getQuery();
