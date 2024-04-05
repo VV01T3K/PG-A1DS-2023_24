@@ -28,6 +28,7 @@ class HexBoard {
     Hex::State tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
     std::forward_list<Hex*> red_stones_list;
     std::forward_list<Hex*> blue_stones_list;
+    int visit_id = 0;
 
     void readBoardFromInput() {
         int index = 0;
@@ -73,6 +74,7 @@ class HexBoard {
         size = 0;
         red_stones = 0;
         blue_stones = 0;
+        visit_id = 0;
         red_stones_list.clear();
         blue_stones_list.clear();
     }
@@ -148,38 +150,35 @@ class HexBoard {
         getHex(size - 1, 0)->edge = Edge::BLUE_1;
     }
 
-    bool pathDfs(Hex* start, Edge end, Hex::State player,
-                 std::forward_list<Hex*>& visited) {
+    bool pathDfs(Hex* start, Edge end, Hex::State player) {
         std::stack<Hex*> stack;
         stack.push(start);
-        visited.push_front(start);
-        start->visited = true;
+        start->visited = visit_id;
         while (!stack.empty()) {
             Hex* hex = stack.top();
             stack.pop();
             if (hex->state == player &&
                 (hex->edge == end || hex->alt_edge == end)) {
-                for (auto hex : visited) hex->visited = false;
-                visited.clear();
+                visit_id++;
                 return true;
             }
             for (auto neighbor : hex->findNeighborsEdge(end)) {
-                if (neighbor->state != player || neighbor->visited) continue;
+                if (neighbor->state != player || neighbor->visited == visit_id)
+                    continue;
                 stack.push(neighbor);
-                visited.push_front(neighbor);
-                neighbor->visited = true;
+                neighbor->visited = visit_id;
             }
         }
         return false;
     }
 
     bool findWiningPath(Player player) {
-        std::forward_list<Hex*> visited;
         if (player == Player::RED) {
             for (int i = 0; i < size; i++) {
                 Hex* hex = getHex(0, i);
-                if (hex->state != Hex::State::RED || hex->visited) continue;
-                if (pathDfs(hex, Edge::RED_2, Hex::State::RED, visited)) {
+                if (hex->state != Hex::State::RED || hex->visited == visit_id)
+                    continue;
+                if (pathDfs(hex, Edge::RED_2, Hex::State::RED)) {
                     return true;
                 }
                 // hex = getHex(size - 1, i);
@@ -191,8 +190,9 @@ class HexBoard {
         } else {
             for (int i = 0; i < size; i++) {
                 Hex* hex = getHex(i, 0);
-                if (hex->state != Hex::State::BLUE || hex->visited) continue;
-                if (pathDfs(hex, Edge::BLUE_2, Hex::State::BLUE, visited)) {
+                if (hex->state != Hex::State::BLUE || hex->visited == visit_id)
+                    continue;
+                if (pathDfs(hex, Edge::BLUE_2, Hex::State::BLUE)) {
                     return true;
                 }
                 // hex = getHex(i, size - 1);

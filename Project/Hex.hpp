@@ -22,7 +22,7 @@ class Hex {
     HexBoard& board;
     std::forward_list<Hex*> neighbors;
 
-    bool visited = false;
+    int visited = -1;
     Edge edge = Edge::NONE;
     Edge alt_edge = Edge::NONE;
     bool found_neighbors = false;
@@ -43,7 +43,7 @@ class Hex {
         state = State::UNDEFINED;
         position = Position(-1, -1);
         neighbors.clear();
-        visited = false;
+        visited = -1;
         edge = Edge::NONE;
         alt_edge = Edge::NONE;
         found_neighbors = false;
