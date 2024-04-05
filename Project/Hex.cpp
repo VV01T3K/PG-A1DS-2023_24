@@ -37,12 +37,12 @@ Hex* Hex::neighbor(Direction direction) const {
     return nullptr;
 }
 
-std::vector<Hex*>& Hex::findNeighbors() {
+std::forward_list<Hex*>& Hex::findNeighbors() {
     if (!neighbors.empty()) return neighbors;
     for (int i = 0; i < 6; ++i) {
         Hex* neighbor_hex = neighbor(i);
         if (neighbor_hex != nullptr) {
-            neighbors.push_back(neighbor_hex);
+            neighbors.push_front(neighbor_hex);
         }
     }
     return neighbors;

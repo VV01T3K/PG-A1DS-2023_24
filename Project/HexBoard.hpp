@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <cstdio>
 #include <forward_list>
-#include <iostream>  // TODO remove later
 #include <stack>
 #include <vector>
 
@@ -89,12 +89,12 @@ class HexBoard {
             for (int q = 0; q < size; q++) {
                 Hex* hex = getHex(q, r);
                 if (hex != nullptr) {
-                    std::cout << static_cast<char>(hex->state);
+                    printf("%c", static_cast<char>(hex->state));
                 } else {
-                    std::cout << '.';
+                    printf(".");
                 }
             }
-            std::cout << '\n';
+            printf("\n");
         }
     }
 
@@ -164,7 +164,7 @@ class HexBoard {
             }
             for (auto neighbor : hex->findNeighbors()) {
                 if (neighbor->state != player || neighbor->visited) continue;
-                stack.push(neighbor);  // change stack to priority queue
+                stack.push(neighbor);
                 visited.push_front(neighbor);
                 neighbor->visited = true;
             }
@@ -181,11 +181,11 @@ class HexBoard {
                 if (pathDfs(hex, Edge::RED_2, Hex::State::RED, visited)) {
                     return true;
                 }
-                hex = getHex(size - 1, i);
-                if (hex->state != Hex::State::RED || hex->visited) continue;
-                if (pathDfs(hex, Edge::RED_1, Hex::State::RED, visited)) {
-                    return true;
-                }
+                // hex = getHex(size - 1, i);
+                // if (hex->state != Hex::State::RED || hex->visited) continue;
+                // if (pathDfs(hex, Edge::RED_1, Hex::State::RED, visited)) {
+                //     return true;
+                // }
             }
         } else {
             for (int i = 0; i < size; i++) {
@@ -194,11 +194,11 @@ class HexBoard {
                 if (pathDfs(hex, Edge::BLUE_2, Hex::State::BLUE, visited)) {
                     return true;
                 }
-                hex = getHex(i, size - 1);
-                if (hex->state != Hex::State::BLUE || hex->visited) continue;
-                if (pathDfs(hex, Edge::BLUE_1, Hex::State::BLUE, visited)) {
-                    return true;
-                }
+                // hex = getHex(i, size - 1);
+                // if (hex->state != Hex::State::BLUE || hex->visited) continue;
+                // if (pathDfs(hex, Edge::BLUE_1, Hex::State::BLUE, visited)) {
+                //     return true;
+                // }
             }
         }
         return false;
@@ -255,12 +255,14 @@ class HexBoard {
                     }
                     for (auto hex : red_stones_list) {
                         hex->state = Hex::State::EMPTY;
-                        if (!findWiningPath(Player::RED)) {
+                        red_stones--;
+                        if (!has_win(Player::RED)) {
                             printf("YES\n");
                             hex->state = Hex::State::RED;
                             return;
                         }
                         hex->state = Hex::State::RED;
+                        red_stones++;
                     }
                     printf("NO\n");
                     break;
@@ -273,12 +275,14 @@ class HexBoard {
                     }
                     for (auto hex : blue_stones_list) {
                         hex->state = Hex::State::EMPTY;
-                        if (!findWiningPath(Player::BLUE)) {
+                        blue_stones--;
+                        if (!has_win(Player::BLUE)) {
                             printf("YES\n");
                             hex->state = Hex::State::BLUE;
                             return;
                         }
                         hex->state = Hex::State::BLUE;
+                        blue_stones++;
                     }
                     printf("NO\n");
                     break;

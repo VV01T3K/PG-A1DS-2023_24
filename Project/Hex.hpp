@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include <vector>
+#include <forward_list>
 
 #include "Position.hpp"
 
@@ -20,7 +20,7 @@ class Hex {
     State state = State::UNDEFINED;
     Position position = Position(-1, -1);
     HexBoard& board;
-    std::vector<Hex*> neighbors;
+    std::forward_list<Hex*> neighbors;
 
     bool visited = false;
     Edge edge = Edge::NONE;
@@ -35,7 +35,7 @@ class Hex {
     Hex* neighbor(Direction direction) const;
     Hex* neighbor(int direct) const;
 
-    std::vector<Hex*>& findNeighbors();
+    std::forward_list<Hex*>& findNeighbors();
 
     void reset() {
         state = State::UNDEFINED;

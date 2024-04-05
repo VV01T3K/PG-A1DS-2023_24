@@ -1,5 +1,3 @@
-#include <iostream>  // TODO remove later
-
 #include "HexBoard.hpp"
 using namespace std;
 
