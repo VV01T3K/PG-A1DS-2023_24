@@ -33,14 +33,18 @@ class HexBoard {
         int index = 0;
         char c;
         while (c = getc(stdin)) {
-            if (c == EOF) break;
+            if (c == EOF || c == -1) break;
             if (c == '<') {
                 getc(stdin);
                 c = getc(stdin);
-                if (c == ' ') c = 'x';
-                tmp[index++] = static_cast<Hex::State>(c);
-            } else if (c >= 'A' && c <= 'B')
+                if (c == ' ')
+                    tmp[index++] = Hex::State::EMPTY;
+                else
+                    tmp[index++] = static_cast<Hex::State>(c);
+            } else if (c >= 'A' && c <= 'Z') {
+                ungetc(c, stdin);
                 break;
+            }
         }
         size = std::sqrt(index);
     }
