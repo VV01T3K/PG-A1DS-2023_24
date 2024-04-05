@@ -4,9 +4,9 @@
 #include <cstdio>
 #include <vector>
 
-#include "ArrayStack.hpp"
 #include "ForwardList.hpp"
 #include "Hex.hpp"
+#include "Stack.hpp"
 #include "UtilityAlgorithms.hpp"
 
 #define MAX_BOARD_SIZE 11
@@ -152,8 +152,7 @@ class HexBoard {
     }
 
     bool pathDfs(Hex* start, Edge end, Hex::State player) {
-        ArrayStack<Hex*> stack(player == Hex::State::RED ? red_stones
-                                                         : blue_stones);
+        Stack<Hex*> stack(player == Hex::State::RED ? red_stones : blue_stones);
         stack.push(start);
         start->visited = visit_id;
         while (!stack.empty()) {
