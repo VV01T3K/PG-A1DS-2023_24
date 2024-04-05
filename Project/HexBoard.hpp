@@ -146,7 +146,6 @@ class HexBoard {
     bool pathDfs(Hex* start, Edge end, Hex::State player,
                  std::forward_list<Hex*>& visited) {
         std::stack<Hex*> stack;
-        std::forward_list<Hex*> path;
         stack.push(start);
         visited.push_front(start);
         start->visited = true;
@@ -155,7 +154,6 @@ class HexBoard {
             stack.pop();
             if (hex->state == player &&
                 (hex->edge == end || hex->alt_edge == end)) {
-                path.push_front(hex);
                 for (auto hex : visited) hex->visited = false;
                 visited.clear();
                 return true;
@@ -167,8 +165,6 @@ class HexBoard {
                 neighbor->visited = true;
             }
         }
-        for (auto hex : visited) hex->visited = false;
-        visited.clear();
         return false;
     }
 
