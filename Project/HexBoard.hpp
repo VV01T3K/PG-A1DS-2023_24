@@ -162,7 +162,7 @@ class HexBoard {
                 visited.clear();
                 return true;
             }
-            for (auto neighbor : hex->findNeighbors()) {
+            for (auto neighbor : hex->findNeighborsEdge(end)) {
                 if (neighbor->state != player || neighbor->visited) continue;
                 stack.push(neighbor);
                 visited.push_front(neighbor);

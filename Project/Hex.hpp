@@ -25,6 +25,7 @@ class Hex {
     bool visited = false;
     Edge edge = Edge::NONE;
     Edge alt_edge = Edge::NONE;
+    bool found_neighbors = false;
 
     Hex(HexBoard& board);
     Hex(int q, int r, HexBoard& board);
@@ -36,6 +37,7 @@ class Hex {
     Hex* neighbor(int direct) const;
 
     std::forward_list<Hex*>& findNeighbors();
+    std::forward_list<Hex*>& findNeighborsEdge(Edge target_edge);
 
     void reset() {
         state = State::UNDEFINED;
@@ -44,5 +46,6 @@ class Hex {
         visited = false;
         edge = Edge::NONE;
         alt_edge = Edge::NONE;
+        found_neighbors = false;
     }
 };
