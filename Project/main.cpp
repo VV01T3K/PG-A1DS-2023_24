@@ -21,17 +21,41 @@ int main() {
     return 0;
 }
 
+void ignoreChars(int n) {
+    for (int i = 0; i < n; i++) getc(stdin);
+}
+
 Info getQuery() {
-    string query;
-    cin >> query;
-    if (query == "BOARD_SIZE") return Info::BOARD_SIZE;
-    if (query == "PAWNS_NUMBER") return Info::PAWNS_NUMBER;
-    if (query == "IS_BOARD_CORRECT") return Info::IS_BOARD_CORRECT;
-    if (query == "IS_GAME_OVER") return Info::IS_GAME_OVER;
-    if (query == "IS_BOARD_POSSIBLE") return Info::IS_BOARD_POSSIBLE;
-    if (query == "N_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT")
-        return Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT;
-    if (query == "N_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT")
-        return Info::CAN_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT;
-    return Info::STOP;
+    Info query = Info::STOP;
+    switch (getc(stdin)) {
+        case 'B':
+            query = Info::BOARD_SIZE;
+            break;
+        case 'P':
+            query = Info::PAWNS_NUMBER;
+            break;
+        case 'I':
+            ignoreChars(8);
+            switch (getc(stdin)) {
+                case 'C':
+                    query = Info::IS_BOARD_CORRECT;
+                    break;
+                case 'V':
+                    query = Info::IS_GAME_OVER;
+                    break;
+                case 'P':
+                    query = Info::IS_BOARD_POSSIBLE;
+                    break;
+            }
+            break;
+        case 'C':
+            // TODO
+            break;
+    }
+    char c;
+    while (true) {
+        c = getc(stdin);
+        if (c == '\n' || c == EOF) break;
+    }
+    return query;
 }
