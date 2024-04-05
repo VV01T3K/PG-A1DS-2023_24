@@ -1,7 +1,8 @@
 #pragma once
 
-#include <algorithm>
 #include <cmath>
+
+#include "UtilityAlgorithms.hpp"
 
 // axial position for hexagonal grid
 class Position {

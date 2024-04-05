@@ -6,7 +6,9 @@
 #include <stack>
 #include <vector>
 
+#include "ArrayStack.hpp"
 #include "Hex.hpp"
+#include "UtilityAlgorithms.hpp"
 
 #define MAX_BOARD_SIZE 11
 
@@ -151,12 +153,11 @@ class HexBoard {
     }
 
     bool pathDfs(Hex* start, Edge end, Hex::State player) {
-        std::stack<Hex*> stack;
+        ArrayStack<Hex*> stack(std::max(red_stones, blue_stones));
         stack.push(start);
         start->visited = visit_id;
         while (!stack.empty()) {
-            Hex* hex = stack.top();
-            stack.pop();
+            Hex* hex = stack.pop();
             if (hex->state == player &&
                 (hex->edge == end || hex->alt_edge == end)) {
                 visit_id++;
