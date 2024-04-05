@@ -151,7 +151,7 @@ class HexBoard {
         getHex(size - 1, 0)->edge = Edge::BLUE_1;
     }
 
-    bool pathDfs(Hex* start, Edge end, Hex::State player) {
+    bool dfs(Hex* start, Edge end, Hex::State player) {
         Stack<Hex*> stack(player == Hex::State::RED ? red_stones : blue_stones);
         stack.push(start);
         start->visited = visit_id;
@@ -178,12 +178,12 @@ class HexBoard {
                 Hex* hex = getHex(0, i);
                 if (hex->state != Hex::State::RED || hex->visited == visit_id)
                     continue;
-                if (pathDfs(hex, Edge::RED_2, Hex::State::RED)) {
+                if (dfs(hex, Edge::RED_2, Hex::State::RED)) {
                     return true;
                 }
                 // hex = getHex(size - 1, i);
                 // if (hex->state != Hex::State::RED || hex->visited) continue;
-                // if (pathDfs(hex, Edge::RED_1, Hex::State::RED, visited)) {
+                // if (dfs(hex, Edge::RED_1, Hex::State::RED, visited)) {
                 //     return true;
                 // }
             }
@@ -192,12 +192,12 @@ class HexBoard {
                 Hex* hex = getHex(i, 0);
                 if (hex->state != Hex::State::BLUE || hex->visited == visit_id)
                     continue;
-                if (pathDfs(hex, Edge::BLUE_2, Hex::State::BLUE)) {
+                if (dfs(hex, Edge::BLUE_2, Hex::State::BLUE)) {
                     return true;
                 }
                 // hex = getHex(i, size - 1);
                 // if (hex->state != Hex::State::BLUE || hex->visited) continue;
-                // if (pathDfs(hex, Edge::BLUE_1, Hex::State::BLUE, visited)) {
+                // if (dfs(hex, Edge::BLUE_1, Hex::State::BLUE, visited)) {
                 //     return true;
                 // }
             }
