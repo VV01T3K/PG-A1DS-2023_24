@@ -8,6 +8,7 @@ int main() {
 
     while (true) {
         board.load();
+        board.print();
         Info query = getQuery();
         if (query == Info::STOP) break;
         board.fetchInfo(query);
@@ -44,13 +45,26 @@ Info getQuery() {
             }
             break;
         case 'C':
-            // TODO
+            ignoreChars(3);
+            if (getc(stdin) == 'R') {
+                ignoreChars(10);
+                if (getc(stdin) == '1')
+                    query = Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT;
+                else
+                    query = Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+            } else {
+                ignoreChars(11);
+                if (getc(stdin) == '1')
+                    query = Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT;
+                else
+                    query = Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+            }
             break;
     }
     char c;
     while (true) {
         c = getc(stdin);
-        if (c == '-' || c == EOF) break;
+        if (c == '-' || c == EOF || c == '\n') break;
     }
     return query;
 }

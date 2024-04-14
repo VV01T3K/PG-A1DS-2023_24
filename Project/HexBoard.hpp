@@ -17,8 +17,10 @@ enum class Info {
     IS_BOARD_CORRECT,
     IS_GAME_OVER,
     IS_BOARD_POSSIBLE,
-    CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT,
-    CAN_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT,
+    CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT,
+    CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT,
+    CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT,
+    CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT,
     STOP
 };
 
@@ -291,11 +293,17 @@ class HexBoard {
 
                 printf("YES\n");
                 break;
-            case Info::CAN_RED_WIN_IN_N_MOVE_WITH_NAIVE_OPPONENT:
-                // TODO: Implement this
+            case Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
+                printf("CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n");
                 break;
-            case Info::CAN_RED_WIN_IN_N_MOVE_WITH_PERFECT_OPPONENT:
-                // TODO: Implement this
+            case Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT:
+                printf("CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT\n");
+                break;
+            case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
+                printf("CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n");
+                break;
+            case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT:
+                printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT\n");
                 break;
         }
     }
