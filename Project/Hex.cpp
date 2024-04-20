@@ -49,45 +49,45 @@ ForwardList<Hex*>& Hex::findNeighbors() {
     return neighbors;
 }
 
+const Direction Hex::best_directions[4][6] = {
+    {
+        Direction::NW,
+        Direction::N,
+        Direction::SW,
+        Direction::NE,
+        Direction::S,
+        Direction::SE,
+    },
+    {
+        Direction::SE,
+        Direction::S,
+        Direction::NE,
+        Direction::SW,
+        Direction::N,
+        Direction::NW,
+    },
+    {
+        Direction::NE,
+        Direction::N,
+        Direction::SE,
+        Direction::NW,
+        Direction::S,
+        Direction::SW,
+    },
+    {
+        Direction::SW,
+        Direction::S,
+        Direction::NW,
+        Direction::SE,
+        Direction::N,
+        Direction::NE,
+    },
+};
+
 ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
     if (found_neighbors) return neighbors;
-    Direction directions[6];
-    switch (target_edge) {
-        case Edge::RED_1:
-            directions[0] = Direction::NW;
-            directions[1] = Direction::N;
-            directions[2] = Direction::SW;
-            directions[3] = Direction::NE;
-            directions[4] = Direction::S;
-            directions[5] = Direction::SE;
-            break;
-        case Edge::RED_2:
-            directions[0] = Direction::SE;
-            directions[1] = Direction::S;
-            directions[2] = Direction::NE;
-            directions[3] = Direction::SW;
-            directions[4] = Direction::N;
-            directions[5] = Direction::NW;
-            break;
-        case Edge::BLUE_1:
-            directions[0] = Direction::NE;
-            directions[1] = Direction::N;
-            directions[2] = Direction::SE;
-            directions[3] = Direction::NW;
-            directions[4] = Direction::S;
-            directions[5] = Direction::SW;
-            break;
-        case Edge::BLUE_2:
-            directions[0] = Direction::SW;
-            directions[1] = Direction::S;
-            directions[2] = Direction::NW;
-            directions[3] = Direction::SE;
-            directions[4] = Direction::N;
-            directions[5] = Direction::NE;
-            break;
-    }
     for (int i = 0; i < 6; ++i) {
-        Hex* hex = neighbor(directions[i]);
+        Hex* hex = neighbor(best_directions[static_cast<int>(target_edge)][i]);
         if (hex != nullptr) {
             neighbors.push_front(hex);
         }

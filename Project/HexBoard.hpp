@@ -164,11 +164,52 @@ class HexBoard {
                 visit_id++;
                 return true;
             }
-            for (auto neighbor : hex->findNeighborsEdge(end)) {
-                if (neighbor->state != player || neighbor->visited == visit_id)
-                    continue;
-                stack.push(neighbor);
-                neighbor->visited = visit_id;
+            // -------------------------
+            // * stare podejscie
+            // for (auto neighbor : hex->findNeighborsEdge(end)) {
+            //     if (neighbor->state != player || neighbor->visited ==
+            //     visit_id)
+            //         continue;
+            //     stack.push(neighbor);
+            //     neighbor->visited = visit_id;
+            // }
+            // -------------------------
+            // * nowe podejscie
+            // for (int i = 0; i < 6; i++) {
+            //     Hex* neighbor_hex = hex->neighbor(
+            //         Hex::best_directions[static_cast<int>(end)][i]);
+            //     if (neighbor_hex != nullptr) {
+            //         if (neighbor_hex->state != player ||
+            //             neighbor_hex->visited == visit_id)
+            //             continue;
+            //         stack.push(neighbor_hex);
+            //         neighbor_hex->visited = visit_id;
+            //     }
+            // }
+            // -------------------------
+            // * nowe podejscie połączone z ulepszonym starym
+            if (hex->found_neighbors) {
+                for (auto neighbor : hex->neighbors) {
+                    if (neighbor->state != player ||
+                        neighbor->visited == visit_id)
+                        continue;
+                    stack.push(neighbor);
+                    neighbor->visited = visit_id;
+                }
+            } else {
+                for (int i = 0; i < 6; i++) {
+                    Hex* neighbor_hex = hex->neighbor(
+                        Hex::best_directions[static_cast<int>(end)][i]);
+                    if (neighbor_hex != nullptr) {
+                        hex->neighbors.push_front(neighbor_hex);
+                        if (neighbor_hex->state != player ||
+                            neighbor_hex->visited == visit_id)
+                            continue;
+                        stack.push(neighbor_hex);
+                        neighbor_hex->visited = visit_id;
+                    }
+                }
+                hex->found_neighbors = true;
             }
         }
         return false;

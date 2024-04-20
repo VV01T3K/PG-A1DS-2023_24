@@ -17,6 +17,7 @@ class Hex {
         EMPTY = 'x',
         UNDEFINED = '.'
     };
+    static const Direction best_directions[4][6];
     State state = State::UNDEFINED;
     Position position = Position(-1, -1);
     HexBoard& board;
