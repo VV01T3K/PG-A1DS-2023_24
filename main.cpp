@@ -14,15 +14,14 @@ enum MAZE {
 
 class Point {
    public:
-    int x, y;
+    int y, x;
     MAZE type;
     bool visited = false;
-    Point(int x, int y, int type) : x(x), y(y), type((MAZE)type) {}
+    Point(int y, int x, int type) : y(y), x(x), type((MAZE)type) {}
     Point() {}
 };
 
 int main() {
-    system("clear");
     int n, m;
     cin >> n >> m;
     vector<vector<Point>> maze(n, vector<Point>(m));
@@ -46,29 +45,29 @@ int main() {
         stack.pop();
         if (maze[current.first][current.second].type == CHEESE) break;
         for (int i = 0; i < 4; i++) {
-            int x = current.first, y = current.second;
+            int y = current.first, x = current.second;
             switch (i) {
                 case 0:
-                    x--;
-                    break;
-                case 1:
                     y--;
                     break;
-                case 2:
-                    y++;
+                case 1:
+                    x--;
                     break;
-                case 3:
+                case 2:
                     x++;
                     break;
+                case 3:
+                    y++;
+                    break;
             }
-            if (x < 0 || x >= n || y < 0 || y >= m) continue;
-            if (maze[x][y].type == WALL || maze[x][y].visited) continue;
-            maze[x][y].visited = true;
-            stack.push({x, y});
+            if (y < 0 || y >= n || x < 0 || x >= m) continue;
+            if (maze[y][x].type == WALL || maze[y][x].visited) continue;
+            maze[y][x].visited = true;
+            stack.push({y, x});
         }
     }
 
-    // n x m array filed with 0
+    // n y m array filed with 0
     vector<vector<int>> path_map(n, vector<int>(m, 0));
     for (auto p : path) {
         path_map[p.first][p.second] = 1;
