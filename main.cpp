@@ -67,7 +67,6 @@ int main() {
         }
     }
 
-    // n y m array filed with 0
     vector<vector<int>> path_map(n, vector<int>(m, 0));
     for (auto p : path) {
         path_map[p.first][p.second] = 1;
