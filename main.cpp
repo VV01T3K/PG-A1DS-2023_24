@@ -1,9 +1,4 @@
-#include <forward_list>
-#include <iostream>
-#include <stack>
-#include <utility>
-#include <vector>
-using namespace std;
+#include <cstdio>
 
 enum MAZE {
     WALL = 0,
@@ -11,53 +6,60 @@ enum MAZE {
     START = 3,
     CHEESE = 5,
 };
-
 class Point {
    public:
     int y, x;
     MAZE type;
     bool visited = false;
     Point(int y, int x, int type) : y(y), x(x), type((MAZE)type) {}
+    Point(int y, int x) : y(y), x(x) {}
     Point() {}
 };
 
-int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<Point>> maze(n, vector<Point>(m));
-    pair<int, int> start;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++) {
-            int tmp;
-            cin >> tmp;
-            maze[i][j] = Point(i, j, tmp);
-            if (tmp == START) start = {i, j};
-        }
+class Stack {
+   public:
+    Point* array;
+    int size = 0;
+    int max_size;
+    Stack(int size) : max_size(size) { array = new Point[size]; }
+    ~Stack() { delete[] array; }
+    void push(Point element) {
+        if (size < max_size) array[size++] = element;
+    }
+    Point pop() { return array[--size]; }
+    bool empty() { return size == 0; }
+};
 
-    std::forward_list<pair<int, int>> path;
-    stack<pair<int, int>> stack;
-    maze[start.first][start.second].visited = true;
+enum DIRECTION {
+    SOUTH = 0,
+    EAST = 1,
+    WEST = 2,
+    NORTH = 3,
+};
+
+void dfs(Point** maze, int** path, int n, int m, Point start) {
+    Stack stack(n * m);
+    start.visited = true;
     stack.push(start);
 
     while (!stack.empty()) {
-        pair<int, int> current = stack.top();
-        path.push_front(current);
-        stack.pop();
-        if (maze[current.first][current.second].type == CHEESE) break;
-        for (int i = 0; i < 4; i++) {
-            int y = current.first, x = current.second;
+        Point current = stack.pop();
+        path[current.y][current.x] = 1;
+        if (maze[current.y][current.x].type == CHEESE) break;
+        for (int i = 3; i >= 0; i--) {
+            int y = current.y, x = current.x;
             switch (i) {
-                case 0:
+                case NORTH:
                     y--;
                     break;
-                case 1:
+                case WEST:
                     x--;
                     break;
-                case 2:
-                    x++;
-                    break;
-                case 3:
+                case SOUTH:
                     y++;
+                    break;
+                case EAST:
+                    x++;
                     break;
             }
             if (y < 0 || y >= n || x < 0 || x >= m) continue;
@@ -66,14 +68,30 @@ int main() {
             stack.push({y, x});
         }
     }
+}
 
-    vector<vector<int>> path_map(n, vector<int>(m, 0));
-    for (auto p : path) {
-        path_map[p.first][p.second] = 1;
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    Point start;
+
+    Point** maze = new Point*[n];
+    int** path = new int*[n];
+    for (int i = 0; i < n; i++) {
+        maze[i] = new Point[m];
+        path[i] = new int[m]{0};
+        for (int j = 0; j < m; j++) {
+            int tmp;
+            scanf("%d", &tmp);
+            maze[i][j] = Point(i, j, tmp);
+            if (tmp == START) start = {i, j};
+        }
     }
 
+    dfs(maze, path, n, m, start);
+
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) cout << path_map[i][j] << " ";
-        cout << endl;
+        for (int j = 0; j < m; j++) printf("%d ", path[i][j]);
+        printf("\n");
     }
 }
