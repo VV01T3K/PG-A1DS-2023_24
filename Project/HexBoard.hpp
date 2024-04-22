@@ -12,6 +12,7 @@
 #define MAX_BOARD_SIZE 11
 
 enum class Info {
+    STOP,
     BOARD_SIZE,
     PAWNS_NUMBER,
     IS_BOARD_CORRECT,
@@ -25,7 +26,6 @@ enum class Info {
     CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT,
     CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT,
     CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT,
-    STOP
 };
 
 enum class Player { RED, BLUE, NONE };
