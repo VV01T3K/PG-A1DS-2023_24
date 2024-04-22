@@ -60,7 +60,7 @@ Info getQuery() {
                         query =
                             Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT;
                 } else {
-                    ignoreChars(11);
+                    ignoreChars(12);
                     if (getc(stdin) == 'N')
                         query = Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
                     else
@@ -78,7 +78,7 @@ Info getQuery() {
                         query =
                             Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT;
                 } else {
-                    ignoreChars(11);
+                    ignoreChars(12);
                     if (getc(stdin) == 'N')
                         query =
                             Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
