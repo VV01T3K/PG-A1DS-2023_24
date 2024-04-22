@@ -276,9 +276,7 @@ class HexBoard {
             player == Player::RED ? Hex::State::BLUE : Hex::State::RED;
         int& stones = player == Player::RED ? red_stones : blue_stones;
         int& opponent_stones = player == Player::RED ? blue_stones : red_stones;
-        // if (who_starts() != player) opponent_stones++;
         if (stones + opponent_stones + n > size * size) {
-            // if (who_starts() != player) opponent_stones--;
             return false;
         }
         if (n == 1) {
@@ -290,13 +288,11 @@ class HexBoard {
                 if (has_win(player)) {
                     hexes[i]->state = Hex::State::EMPTY;
                     stones--;
-                    // if (who_starts() != player) opponent_stones--;
                     return true;
                 }
                 hexes[i]->state = Hex::State::EMPTY;
                 stones--;
             }
-            // if (who_starts() != player) opponent_stones--;
             return false;
         }
 
@@ -397,7 +393,7 @@ class HexBoard {
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::RED, 1))
+                else if (can_win_in_n(Player::BLUE, 1))
                     printf("YES\n");
                 else
                     printf("NO\n");
