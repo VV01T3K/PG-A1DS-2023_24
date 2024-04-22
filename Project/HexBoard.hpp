@@ -295,6 +295,31 @@ class HexBoard {
             }
             return false;
         }
+        if (n == 2) {
+            for (int i = 0; i < size * size; i++) {
+                if (hexes[i]->state != Hex::State::EMPTY) continue;
+                hexes[i]->state = player_state;
+                stones++;
+                for (int j = 0; j < size * size; j++) {
+                    if (hexes[j]->state != Hex::State::EMPTY) continue;
+                    hexes[j]->state = player_state;
+                    stones++;
+                    visit_id++;
+                    if (has_win(player)) {
+                        hexes[j]->state = Hex::State::EMPTY;
+                        stones--;
+                        hexes[i]->state = Hex::State::EMPTY;
+                        stones--;
+                        return true;
+                    }
+                    hexes[j]->state = Hex::State::EMPTY;
+                    stones--;
+                }
+                hexes[i]->state = Hex::State::EMPTY;
+                stones--;
+            }
+            return false;
+        }
 
         return false;
     }
@@ -384,7 +409,16 @@ class HexBoard {
                     printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT:
-                printf("CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::RED, 2))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
                 if (!is_correct())
@@ -399,7 +433,17 @@ class HexBoard {
                     printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT:
-                printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT\n\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::BLUE, 2))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
+                printf("\n");
                 break;
         }
     }
