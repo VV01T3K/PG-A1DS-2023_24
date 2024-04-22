@@ -21,6 +21,10 @@ enum class Info {
     CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT,
     CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT,
     CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT,
+    CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT,
+    CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT,
+    CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT,
+    CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT,
     STOP
 };
 
@@ -445,6 +449,18 @@ class HexBoard {
                     printf("YES\n");
                 else
                     printf("NO\n");
+                break;
+            case Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
+                printf("CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
+                break;
+            case Info::CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
+                printf("CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
+                break;
+            case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
+                printf("CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
+                break;
+            case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
+                printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
                 break;
         }
     }
