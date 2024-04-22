@@ -269,6 +269,29 @@ class HexBoard {
             return Player::BLUE;
     }
 
+    bool can_win_in_n(const Player player, const int n) {
+        const Hex::State player_state =
+            player == Player::RED ? Hex::State::RED : Hex::State::BLUE;
+        int& stones = player == Player::RED ? red_stones : blue_stones;
+        if (n == 1) {
+            if (red_stones + blue_stones + 1 > size * size) return false;
+            for (int i = 0; i < size * size; i++) {
+                if (hexes[i]->state != Hex::State::EMPTY) continue;
+                hexes[i]->state = player_state;
+                stones++;
+                visit_id++;
+                if (has_win(player)) {
+                    hexes[i]->state = Hex::State::EMPTY;
+                    stones--;
+                    return true;
+                }
+                hexes[i]->state = Hex::State::EMPTY;
+                stones--;
+            }
+        }
+        return false;
+    }
+
     void fetchInfo(Info info) {
         switch (info) {
             case Info::BOARD_SIZE:
@@ -342,44 +365,34 @@ class HexBoard {
                 printf("YES\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
-                // int n = 1;
-                // if (!is_correct())
-                //     printf("NO\n");
-                // else if (has_win(Player::RED))
-                //     printf("NO\n");
-                // else if (has_win(Player::BLUE))
-                //     printf("NO\n");
-                // else {
-                //     if (red_stones + n >= size)
-                //         printf("NO\n");
-                //     else {
-                //         for (int i = 0; i < size * size; i++) {
-                //             if (hexes[i]->state != Hex::State::EMPTY)
-                //             continue; hexes[i]->state = Hex::State::RED;
-                //             red_stones++;
-                //             if (has_win(Player::RED)) {
-                //                 printf("YES\n");
-                //                 hexes[i]->state = Hex::State::EMPTY;
-                //                 red_stones--;
-                //                 break;
-                //             }
-                //             hexes[i]->state = Hex::State::EMPTY;
-                //             red_stones--;
-                //         }
-                //         printf("NO\n");
-                //     }
-                // }
-
-                printf("CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::RED, 1))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT:
                 printf("CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
-                printf("CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::BLUE, 1))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT:
-                printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT\n");
+                printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT\n\n");
                 break;
         }
     }

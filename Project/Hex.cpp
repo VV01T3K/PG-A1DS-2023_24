@@ -37,17 +37,17 @@ Hex* Hex::neighbor(Direction direction) const {
     return nullptr;
 }
 
-ForwardList<Hex*>& Hex::findNeighbors() {
-    if (found_neighbors) return neighbors;
-    for (int i = 0; i < 6; ++i) {
-        Hex* neighbor_hex = neighbor(i);
-        if (neighbor_hex != nullptr) {
-            neighbors.push_front(neighbor_hex);
-        }
-    }
-    found_neighbors = true;
-    return neighbors;
-}
+// ForwardList<Hex*>& Hex::findNeighbors() {
+//     if (found_neighbors) return neighbors;
+//     for (int i = 0; i < 6; ++i) {
+//         Hex* neighbor_hex = neighbor(i);
+//         if (neighbor_hex != nullptr) {
+//             neighbors.push_front(neighbor_hex);
+//         }
+//     }
+//     found_neighbors = true;
+//     return neighbors;
+// }
 
 const Direction Hex::best_directions[4][6] = {
     {
@@ -86,16 +86,6 @@ const Direction Hex::best_directions[4][6] = {
 
 ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
     if (found_neighbors) return neighbors;
-    for (int i = 0; i < 6; ++i) {
-        Hex* hex = neighbor(best_directions[static_cast<int>(target_edge)][i]);
-        if (hex != nullptr) {
-            neighbors.push_front(hex);
-        }
-    }
-    found_neighbors = true;
-    return neighbors;
-}
-ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
     for (int i = 0; i < 6; ++i) {
         Hex* hex = neighbor(best_directions[static_cast<int>(target_edge)][i]);
         if (hex != nullptr) {

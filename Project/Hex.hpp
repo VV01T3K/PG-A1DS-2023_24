@@ -37,9 +37,8 @@ class Hex {
     Hex* neighbor(Direction direction) const;
     Hex* neighbor(int direct) const;
 
-    ForwardList<Hex*>& findNeighbors();
+    // ForwardList<Hex*>& findNeighbors();
     ForwardList<Hex*>& findNeighborsEdge(Edge target_edge);
-    ForwardList<Hex*>& findNewNeighborsEdge(Edge target_edge);
 
     void reset() {
         state = State::UNDEFINED;
