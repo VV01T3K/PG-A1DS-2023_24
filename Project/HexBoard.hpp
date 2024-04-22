@@ -71,6 +71,7 @@ class HexBoard {
     }
 
     void reset() {
+        printf("RESET\n");
         for (auto hex : hexes) {
             hex->reset();
         }
@@ -272,9 +273,16 @@ class HexBoard {
     bool can_win_in_n(const Player player, const int n) {
         const Hex::State player_state =
             player == Player::RED ? Hex::State::RED : Hex::State::BLUE;
+        const Hex::State opponent_state =
+            player == Player::RED ? Hex::State::BLUE : Hex::State::RED;
         int& stones = player == Player::RED ? red_stones : blue_stones;
+        int& opponent_stones = player == Player::RED ? blue_stones : red_stones;
+        // if (who_starts() != player) opponent_stones++;
+        if (stones + opponent_stones + n > size * size) {
+            // if (who_starts() != player) opponent_stones--;
+            return false;
+        }
         if (n == 1) {
-            if (red_stones + blue_stones + 1 > size * size) return false;
             for (int i = 0; i < size * size; i++) {
                 if (hexes[i]->state != Hex::State::EMPTY) continue;
                 hexes[i]->state = player_state;
@@ -283,12 +291,16 @@ class HexBoard {
                 if (has_win(player)) {
                     hexes[i]->state = Hex::State::EMPTY;
                     stones--;
+                    // if (who_starts() != player) opponent_stones--;
                     return true;
                 }
                 hexes[i]->state = Hex::State::EMPTY;
                 stones--;
             }
+            // if (who_starts() != player) opponent_stones--;
+            return false;
         }
+
         return false;
     }
 
@@ -386,7 +398,7 @@ class HexBoard {
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::BLUE, 1))
+                else if (can_win_in_n(Player::RED, 1))
                     printf("YES\n");
                 else
                     printf("NO\n");

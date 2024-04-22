@@ -8,9 +8,13 @@ int main() {
 
     while (true) {
         board.load();
-        Info query = getQuery();
+        Info query;
+        for (int i = 0; i < 4; ++i) {
+            query = getQuery();
+            if (query == Info::STOP) break;
+            board.fetchInfo(query);
+        }
         if (query == Info::STOP) break;
-        board.fetchInfo(query);
     }
 
     return 0;
