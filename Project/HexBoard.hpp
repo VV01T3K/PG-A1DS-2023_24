@@ -71,7 +71,6 @@ class HexBoard {
     }
 
     void reset() {
-        printf("RESET\n");
         for (auto hex : hexes) {
             hex->reset();
         }
