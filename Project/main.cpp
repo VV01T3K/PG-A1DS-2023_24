@@ -51,16 +51,40 @@ Info getQuery() {
             ignoreChars(3);
             if (getc(stdin) == 'R') {
                 ignoreChars(10);
-                if (getc(stdin) == '1')
-                    query = Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT;
-                else
-                    query = Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+                if (getc(stdin) == '1') {
+                    ignoreChars(11);
+                    if (getc(stdin) == 'N')
+                        query = Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT;
+                    else
+                        query =
+                            Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT;
+                } else {
+                    ignoreChars(11);
+                    if (getc(stdin) == 'N')
+                        query = Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+                    else
+                        query =
+                            Info::CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT;
+                }
             } else {
                 ignoreChars(11);
-                if (getc(stdin) == '1')
-                    query = Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT;
-                else
-                    query = Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+                if (getc(stdin) == '1') {
+                    ignoreChars(11);
+                    if (getc(stdin) == 'N')
+                        query =
+                            Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT;
+                    else
+                        query =
+                            Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT;
+                } else {
+                    ignoreChars(11);
+                    if (getc(stdin) == 'N')
+                        query =
+                            Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+                    else
+                        query =
+                            Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT;
+                }
             }
             break;
     }
