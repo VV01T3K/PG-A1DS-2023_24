@@ -449,6 +449,7 @@ class HexBoard {
                     printf("YES\n");
                 else
                     printf("NO\n");
+                printf("\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
                 printf("CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
@@ -461,6 +462,7 @@ class HexBoard {
                 break;
             case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
                 printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
+                printf("\n");
                 break;
         }
     }
