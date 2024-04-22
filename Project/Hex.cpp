@@ -95,3 +95,13 @@ ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
     found_neighbors = true;
     return neighbors;
 }
+ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
+    for (int i = 0; i < 6; ++i) {
+        Hex* hex = neighbor(best_directions[static_cast<int>(target_edge)][i]);
+        if (hex != nullptr) {
+            neighbors.push_front(hex);
+        }
+    }
+    found_neighbors = true;
+    return neighbors;
+}

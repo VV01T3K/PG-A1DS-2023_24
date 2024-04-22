@@ -39,6 +39,7 @@ class Hex {
 
     ForwardList<Hex*>& findNeighbors();
     ForwardList<Hex*>& findNeighborsEdge(Edge target_edge);
+    ForwardList<Hex*>& findNewNeighborsEdge(Edge target_edge);
 
     void reset() {
         state = State::UNDEFINED;

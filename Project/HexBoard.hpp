@@ -166,15 +166,14 @@ class HexBoard {
             }
             // -------------------------
             // * stare podejscie
-            // for (auto neighbor : hex->findNeighborsEdge(end)) {
-            //     if (neighbor->state != player || neighbor->visited ==
-            //     visit_id)
-            //         continue;
-            //     stack.push(neighbor);
-            //     neighbor->visited = visit_id;
-            // }
+            for (auto neighbor : hex->findNeighborsEdge(end)) {
+                if (neighbor->state != player || neighbor->visited == visit_id)
+                    continue;
+                stack.push(neighbor);
+                neighbor->visited = visit_id;
+            }
             // -------------------------
-            // * nowe podejscie
+            // // * nowe podejscie
             // for (int i = 0; i < 6; i++) {
             //     Hex* neighbor_hex = hex->neighbor(
             //         Hex::best_directions[static_cast<int>(end)][i]);
@@ -187,30 +186,31 @@ class HexBoard {
             //     }
             // }
             // -------------------------
-            // * nowe podejscie połączone z ulepszonym starym
-            if (hex->found_neighbors) {
-                for (auto neighbor : hex->neighbors) {
-                    if (neighbor->state != player ||
-                        neighbor->visited == visit_id)
-                        continue;
-                    stack.push(neighbor);
-                    neighbor->visited = visit_id;
-                }
-            } else {
-                for (int i = 0; i < 6; i++) {
-                    Hex* neighbor_hex = hex->neighbor(
-                        Hex::best_directions[static_cast<int>(end)][i]);
-                    if (neighbor_hex != nullptr) {
-                        hex->neighbors.push_front(neighbor_hex);
-                        if (neighbor_hex->state != player ||
-                            neighbor_hex->visited == visit_id)
-                            continue;
-                        stack.push(neighbor_hex);
-                        neighbor_hex->visited = visit_id;
-                    }
-                }
-                hex->found_neighbors = true;
-            }
+            // // * nowe podejscie połączone z ulepszonym starym
+            // if (hex->found_neighbors) {
+            //     for (auto neighbor : hex->neighbors) {
+            //         if (neighbor->state != player ||
+            //             neighbor->visited == visit_id)
+            //             continue;
+            //         stack.push(neighbor);
+            //         neighbor->visited = visit_id;
+            //     }
+            // } else {
+            //     for (int i = 0; i < 6; i++) {
+            //         Hex* neighbor_hex = hex->neighbor(
+            //             Hex::best_directions[static_cast<int>(end)][i]);
+            //         if (neighbor_hex != nullptr) {
+            //             hex->neighbors.push_front(neighbor_hex);
+            //             if (neighbor_hex->state != player ||
+            //                 neighbor_hex->visited == visit_id)
+            //                 continue;
+            //             stack.push(neighbor_hex);
+            //             neighbor_hex->visited = visit_id;
+            //         }
+            //     }
+            //     hex->found_neighbors = true;
+            // }
+            // -------------------------
         }
         return false;
     }
@@ -260,6 +260,13 @@ class HexBoard {
         if ((red_stones == blue_stones || red_stones == blue_stones + 1))
             return true;
         return false;
+    }
+
+    Player who_starts() {
+        if (red_stones == blue_stones)
+            return Player::RED;
+        else
+            return Player::BLUE;
     }
 
     void fetchInfo(Info info) {
@@ -335,6 +342,34 @@ class HexBoard {
                 printf("YES\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
+                // int n = 1;
+                // if (!is_correct())
+                //     printf("NO\n");
+                // else if (has_win(Player::RED))
+                //     printf("NO\n");
+                // else if (has_win(Player::BLUE))
+                //     printf("NO\n");
+                // else {
+                //     if (red_stones + n >= size)
+                //         printf("NO\n");
+                //     else {
+                //         for (int i = 0; i < size * size; i++) {
+                //             if (hexes[i]->state != Hex::State::EMPTY)
+                //             continue; hexes[i]->state = Hex::State::RED;
+                //             red_stones++;
+                //             if (has_win(Player::RED)) {
+                //                 printf("YES\n");
+                //                 hexes[i]->state = Hex::State::EMPTY;
+                //                 red_stones--;
+                //                 break;
+                //             }
+                //             hexes[i]->state = Hex::State::EMPTY;
+                //             red_stones--;
+                //         }
+                //         printf("NO\n");
+                //     }
+                // }
+
                 printf("CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n");
                 break;
             case Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT:
