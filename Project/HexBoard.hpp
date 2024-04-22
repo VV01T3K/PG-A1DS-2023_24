@@ -306,6 +306,11 @@ class HexBoard {
                 if (hexes[i]->state != Hex::State::EMPTY) continue;
                 hexes[i]->state = player_state;
                 stones++;
+                if (has_win(player)) {
+                    hexes[i]->state = Hex::State::EMPTY;
+                    stones--;
+                    continue;
+                }
                 for (int j = 0; j < size * size; j++) {
                     if (hexes[j]->state != Hex::State::EMPTY) continue;
                     hexes[j]->state = player_state;
