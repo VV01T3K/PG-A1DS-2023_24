@@ -457,16 +457,52 @@ class HexBoard {
                 printf("\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
-                printf("CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::RED, 1))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
-                printf("CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::RED, 2))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
-                printf("CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::BLUE, 1))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
-                printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_win_in_n(Player::BLUE, 2))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
                 printf("\n");
                 break;
         }
