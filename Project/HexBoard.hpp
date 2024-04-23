@@ -273,7 +273,7 @@ class HexBoard {
             return Player::BLUE;
     }
 
-    bool can_win_in_n(const Player player, const int n) {
+    bool can_naively_win_in_n(const Player player, const int n) {
         const Hex::State player_state =
             player == Player::RED ? Hex::State::RED : Hex::State::BLUE;
         const Hex::State opponent_state =
@@ -331,6 +331,67 @@ class HexBoard {
             }
             return false;
         }
+
+        return false;
+    }
+    bool can_perfectly_win_in_n(const Player player, const int n) {
+        const Hex::State player_state =
+            player == Player::RED ? Hex::State::RED : Hex::State::BLUE;
+        const Hex::State opponent_state =
+            player == Player::RED ? Hex::State::BLUE : Hex::State::RED;
+        int& stones = player == Player::RED ? red_stones : blue_stones;
+        int& opponent_stones = player == Player::RED ? blue_stones : red_stones;
+        if (stones + opponent_stones + n + n / 2 +
+                (who_starts() == player ? 0 : 1) >
+            size * size) {
+            return false;
+        }
+        if (n == 1) {
+            for (int i = 0; i < size * size; i++) {
+                if (hexes[i]->state != Hex::State::EMPTY) continue;
+                hexes[i]->state = player_state;
+                stones++;
+                visit_id++;
+                if (has_win(player)) {
+                    hexes[i]->state = Hex::State::EMPTY;
+                    stones--;
+                    return true;
+                }
+                hexes[i]->state = Hex::State::EMPTY;
+                stones--;
+            }
+            return false;
+        }
+        // if (n == 2) {
+        //     for (int i = 0; i < size * size; i++) {
+        //         if (hexes[i]->state != Hex::State::EMPTY) continue;
+        //         hexes[i]->state = player_state;
+        //         stones++;
+        //         if (has_win(player)) {
+        //             hexes[i]->state = Hex::State::EMPTY;
+        //             stones--;
+        //             continue;
+        //         }
+        //         for (int j = 0; j < size * size; j++) {
+        //             if (hexes[j]->state != Hex::State::EMPTY) continue;
+        //             hexes[j]->state = player_state;
+        //             stones++;
+        //             visit_id++;
+        //             if (has_win(player)) {
+        //                 hexes[j]->state = Hex::State::EMPTY;
+        //                 stones--;
+        //                 hexes[i]->state = Hex::State::EMPTY;
+        //                 stones--;
+        //                 return true;
+        //             }
+        //             hexes[j]->state = Hex::State::EMPTY;
+        //             stones--;
+        //         }
+        //         hexes[i]->state = Hex::State::EMPTY;
+        //         stones--;
+        //     }
+        //     return false;
+        // }
 
         return false;
     }
@@ -414,7 +475,7 @@ class HexBoard {
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::RED, 1))
+                else if (can_naively_win_in_n(Player::RED, 1))
                     printf("YES\n");
                 else
                     printf("NO\n");
@@ -426,7 +487,7 @@ class HexBoard {
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::RED, 2))
+                else if (can_naively_win_in_n(Player::RED, 2))
                     printf("YES\n");
                 else
                     printf("NO\n");
@@ -438,7 +499,7 @@ class HexBoard {
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::BLUE, 1))
+                else if (can_naively_win_in_n(Player::BLUE, 1))
                     printf("YES\n");
                 else
                     printf("NO\n");
@@ -450,56 +511,60 @@ class HexBoard {
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::BLUE, 2))
+                else if (can_naively_win_in_n(Player::BLUE, 2))
                     printf("YES\n");
                 else
                     printf("NO\n");
                 printf("\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
+                // printf("CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
                     printf("NO\n");
                 else if (has_win(Player::RED))
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::RED, 1))
+                else if (can_perfectly_win_in_n(Player::RED, 1))
                     printf("YES\n");
                 else
                     printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
+                // printf("CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
                     printf("NO\n");
                 else if (has_win(Player::RED))
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::RED, 2))
+                else if (can_perfectly_win_in_n(Player::RED, 2))
                     printf("YES\n");
                 else
                     printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
+                // printf("CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
                     printf("NO\n");
                 else if (has_win(Player::RED))
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::BLUE, 1))
+                else if (can_perfectly_win_in_n(Player::BLUE, 1))
                     printf("YES\n");
                 else
                     printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
+                // printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
                     printf("NO\n");
                 else if (has_win(Player::RED))
                     printf("NO\n");
                 else if (has_win(Player::BLUE))
                     printf("NO\n");
-                else if (can_win_in_n(Player::BLUE, 2))
+                else if (can_perfectly_win_in_n(Player::BLUE, 2))
                     printf("YES\n");
                 else
                     printf("NO\n");
