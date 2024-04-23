@@ -374,36 +374,66 @@ class HexBoard {
                 return false;
             }
         }
-        // if (n == 2) {
-        //     for (int i = 0; i < size * size; i++) {
-        //         if (hexes[i]->state != Hex::State::EMPTY) continue;
-        //         hexes[i]->state = player_state;
-        //         stones++;
-        //         if (has_win(player)) {
-        //             hexes[i]->state = Hex::State::EMPTY;
-        //             stones--;
-        //             continue;
-        //         }
-        //         for (int j = 0; j < size * size; j++) {
-        //             if (hexes[j]->state != Hex::State::EMPTY) continue;
-        //             hexes[j]->state = player_state;
-        //             stones++;
-        //             visit_id++;
-        //             if (has_win(player)) {
-        //                 hexes[j]->state = Hex::State::EMPTY;
-        //                 stones--;
-        //                 hexes[i]->state = Hex::State::EMPTY;
-        //                 stones--;
-        //                 return true;
-        //             }
-        //             hexes[j]->state = Hex::State::EMPTY;
-        //             stones--;
-        //         }
-        //         hexes[i]->state = Hex::State::EMPTY;
-        //         stones--;
-        //     }
-        //     return false;
-        // }
+        if (n == 2) {
+            if (player == who_starts()) {
+                if (can_naively_win_in_n(opponent, 1)) return false;
+                for (int i = 0; i < size * size; i++) {
+                    if (hexes[i]->state != Hex::State::EMPTY) continue;
+                    hexes[i]->state = player_state;
+                    stones++;
+                    if (has_win(player)) {
+                        hexes[i]->state = Hex::State::EMPTY;
+                        stones--;
+                        continue;
+                    }
+                    for (int j = 0; j < size * size; j++) {
+                        if (hexes[j]->state != Hex::State::EMPTY) continue;
+                        hexes[j]->state = player_state;
+                        stones++;
+                        visit_id++;
+                        if (has_win(player)) {
+                            hexes[j]->state = opponent_state;
+                            opponent_stones++;
+                            stones--;
+                            if (can_naively_win_in_n(player, 1)) {
+                                hexes[i]->state = Hex::State::EMPTY;
+                                hexes[j]->state = Hex::State::EMPTY;
+                                stones--;
+                                opponent_stones--;
+                                return true;
+                            }
+                            hexes[j]->state = Hex::State::EMPTY;
+                            opponent_stones++;
+                        }
+                        hexes[j]->state = Hex::State::EMPTY;
+                        stones--;
+                    }
+                    hexes[i]->state = Hex::State::EMPTY;
+                    stones--;
+                }
+                return false;
+            } else {
+                if (can_naively_win_in_n(opponent, 1)) return false;
+                for (int i = 0; i < size * size; i++) {
+                    if (hexes[i]->state != Hex::State::EMPTY) continue;
+                    hexes[i]->state = player_state;
+                    stones++;
+                    if (has_win(player)) {
+                        hexes[i]->state = opponent_state;
+                        opponent_stones++;
+                        stones--;
+                        if (can_naively_win_in_n(player, 2)) {
+                            hexes[i]->state = Hex::State::EMPTY;
+                            opponent_stones--;
+                            return true;
+                        }
+                    }
+                    hexes[i]->state = Hex::State::EMPTY;
+                    stones--;
+                }
+                return false;
+            }
+        }
 
         return false;
     }
