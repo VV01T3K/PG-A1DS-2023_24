@@ -434,6 +434,7 @@ class HexBoard {
                 return false;
             } else {
                 if (can_naively_win_in_n(opponent, 1)) return false;
+                if (can_perfectly_win_in_n(opponent, 2)) return false;
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
                     place_tmp_stone(hexes[i], player);
