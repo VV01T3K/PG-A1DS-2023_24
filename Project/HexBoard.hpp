@@ -335,6 +335,8 @@ class HexBoard {
         return false;
     }
     bool can_perfectly_win_in_n(const Player player, const int n) {
+        const Player opponent =
+            player == Player::RED ? Player::BLUE : Player::RED;
         const Hex::State player_state =
             player == Player::RED ? Hex::State::RED : Hex::State::BLUE;
         const Hex::State opponent_state =
@@ -347,20 +349,30 @@ class HexBoard {
             return false;
         }
         if (n == 1) {
-            for (int i = 0; i < size * size; i++) {
-                if (hexes[i]->state != Hex::State::EMPTY) continue;
-                hexes[i]->state = player_state;
-                stones++;
-                visit_id++;
-                if (has_win(player)) {
+            if (player == who_starts()) {
+                if (can_naively_win_in_n(player, 1)) return true;
+            } else {
+                if (can_naively_win_in_n(opponent, 1)) return false;
+                for (int i = 0; i < size * size; i++) {
+                    if (hexes[i]->state != Hex::State::EMPTY) continue;
+                    hexes[i]->state = player_state;
+                    stones++;
+                    visit_id++;
+                    if (has_win(player)) {
+                        hexes[i]->state = opponent_state;
+                        opponent_stones++;
+                        stones--;
+                        if (can_naively_win_in_n(player, 1)) {
+                            hexes[i]->state = Hex::State::EMPTY;
+                            opponent_stones--;
+                            return true;
+                        }
+                    }
                     hexes[i]->state = Hex::State::EMPTY;
                     stones--;
-                    return true;
                 }
-                hexes[i]->state = Hex::State::EMPTY;
-                stones--;
+                return false;
             }
-            return false;
         }
         // if (n == 2) {
         //     for (int i = 0; i < size * size; i++) {
