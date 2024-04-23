@@ -165,7 +165,7 @@ class HexBoard {
             Hex* hex = stack.pop();
             if (hex->state == player &&
                 (hex->edge == end || hex->alt_edge == end)) {
-                visit_id++;
+                unVisitAll();
                 return true;
             }
             // -------------------------
@@ -273,6 +273,40 @@ class HexBoard {
             return Player::BLUE;
     }
 
+    void place_tmp_stone(Hex* hex, Player player) {
+        if (player == Player::RED) {
+            hex->state = Hex::State::RED;
+            red_stones++;
+        } else {
+            hex->state = Hex::State::BLUE;
+            blue_stones++;
+        }
+    }
+
+    void remove_tmp_stone(Hex* hex, Player player) {
+        if (player == Player::RED) {
+            hex->state = Hex::State::EMPTY;
+            red_stones--;
+        } else {
+            hex->state = Hex::State::EMPTY;
+            blue_stones--;
+        }
+    }
+
+    void replace_tmp_stone(Hex* hex, Player player) {
+        if (player == Player::RED) {
+            hex->state = Hex::State::RED;
+            red_stones++;
+            blue_stones--;
+        } else {
+            hex->state = Hex::State::BLUE;
+            blue_stones++;
+            red_stones--;
+        }
+    }
+
+    void unVisitAll() { visit_id++; }
+
     bool can_naively_win_in_n(const Player player, const int n) {
         const Hex::State player_state =
             player == Player::RED ? Hex::State::RED : Hex::State::BLUE;
@@ -290,7 +324,7 @@ class HexBoard {
                 if (hexes[i]->state != Hex::State::EMPTY) continue;
                 hexes[i]->state = player_state;
                 stones++;
-                visit_id++;
+                unVisitAll();
                 if (has_win(player)) {
                     hexes[i]->state = Hex::State::EMPTY;
                     stones--;
@@ -315,7 +349,7 @@ class HexBoard {
                     if (hexes[j]->state != Hex::State::EMPTY) continue;
                     hexes[j]->state = player_state;
                     stones++;
-                    visit_id++;
+                    unVisitAll();
                     if (has_win(player)) {
                         hexes[j]->state = Hex::State::EMPTY;
                         stones--;
@@ -355,81 +389,76 @@ class HexBoard {
                 if (can_naively_win_in_n(opponent, 1)) return false;
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
-                    hexes[i]->state = player_state;
-                    stones++;
-                    visit_id++;
+                    place_tmp_stone(hexes[i], player);
+                    unVisitAll();
                     if (has_win(player)) {
-                        hexes[i]->state = opponent_state;
-                        opponent_stones++;
-                        stones--;
+                        replace_tmp_stone(hexes[i], opponent);
                         if (can_naively_win_in_n(player, 1)) {
-                            hexes[i]->state = Hex::State::EMPTY;
-                            opponent_stones--;
+                            remove_tmp_stone(hexes[i], opponent);
                             return true;
                         }
+                        replace_tmp_stone(hexes[i], player);
                     }
-                    hexes[i]->state = Hex::State::EMPTY;
-                    stones--;
+                    remove_tmp_stone(hexes[i], player);
                 }
                 return false;
             }
         }
         if (n == 2) {
             if (player == who_starts()) {
-                if (can_naively_win_in_n(opponent, 1)) return false;
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
-                    hexes[i]->state = player_state;
-                    stones++;
+                    place_tmp_stone(hexes[i], player);
                     if (has_win(player)) {
-                        hexes[i]->state = Hex::State::EMPTY;
-                        stones--;
+                        remove_tmp_stone(hexes[i], player);
                         continue;
                     }
                     for (int j = 0; j < size * size; j++) {
                         if (hexes[j]->state != Hex::State::EMPTY) continue;
-                        hexes[j]->state = player_state;
-                        stones++;
-                        visit_id++;
+                        place_tmp_stone(hexes[j], player);
+                        unVisitAll();
                         if (has_win(player)) {
-                            hexes[j]->state = opponent_state;
-                            opponent_stones++;
-                            stones--;
-                            if (can_naively_win_in_n(player, 1)) {
-                                hexes[i]->state = Hex::State::EMPTY;
-                                hexes[j]->state = Hex::State::EMPTY;
-                                stones--;
-                                opponent_stones--;
+                            replace_tmp_stone(hexes[j], opponent);
+                            if (!has_win(opponent) &&
+                                can_perfectly_win_in_n(player, 1)) {
+                                remove_tmp_stone(hexes[j], opponent);
+                                remove_tmp_stone(hexes[i], player);
                                 return true;
                             }
-                            hexes[j]->state = Hex::State::EMPTY;
-                            opponent_stones++;
+                            replace_tmp_stone(hexes[j], player);
                         }
-                        hexes[j]->state = Hex::State::EMPTY;
-                        stones--;
+                        remove_tmp_stone(hexes[j], player);
                     }
-                    hexes[i]->state = Hex::State::EMPTY;
-                    stones--;
+                    remove_tmp_stone(hexes[i], player);
                 }
                 return false;
             } else {
                 if (can_naively_win_in_n(opponent, 1)) return false;
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
-                    hexes[i]->state = player_state;
-                    stones++;
+                    place_tmp_stone(hexes[i], player);
                     if (has_win(player)) {
-                        hexes[i]->state = opponent_state;
-                        opponent_stones++;
-                        stones--;
-                        if (can_naively_win_in_n(player, 2)) {
-                            hexes[i]->state = Hex::State::EMPTY;
-                            opponent_stones--;
-                            return true;
-                        }
+                        remove_tmp_stone(hexes[i], player);
+                        continue;
                     }
-                    hexes[i]->state = Hex::State::EMPTY;
-                    stones--;
+                    for (int j = 0; j < size * size; j++) {
+                        if (hexes[j]->state != Hex::State::EMPTY) continue;
+                        place_tmp_stone(hexes[j], player);
+                        unVisitAll();
+                        if (has_win(player)) {
+                            replace_tmp_stone(hexes[j], opponent);
+                            remove_tmp_stone(hexes[i], player);
+                            if (!has_win(opponent) &&
+                                can_perfectly_win_in_n(player, 2)) {
+                                remove_tmp_stone(hexes[j], opponent);
+                                return true;
+                            }
+                            replace_tmp_stone(hexes[j], player);
+                            place_tmp_stone(hexes[i], player);
+                        }
+                        remove_tmp_stone(hexes[j], player);
+                    }
+                    remove_tmp_stone(hexes[i], player);
                 }
                 return false;
             }
@@ -572,19 +601,6 @@ class HexBoard {
                 else
                     printf("NO\n");
                 break;
-            case Info::CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
-                // printf("CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
-                if (!is_correct())
-                    printf("NO\n");
-                else if (has_win(Player::RED))
-                    printf("NO\n");
-                else if (has_win(Player::BLUE))
-                    printf("NO\n");
-                else if (can_perfectly_win_in_n(Player::RED, 2))
-                    printf("YES\n");
-                else
-                    printf("NO\n");
-                break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
                 // printf("CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
@@ -598,8 +614,19 @@ class HexBoard {
                 else
                     printf("NO\n");
                 break;
+            case Info::CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
+                if (!is_correct())
+                    printf("NO\n");
+                else if (has_win(Player::RED))
+                    printf("NO\n");
+                else if (has_win(Player::BLUE))
+                    printf("NO\n");
+                else if (can_perfectly_win_in_n(Player::RED, 2))
+                    printf("YES\n");
+                else
+                    printf("NO\n");
+                break;
             case Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT:
-                // printf("CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
                     printf("NO\n");
                 else if (has_win(Player::RED))
