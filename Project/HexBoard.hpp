@@ -433,48 +433,24 @@ class HexBoard {
                 }
                 return false;
             } else {
-                printf("player != who_starts()\n");
+                if (can_naively_win_in_n(opponent, 1)) return false;
+                if (can_perfectly_win_in_n(opponent, 2)) return false;
+                if (!can_naively_win_in_n(player, 2)) return false;
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
-                    place_tmp_stone(hexes[i], player);
-                    // unVisitAll();
-                    if (has_win(player)) {
-                        remove_tmp_stone(hexes[i], player);
+                    place_tmp_stone(hexes[i], opponent);
+                    unVisitAll();
+                    if (has_win(opponent)) {
+                        remove_tmp_stone(hexes[i], opponent);
                         continue;
                     }
-                    for (int j = 0; j < size * size; j++) {
-                        if (hexes[j]->state != Hex::State::EMPTY) continue;
-                        place_tmp_stone(hexes[j], player);
-                        unVisitAll();
-                        if (has_win(player)) {
-                            replace_tmp_stone(hexes[i], opponent);
-                            remove_tmp_stone(hexes[j], player);
-                            if (!has_win(opponent) &&
-                                can_perfectly_win_in_n(player, 2)) {
-                                remove_tmp_stone(hexes[i], opponent);
-                                hexes[j]->state = Hex::State::UNDEFINED;
-                                // print();
-                                place_tmp_stone(hexes[j], opponent);
-                                if (!has_win(opponent) &&
-                                    can_perfectly_win_in_n(player, 2)) {
-                                    remove_tmp_stone(hexes[j], opponent);
-                                    // hexes[i]->state = Hex::State::UNDEFINED;
-                                    // hexes[j]->state = Hex::State::UNDEFINED;
-                                    // print();
-                                    // printf("i: %d, j: %d\n", i, j);
-                                    return true;
-                                }
-                                place_tmp_stone(hexes[i], opponent);
-                                remove_tmp_stone(hexes[j], opponent);
-                            }
-                            replace_tmp_stone(hexes[i], player);
-                            place_tmp_stone(hexes[j], player);
-                        }
-                        remove_tmp_stone(hexes[j], player);
+                    if (!can_perfectly_win_in_n(player, 2)) {
+                        remove_tmp_stone(hexes[i], opponent);
+                        return false;
                     }
-                    remove_tmp_stone(hexes[i], player);
+                    remove_tmp_stone(hexes[i], opponent);
                 }
-                return false;
+                return true;
             }
         }
 
