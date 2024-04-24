@@ -8,6 +8,7 @@ int main() {
 
     while (true) {
         board.load();
+        // board.print();
         Info query = getQuery();
         if (query == Info::STOP) break;
         board.fetchInfo(query);

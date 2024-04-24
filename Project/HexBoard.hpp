@@ -433,10 +433,11 @@ class HexBoard {
                 }
                 return false;
             } else {
-                // printf("player != who_starts()\n");
+                printf("player != who_starts()\n");
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
                     place_tmp_stone(hexes[i], player);
+                    // unVisitAll();
                     if (has_win(player)) {
                         remove_tmp_stone(hexes[i], player);
                         continue;
@@ -446,16 +447,21 @@ class HexBoard {
                         place_tmp_stone(hexes[j], player);
                         unVisitAll();
                         if (has_win(player)) {
-                            // print();
                             replace_tmp_stone(hexes[i], opponent);
                             remove_tmp_stone(hexes[j], player);
                             if (!has_win(opponent) &&
                                 can_perfectly_win_in_n(player, 2)) {
                                 remove_tmp_stone(hexes[i], opponent);
+                                hexes[j]->state = Hex::State::UNDEFINED;
+                                // print();
                                 place_tmp_stone(hexes[j], opponent);
                                 if (!has_win(opponent) &&
                                     can_perfectly_win_in_n(player, 2)) {
                                     remove_tmp_stone(hexes[j], opponent);
+                                    // hexes[i]->state = Hex::State::UNDEFINED;
+                                    // hexes[j]->state = Hex::State::UNDEFINED;
+                                    // print();
+                                    // printf("i: %d, j: %d\n", i, j);
                                     return true;
                                 }
                                 place_tmp_stone(hexes[i], opponent);
