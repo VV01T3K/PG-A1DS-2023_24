@@ -1,5 +1,5 @@
 #pragma once
-// !! danger !! this is a simplified version of the Stack class
+// !! danger !! this is a simplified version of the Stack container
 template <typename T>
 class Stack {
    private:
