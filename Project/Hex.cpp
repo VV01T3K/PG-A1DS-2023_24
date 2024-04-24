@@ -40,6 +40,29 @@ Hex* Hex::neighbor(Direction direction) const {
 //     return neighbors;
 // }
 
+ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
+    if (found_neighbors) return neighbors;
+    for (int i = 0; i < 6; ++i) {
+        Hex* hex = neighbor(best_directions[static_cast<int>(target_edge)][i]);
+        if (hex != nullptr) {
+            neighbors.push_front(hex);
+        }
+    }
+    found_neighbors = true;
+    return neighbors;
+}
+
+void Hex::reset() {
+    state = State::UNDEFINED;
+    neighbors.clear();
+    visited = -1;
+    edge = Edge::NONE;
+    alt_edge = Edge::NONE;
+    found_neighbors = false;
+    q = -1;
+    r = -1;
+}
+
 const Direction Hex::best_directions[4][6] = {
     {
         Direction::NW,
@@ -74,15 +97,3 @@ const Direction Hex::best_directions[4][6] = {
         Direction::NE,
     },
 };
-
-ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
-    if (found_neighbors) return neighbors;
-    for (int i = 0; i < 6; ++i) {
-        Hex* hex = neighbor(best_directions[static_cast<int>(target_edge)][i]);
-        if (hex != nullptr) {
-            neighbors.push_front(hex);
-        }
-    }
-    found_neighbors = true;
-    return neighbors;
-}

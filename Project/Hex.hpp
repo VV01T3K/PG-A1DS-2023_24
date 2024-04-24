@@ -31,23 +31,11 @@ class Hex {
     Hex(HexBoard& board);
     Hex(int q, int r, HexBoard& board);
 
-    int distance(const Hex* other) const;
-    int distance(const Hex& other) const;
-
     Hex* neighbor(Direction direction) const;
     Hex* neighbor(int direct) const;
 
     // ForwardList<Hex*>& findNeighbors();
     ForwardList<Hex*>& findNeighborsEdge(Edge target_edge);
 
-    void reset() {
-        state = State::UNDEFINED;
-        neighbors.clear();
-        visited = -1;
-        edge = Edge::NONE;
-        alt_edge = Edge::NONE;
-        found_neighbors = false;
-        q = -1;
-        r = -1;
-    }
+    void reset();
 };
