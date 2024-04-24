@@ -63,7 +63,6 @@ class ForwardList {
         }
     };
     Iterator begin() { return Iterator(head); }
-    // cppcheck-suppress performance
     Iterator end() { return Iterator(nullptr); }
 };
 
