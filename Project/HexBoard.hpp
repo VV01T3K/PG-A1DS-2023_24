@@ -38,7 +38,7 @@ class HexBoard {
     int blue_stones = 0;
 
    public:
-    void fetchInfo(Info info) {
+    void fetch(Info info) {
         switch (info) {
             case Info::BOARD_SIZE:
                 printf("%d\n", size);
@@ -47,60 +47,60 @@ class HexBoard {
                 printf("%d\n", red_stones + blue_stones);
                 break;
             case Info::IS_BOARD_CORRECT:
-                is_correct() ? printf("YES\n") : printf("NO\n");
+                isCorrect() ? printf("YES\n") : printf("NO\n");
                 break;
             case Info::IS_GAME_OVER:
-                if (!is_correct())
+                if (!isCorrect())
                     printf("NO\n");
-                else if (has_win(Player::RED))
+                else if (hasWin(Player::RED))
                     printf("YES RED\n");
-                else if (has_win(Player::BLUE))
+                else if (hasWin(Player::BLUE))
                     printf("YES BLUE\n");
                 else
                     printf("NO\n");
                 break;
             case Info::IS_BOARD_POSSIBLE:
-                is_board_possible() ? printf("YES\n") : printf("NO\n");
+                isBoardPossible() ? printf("YES\n") : printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
-                can_naively_win_in_n(Player::RED, 1) ? printf("YES\n")
-                                                     : printf("NO\n");
+                canNaivelyWinIn_N(Player::RED, 1) ? printf("YES\n")
+                                                  : printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
-                can_naively_win_in_n(Player::BLUE, 1) ? printf("YES\n")
-                                                      : printf("NO\n");
+                canNaivelyWinIn_N(Player::BLUE, 1) ? printf("YES\n")
+                                                   : printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT:
-                can_naively_win_in_n(Player::RED, 2) ? printf("YES\n")
-                                                     : printf("NO\n");
+                canNaivelyWinIn_N(Player::RED, 2) ? printf("YES\n")
+                                                  : printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT:
-                can_naively_win_in_n(Player::BLUE, 2) ? printf("YES\n")
-                                                      : printf("NO\n");
+                canNaivelyWinIn_N(Player::BLUE, 2) ? printf("YES\n")
+                                                   : printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
-                can_perfectly_win_in_n(Player::RED, 1) ? printf("YES\n")
-                                                       : printf("NO\n");
+                canPerfectlyWinIn_N(Player::RED, 1) ? printf("YES\n")
+                                                    : printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
-                can_perfectly_win_in_n(Player::BLUE, 1) ? printf("YES\n")
-                                                        : printf("NO\n");
+                canPerfectlyWinIn_N(Player::BLUE, 1) ? printf("YES\n")
+                                                     : printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT:
-                can_perfectly_win_in_n(Player::RED, 2) ? printf("YES\n")
-                                                       : printf("NO\n");
+                canPerfectlyWinIn_N(Player::RED, 2) ? printf("YES\n")
+                                                    : printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT:
-                can_perfectly_win_in_n(Player::BLUE, 2) ? printf("YES\n")
-                                                        : printf("NO\n");
+                canPerfectlyWinIn_N(Player::BLUE, 2) ? printf("YES\n")
+                                                     : printf("NO\n");
                 break;
         }
     }
 
-    bool is_board_possible() {
-        if (!is_correct()) return false;
+    bool isBoardPossible() {
+        if (!isCorrect()) return false;
         for (Player player : {Player::RED, Player::BLUE}) {
-            if (has_win(player)) {
+            if (hasWin(player)) {
                 Hex::State state;
                 if (player == Player::RED) {
                     if (red_stones != blue_stones + 1) return false;
@@ -111,9 +111,9 @@ class HexBoard {
                 }
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != state) continue;
-                    remove_tmp_stone(hexes[i], player);
-                    if (!has_win(player)) return true;
-                    place_tmp_stone(hexes[i], player);
+                    removeStone(hexes[i], player);
+                    if (!hasWin(player)) return true;
+                    placeStone(hexes[i], player);
                 }
                 return false;
             }
@@ -135,14 +135,10 @@ class HexBoard {
                 if (tmp[index] == Hex::State::BLUE) blue_stones++;
                 Hex* hex = getHex(tmp_q, tmp_r);
                 hex->state = tmp[index++];
-                hex->position = Position(tmp_q, tmp_r);
-                tmp_q++;
-                tmp_r--;
+                hex->q = tmp_q++;
+                hex->r = tmp_r--;
             }
-            if (i < size - 1)
-                r++;
-            else
-                q++;
+            (i < size - 1) ? r++ : q++;
         }
         setEdges();
     }
@@ -247,7 +243,7 @@ class HexBoard {
         return false;
     }
 
-    bool has_win(Player player) {
+    bool hasWin(Player player) {
         if (player == Player::RED && red_stones < size) return false;
         if (player == Player::BLUE && blue_stones < size) return false;
         if (size == 1 && player == Player::RED && red_stones == 1) return true;
@@ -255,20 +251,20 @@ class HexBoard {
         return false;
     }
 
-    bool is_correct() {
+    bool isCorrect() {
         if ((red_stones == blue_stones || red_stones == blue_stones + 1))
             return true;
         return false;
     }
 
-    Player who_starts() {
+    Player whoStarts() {
         if (red_stones == blue_stones)
             return Player::RED;
         else
             return Player::BLUE;
     }
 
-    void place_tmp_stone(Hex* hex, Player player) {
+    void placeStone(Hex* hex, Player player) {
         if (player == Player::RED) {
             hex->state = Hex::State::RED;
             red_stones++;
@@ -278,7 +274,7 @@ class HexBoard {
         }
     }
 
-    void remove_tmp_stone(Hex* hex, Player player) {
+    void removeStone(Hex* hex, Player player) {
         if (player == Player::RED) {
             hex->state = Hex::State::EMPTY;
             red_stones--;
@@ -288,7 +284,7 @@ class HexBoard {
         }
     }
 
-    void replace_tmp_stone(Hex* hex, Player player) {
+    void replaceStone(Hex* hex, Player player) {
         if (player == Player::RED) {
             hex->state = Hex::State::RED;
             red_stones++;
@@ -302,136 +298,136 @@ class HexBoard {
 
     void unVisitAll() { visit_id++; }
 
-    bool can_naively_win_in_1(const Player player) {
+    bool canNaivelyWinIn_1(const Player player) {
         for (int i = 0; i < size * size; i++) {
             if (hexes[i]->state != Hex::State::EMPTY) continue;
-            place_tmp_stone(hexes[i], player);
+            placeStone(hexes[i], player);
             unVisitAll();
-            if (has_win(player)) {
-                remove_tmp_stone(hexes[i], player);
+            if (hasWin(player)) {
+                removeStone(hexes[i], player);
                 return true;
             }
-            remove_tmp_stone(hexes[i], player);
+            removeStone(hexes[i], player);
         }
         return false;
     }
-    bool can_naively_win_in_2(const Player player) {
+    bool canNaivelyWinIn_2(const Player player) {
         for (int i = 0; i < size * size; i++) {
             if (hexes[i]->state != Hex::State::EMPTY) continue;
-            place_tmp_stone(hexes[i], player);
-            if (has_win(player)) {
-                remove_tmp_stone(hexes[i], player);
+            placeStone(hexes[i], player);
+            if (hasWin(player)) {
+                removeStone(hexes[i], player);
                 continue;
             }
             for (int j = 0; j < size * size; j++) {
                 if (hexes[j]->state != Hex::State::EMPTY) continue;
-                place_tmp_stone(hexes[j], player);
+                placeStone(hexes[j], player);
                 unVisitAll();
-                if (has_win(player)) {
-                    remove_tmp_stone(hexes[i], player);
-                    remove_tmp_stone(hexes[j], player);
+                if (hasWin(player)) {
+                    removeStone(hexes[i], player);
+                    removeStone(hexes[j], player);
                     return true;
                 }
-                remove_tmp_stone(hexes[j], player);
+                removeStone(hexes[j], player);
             }
-            remove_tmp_stone(hexes[i], player);
+            removeStone(hexes[i], player);
         }
         return false;
     }
 
-    bool can_naively_win_in_n(const Player player, const int n) {
-        if (!is_correct()) return false;
-        if (has_win(Player::RED)) return false;
-        if (has_win(Player::BLUE)) return false;
+    bool canNaivelyWinIn_N(const Player player, const int n) {
+        if (!isCorrect()) return false;
+        if (hasWin(Player::RED)) return false;
+        if (hasWin(Player::BLUE)) return false;
         if (red_stones + blue_stones + n + n / 2 +
-                (who_starts() == player ? 0 : 1) >
+                (whoStarts() == player ? 0 : 1) >
             size * size)
             return false;
-        if (n == 1) return can_naively_win_in_1(player);
-        if (n == 2) return can_naively_win_in_2(player);
+        if (n == 1) return canNaivelyWinIn_1(player);
+        if (n == 2) return canNaivelyWinIn_2(player);
         return false;
     }
 
-    bool can_perfectly_win_in_1(const Player player) {
+    bool canPerfectlyWinIn_1(const Player player) {
         const Player opponent =
             player == Player::RED ? Player::BLUE : Player::RED;
-        if (player == who_starts()) {
-            return can_naively_win_in_1(player);
+        if (player == whoStarts()) {
+            return canNaivelyWinIn_1(player);
         } else {
             for (int i = 0; i < size * size; i++) {
                 if (hexes[i]->state != Hex::State::EMPTY) continue;
-                place_tmp_stone(hexes[i], player);
+                placeStone(hexes[i], player);
                 unVisitAll();
-                if (has_win(player)) {
-                    replace_tmp_stone(hexes[i], opponent);
-                    if (can_naively_win_in_1(player)) {
-                        remove_tmp_stone(hexes[i], opponent);
+                if (hasWin(player)) {
+                    replaceStone(hexes[i], opponent);
+                    if (canNaivelyWinIn_1(player)) {
+                        removeStone(hexes[i], opponent);
                         return true;
                     }
-                    replace_tmp_stone(hexes[i], player);
+                    replaceStone(hexes[i], player);
                 }
-                remove_tmp_stone(hexes[i], player);
+                removeStone(hexes[i], player);
             }
         }
         return false;
     }
-    bool can_perfectly_win_in_2(const Player player) {
+    bool canPerfectlyWinIn_2(const Player player) {
         const Player opponent =
             player == Player::RED ? Player::BLUE : Player::RED;
-        if (player == who_starts()) {
+        if (player == whoStarts()) {
             for (int i = 0; i < size * size; i++) {
                 if (hexes[i]->state != Hex::State::EMPTY) continue;
-                place_tmp_stone(hexes[i], player);
+                placeStone(hexes[i], player);
                 unVisitAll();
-                if (has_win(player)) {
-                    remove_tmp_stone(hexes[i], player);
+                if (hasWin(player)) {
+                    removeStone(hexes[i], player);
                     continue;
                 }
                 for (int j = 0; j < size * size; j++) {
                     if (hexes[j]->state != Hex::State::EMPTY) continue;
-                    place_tmp_stone(hexes[j], player);
+                    placeStone(hexes[j], player);
                     unVisitAll();
-                    if (has_win(player)) {
-                        remove_tmp_stone(hexes[j], player);
-                        if (can_perfectly_win_in_1(player)) {
-                            remove_tmp_stone(hexes[i], player);
+                    if (hasWin(player)) {
+                        removeStone(hexes[j], player);
+                        if (canPerfectlyWinIn_1(player)) {
+                            removeStone(hexes[i], player);
                             return true;
                         }
-                        place_tmp_stone(hexes[j], player);
+                        placeStone(hexes[j], player);
                     }
-                    remove_tmp_stone(hexes[j], player);
+                    removeStone(hexes[j], player);
                 }
-                remove_tmp_stone(hexes[i], player);
+                removeStone(hexes[i], player);
             }
             return false;
         } else {
-            if (can_naively_win_in_1(opponent)) return false;
-            if (!can_naively_win_in_2(player)) return false;
+            if (canNaivelyWinIn_1(opponent)) return false;
+            if (!canNaivelyWinIn_2(player)) return false;
             for (int i = 0; i < size * size; i++) {
                 if (hexes[i]->state != Hex::State::EMPTY) continue;
-                place_tmp_stone(hexes[i], opponent);
+                placeStone(hexes[i], opponent);
                 unVisitAll();
-                if (!can_perfectly_win_in_2(player)) {
-                    remove_tmp_stone(hexes[i], opponent);
+                if (!canPerfectlyWinIn_2(player)) {
+                    removeStone(hexes[i], opponent);
                     return false;
                 }
-                remove_tmp_stone(hexes[i], opponent);
+                removeStone(hexes[i], opponent);
             }
             return true;
         }
         return false;
     }
 
-    bool can_perfectly_win_in_n(const Player player, const int n) {
-        if (!is_correct()) return false;
-        if (has_win(Player::RED)) return false;
-        if (has_win(Player::BLUE)) return false;
+    bool canPerfectlyWinIn_N(const Player player, const int n) {
+        if (!isCorrect()) return false;
+        if (hasWin(Player::RED)) return false;
+        if (hasWin(Player::BLUE)) return false;
         if (red_stones + blue_stones + n + n / 2 +
-                (who_starts() == player ? 0 : 1) >
+                (whoStarts() == player ? 0 : 1) >
             size * size)
             return false;
-        if (n == 1) return can_perfectly_win_in_1(player);
-        if (n == 2) return can_perfectly_win_in_2(player);
+        if (n == 1) return canPerfectlyWinIn_1(player);
+        if (n == 2) return canPerfectlyWinIn_2(player);
 
         return false;
     }

@@ -9,11 +9,11 @@ int main() {
         board.load();
         Info query = getQuery();
         if (query == Info::STOP) break;
-        board.fetchInfo(query);
+        board.fetch(query);
         if (query > Info::IS_BOARD_POSSIBLE) {
-            board.fetchInfo(getQuery());
-            board.fetchInfo(getQuery());
-            board.fetchInfo(getQuery());
+            board.fetch(getQuery());
+            board.fetch(getQuery());
+            board.fetch(getQuery());
         }
     }
     return 0;

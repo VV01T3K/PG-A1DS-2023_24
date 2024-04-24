@@ -3,7 +3,6 @@
 #include <cmath>
 
 #include "ForwardList.hpp"
-#include "Position.hpp"
 
 enum class Direction { N, NE, SE, S, SW, NW };
 enum class Edge { RED_1, RED_2, BLUE_1, BLUE_2, NONE };
@@ -19,9 +18,10 @@ class Hex {
     };
     static const Direction best_directions[4][6];
     State state = State::UNDEFINED;
-    Position position = Position(-1, -1);
     HexBoard& board;
     ForwardList<Hex*> neighbors;
+    int q = -1;
+    int r = -1;
 
     int visited = -1;
     Edge edge = Edge::NONE;
@@ -42,11 +42,12 @@ class Hex {
 
     void reset() {
         state = State::UNDEFINED;
-        position = Position(-1, -1);
         neighbors.clear();
         visited = -1;
         edge = Edge::NONE;
         alt_edge = Edge::NONE;
         found_neighbors = false;
+        q = -1;
+        r = -1;
     }
 };
