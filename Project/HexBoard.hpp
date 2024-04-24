@@ -41,6 +41,14 @@ class Perspective {
 };
 
 class HexBoard {
+   private:
+    Hex::State tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
+    Hex* hexes[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
+    int visit_id = 0;
+    int size = 0;
+    int red_stones = 0;
+    int blue_stones = 0;
+
    public:
     void fetchInfo(Info info) {
         switch (info) {
@@ -64,48 +72,7 @@ class HexBoard {
                     printf("NO\n");
                 break;
             case Info::IS_BOARD_POSSIBLE:
-                if (!is_correct()) {
-                    printf("NO\n");
-                    break;
-                }
-
-                if (has_win(Player::RED)) {
-                    if (red_stones != blue_stones + 1) {
-                        printf("NO\n");
-                        break;
-                    }
-                    for (auto hex : red_stones_list) {
-                        remove_tmp_stone(hex, Player::RED);
-                        if (!has_win(Player::RED)) {
-                            printf("YES\n");
-                            place_tmp_stone(hex, Player::RED);
-                            return;
-                        }
-                        place_tmp_stone(hex, Player::RED);
-                    }
-                    printf("NO\n");
-                    break;
-                }
-
-                if (has_win((Player::BLUE))) {
-                    if (red_stones != blue_stones) {
-                        printf("NO\n");
-                        break;
-                    }
-                    for (auto hex : blue_stones_list) {
-                        remove_tmp_stone(hex, Player::BLUE);
-                        if (!has_win(Player::BLUE)) {
-                            printf("YES\n");
-                            place_tmp_stone(hex, Player::BLUE);
-                            return;
-                        }
-                        place_tmp_stone(hex, Player::BLUE);
-                    }
-                    printf("NO\n");
-                    break;
-                }
-
-                printf("YES\n");
+                is_board_possible() ? printf("YES\n") : printf("NO\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT:
                 can_naively_win_in_n(get_perspective(Player::RED), 1)
@@ -150,6 +117,30 @@ class HexBoard {
         }
     }
 
+    bool is_board_possible() {
+        if (!is_correct()) return false;
+        for (Player player : {Player::RED, Player::BLUE}) {
+            if (has_win(player)) {
+                Hex::State state;
+                if (player == Player::RED) {
+                    if (red_stones != blue_stones + 1) return false;
+                    state = Hex::State::RED;
+                } else {
+                    if (red_stones != blue_stones) return false;
+                    state = Hex::State::BLUE;
+                }
+                for (int i = 0; i < size * size; i++) {
+                    if (hexes[i]->state != state) continue;
+                    remove_tmp_stone(hexes[i], player);
+                    if (!has_win(player)) return true;
+                    place_tmp_stone(hexes[i], player);
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
     void load() {
         reset();
         readBoardFromInput();
@@ -160,14 +151,8 @@ class HexBoard {
             int tmp_q = q;
             int tmp_r = r;
             for (int j = 0; j < std::abs(q - r) + 1; j++) {
-                if (tmp[index] == Hex::State::RED) {
-                    red_stones++;
-                    red_stones_list.push_front(getHex(tmp_q, tmp_r));
-                }
-                if (tmp[index] == Hex::State::BLUE) {
-                    blue_stones++;
-                    blue_stones_list.push_front(getHex(tmp_q, tmp_r));
-                }
+                if (tmp[index] == Hex::State::RED) red_stones++;
+                if (tmp[index] == Hex::State::BLUE) blue_stones++;
                 Hex* hex = getHex(tmp_q, tmp_r);
                 hex->state = tmp[index++];
                 hex->position = Position(tmp_q, tmp_r);
@@ -196,15 +181,6 @@ class HexBoard {
     }
 
    private:
-    Hex::State tmp[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
-    ForwardList<Hex*> red_stones_list;
-    ForwardList<Hex*> blue_stones_list;
-    int visit_id = 0;
-    int size = 0;
-    Hex* hexes[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
-    int red_stones = 0;
-    int blue_stones = 0;
-
     void readBoardFromInput() {
         int index = 0;
         char c;
@@ -231,8 +207,6 @@ class HexBoard {
         red_stones = 0;
         blue_stones = 0;
         visit_id = 0;
-        red_stones_list.clear();
-        blue_stones_list.clear();
     }
 
     void setEdges() {
