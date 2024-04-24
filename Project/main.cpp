@@ -60,10 +60,11 @@ Info getQuery() {
                 } else {
                     ignoreChars(12);
                     if (getc(stdin) == 'N')
-                        query = Info::CAN_RED_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+                        query =
+                            Info::CAN_RED_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT;
                     else
                         query =
-                            Info::CAN_RED_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT;
+                            Info::CAN_RED_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT;
                 }
             } else {
                 ignoreChars(11);
@@ -79,10 +80,10 @@ Info getQuery() {
                     ignoreChars(12);
                     if (getc(stdin) == 'N')
                         query =
-                            Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_NAIVE_OPPONENT;
+                            Info::CAN_BLUE_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT;
                     else
                         query =
-                            Info::CAN_BLUE_WIN_IN_2_MOVE_WITH_PERFECT_OPPONENT;
+                            Info::CAN_BLUE_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT;
                 }
             }
             break;
