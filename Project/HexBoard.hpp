@@ -338,69 +338,50 @@ class HexBoard {
     bool can_naively_win_in_1(const Perspective persp) {
         auto [player, opponent, player_state, opponent_state, stones,
               opponent_stones] = persp;
-
         for (int i = 0; i < size * size; i++) {
             if (hexes[i]->state != Hex::State::EMPTY) continue;
-            hexes[i]->state = player_state;
-            stones++;
+            place_tmp_stone(hexes[i], player);
             unVisitAll();
             if (has_win(player)) {
-                hexes[i]->state = Hex::State::EMPTY;
-                stones--;
+                remove_tmp_stone(hexes[i], player);
                 return true;
             }
-            hexes[i]->state = Hex::State::EMPTY;
-            stones--;
+            remove_tmp_stone(hexes[i], player);
         }
         return false;
     }
     bool can_naively_win_in_2(const Perspective persp) {
         auto [player, opponent, player_state, opponent_state, stones,
               opponent_stones] = persp;
-
         for (int i = 0; i < size * size; i++) {
             if (hexes[i]->state != Hex::State::EMPTY) continue;
-            hexes[i]->state = player_state;
-            stones++;
+            place_tmp_stone(hexes[i], player);
             if (has_win(player)) {
-                hexes[i]->state = Hex::State::EMPTY;
-                stones--;
+                remove_tmp_stone(hexes[i], player);
                 continue;
             }
             for (int j = 0; j < size * size; j++) {
                 if (hexes[j]->state != Hex::State::EMPTY) continue;
-                hexes[j]->state = player_state;
-                stones++;
+                place_tmp_stone(hexes[j], player);
                 unVisitAll();
                 if (has_win(player)) {
-                    hexes[j]->state = Hex::State::EMPTY;
-                    stones--;
-                    hexes[i]->state = Hex::State::EMPTY;
-                    stones--;
+                    remove_tmp_stone(hexes[i], player);
+                    remove_tmp_stone(hexes[j], player);
                     return true;
                 }
-                hexes[j]->state = Hex::State::EMPTY;
-                stones--;
+                remove_tmp_stone(hexes[j], player);
             }
-            hexes[i]->state = Hex::State::EMPTY;
-            stones--;
+            remove_tmp_stone(hexes[i], player);
         }
         return false;
     }
 
     bool can_naively_win_in_n(const Perspective persp, const int n) {
-        if (!is_correct())
-            return false;
-        else if (has_win(Player::RED))
-            return false;
-        else if (has_win(Player::BLUE))
-            return false;
-
-        auto [player, opponent, player_state, opponent_state, stones,
-              opponent_stones] = persp;
-
-        if (stones + opponent_stones + n + n / 2 +
-                (who_starts() == player ? 0 : 1) >
+        if (!is_correct()) return false;
+        if (has_win(Player::RED)) return false;
+        if (has_win(Player::BLUE)) return false;
+        if (red_stones + blue_stones + n + n / 2 +
+                (who_starts() == persp.player ? 0 : 1) >
             size * size)
             return false;
         if (n == 1) return can_naively_win_in_1(persp);
@@ -411,7 +392,6 @@ class HexBoard {
     bool can_perfectly_win_in_1(const Perspective persp) {
         auto [player, opponent, player_state, opponent_state, stones,
               opponent_stones] = persp;
-
         if (player == who_starts()) {
             return can_naively_win_in_1(persp);
         } else {
@@ -435,7 +415,6 @@ class HexBoard {
     bool can_perfectly_win_in_2(const Perspective persp) {
         auto [player, opponent, player_state, opponent_state, stones,
               opponent_stones] = persp;
-
         if (player == who_starts()) {
             for (int i = 0; i < size * size; i++) {
                 if (hexes[i]->state != Hex::State::EMPTY) continue;
@@ -484,15 +463,10 @@ class HexBoard {
         if (!is_correct()) return false;
         if (has_win(Player::RED)) return false;
         if (has_win(Player::BLUE)) return false;
-
-        auto [player, opponent, player_state, opponent_state, stones,
-              opponent_stones] = persp;
-
-        if (stones + opponent_stones + n + n / 2 +
-                (who_starts() == player ? 0 : 1) >
-            size * size) {
+        if (red_stones + blue_stones + n + n / 2 +
+                (who_starts() == persp.player ? 0 : 1) >
+            size * size)
             return false;
-        }
         if (n == 1) return can_perfectly_win_in_1(persp);
         if (n == 2) return can_perfectly_win_in_2(persp);
 
