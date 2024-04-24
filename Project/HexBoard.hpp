@@ -386,7 +386,7 @@ class HexBoard {
             if (player == who_starts()) {
                 if (can_naively_win_in_n(player, 1)) return true;
             } else {
-                if (can_naively_win_in_n(opponent, 1)) return false;
+                // if (can_naively_win_in_n(opponent, 1)) return false;
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
                     place_tmp_stone(hexes[i], player);
@@ -406,7 +406,6 @@ class HexBoard {
         }
         if (n == 2) {
             if (player == who_starts()) {
-                // printf("player == who_starts()\n");
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
                     place_tmp_stone(hexes[i], player);
@@ -434,16 +433,16 @@ class HexBoard {
                 return false;
             } else {
                 if (can_naively_win_in_n(opponent, 1)) return false;
-                if (can_perfectly_win_in_n(opponent, 2)) return false;
+                // if (can_perfectly_win_in_n(opponent, 2)) return false;
                 if (!can_naively_win_in_n(player, 2)) return false;
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
                     place_tmp_stone(hexes[i], opponent);
                     unVisitAll();
-                    if (has_win(opponent)) {
-                        remove_tmp_stone(hexes[i], opponent);
-                        continue;
-                    }
+                    // if (has_win(opponent)) {
+                    //     remove_tmp_stone(hexes[i], opponent);
+                    //     continue;
+                    // }
                     if (!can_perfectly_win_in_n(player, 2)) {
                         remove_tmp_stone(hexes[i], opponent);
                         return false;
