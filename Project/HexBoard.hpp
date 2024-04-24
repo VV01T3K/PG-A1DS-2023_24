@@ -406,9 +406,11 @@ class HexBoard {
         }
         if (n == 2) {
             if (player == who_starts()) {
+                // printf("player == who_starts()\n");
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
                     place_tmp_stone(hexes[i], player);
+                    unVisitAll();
                     if (has_win(player)) {
                         remove_tmp_stone(hexes[i], player);
                         continue;
@@ -418,14 +420,12 @@ class HexBoard {
                         place_tmp_stone(hexes[j], player);
                         unVisitAll();
                         if (has_win(player)) {
-                            replace_tmp_stone(hexes[j], opponent);
-                            if (!has_win(opponent) &&
-                                can_perfectly_win_in_n(player, 1)) {
-                                remove_tmp_stone(hexes[j], opponent);
+                            remove_tmp_stone(hexes[j], player);
+                            if (can_perfectly_win_in_n(player, 1)) {
                                 remove_tmp_stone(hexes[i], player);
                                 return true;
                             }
-                            replace_tmp_stone(hexes[j], player);
+                            place_tmp_stone(hexes[j], player);
                         }
                         remove_tmp_stone(hexes[j], player);
                     }
@@ -433,8 +433,7 @@ class HexBoard {
                 }
                 return false;
             } else {
-                if (can_naively_win_in_n(opponent, 1)) return false;
-                if (can_perfectly_win_in_n(opponent, 2)) return false;
+                // printf("player != who_starts()\n");
                 for (int i = 0; i < size * size; i++) {
                     if (hexes[i]->state != Hex::State::EMPTY) continue;
                     place_tmp_stone(hexes[i], player);
@@ -447,15 +446,23 @@ class HexBoard {
                         place_tmp_stone(hexes[j], player);
                         unVisitAll();
                         if (has_win(player)) {
-                            replace_tmp_stone(hexes[j], opponent);
-                            remove_tmp_stone(hexes[i], player);
+                            // print();
+                            replace_tmp_stone(hexes[i], opponent);
+                            remove_tmp_stone(hexes[j], player);
                             if (!has_win(opponent) &&
                                 can_perfectly_win_in_n(player, 2)) {
+                                remove_tmp_stone(hexes[i], opponent);
+                                place_tmp_stone(hexes[j], opponent);
+                                if (!has_win(opponent) &&
+                                    can_perfectly_win_in_n(player, 2)) {
+                                    remove_tmp_stone(hexes[j], opponent);
+                                    return true;
+                                }
+                                place_tmp_stone(hexes[i], opponent);
                                 remove_tmp_stone(hexes[j], opponent);
-                                return true;
                             }
-                            replace_tmp_stone(hexes[j], player);
-                            place_tmp_stone(hexes[i], player);
+                            replace_tmp_stone(hexes[i], player);
+                            place_tmp_stone(hexes[j], player);
                         }
                         remove_tmp_stone(hexes[j], player);
                     }
@@ -469,6 +476,7 @@ class HexBoard {
     }
 
     void fetchInfo(Info info) {
+        // printf("red_stones: %d, blue_stones: %d\n", red_stones, blue_stones);
         switch (info) {
             case Info::BOARD_SIZE:
                 printf("%d\n", size);
@@ -590,7 +598,6 @@ class HexBoard {
                 printf("\n");
                 break;
             case Info::CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
-                // printf("CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
                     printf("NO\n");
                 else if (has_win(Player::RED))
@@ -603,7 +610,6 @@ class HexBoard {
                     printf("NO\n");
                 break;
             case Info::CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT:
-                // printf("CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n");
                 if (!is_correct())
                     printf("NO\n");
                 else if (has_win(Player::RED))
