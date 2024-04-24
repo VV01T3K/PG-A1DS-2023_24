@@ -208,20 +208,35 @@ bool HexBoard::dfs(Hex* start, Edge end, Hex::State player) {
     return false;
 }
 
+bool HexBoard::recursiveDfs(Hex* start, Edge end, Hex::State player) {
+    start->visited = visit_id;
+    if (start->state == player &&
+        (start->edge == end || start->alt_edge == end)) {
+        unVisitAll();
+        return true;
+    }
+    for (auto neighbor : start->findNeighborsEdge(end)) {
+        if (neighbor->state != player || neighbor->visited == visit_id)
+            continue;
+        if (recursiveDfs(neighbor, end, player)) return true;
+    }
+    return false;
+}
+
 bool HexBoard::findWiningPath(Player player) {
     if (player == Player::RED) {
         for (int i = 0; i < size; i++) {
             Hex* hex = getHex(0, i);
             if (hex->state != Hex::State::RED || hex->visited == visit_id)
                 continue;
-            if (dfs(hex, Edge::RED_2, Hex::State::RED)) return true;
+            if (recursiveDfs(hex, Edge::RED_2, Hex::State::RED)) return true;
         }
     } else {
         for (int i = 0; i < size; i++) {
             Hex* hex = getHex(i, 0);
             if (hex->state != Hex::State::BLUE || hex->visited == visit_id)
                 continue;
-            if (dfs(hex, Edge::BLUE_2, Hex::State::BLUE)) return true;
+            if (recursiveDfs(hex, Edge::BLUE_2, Hex::State::BLUE)) return true;
         }
     }
     return false;
