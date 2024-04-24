@@ -41,9 +41,6 @@ class ForwardList {
     void insert(U&& data, std::size_t index);
     T& operator[](std::size_t index);
     const T& operator[](std::size_t index) const;
-    void print(const char* seperator = ">") const;
-    void printInt() const;
-    void printToken() const;
     void clear();
     void swap(ForwardList& other);
     T& front() { return head->data; };
@@ -55,7 +52,7 @@ class ForwardList {
         Node* node;
 
        public:
-        Iterator(Node* node) : node(node) {}
+        explicit Iterator(Node* node) : node(node) {}
         Iterator& operator++() {
             node = node->next;
             return *this;
@@ -66,6 +63,7 @@ class ForwardList {
         }
     };
     Iterator begin() { return Iterator(head); }
+    // cppcheck-suppress performance
     Iterator end() { return Iterator(nullptr); }
 };
 
@@ -103,14 +101,27 @@ ForwardList<T>::ForwardList(ForwardList&& orig)
 
 template <typename T>
 ForwardList<T>& ForwardList<T>::operator=(const ForwardList& right) {
-    ForwardList temp(right);
-    swap(temp);
+    if (this != &right) {
+        ForwardList temp(right);
+        swap(temp);
+        head = temp.head;
+        tail = temp.tail;
+        size = temp.size;
+    }
     return *this;
 };
 
 template <typename T>
 ForwardList<T>& ForwardList<T>::operator=(ForwardList&& right) {
-    swap(right);
+    if (this != &right) {
+        swap(right);
+        head = right.head;
+        tail = right.tail;
+        size = right.size;
+        right.head = nullptr;
+        right.tail = nullptr;
+        right.size = 0;
+    }
     return *this;
 };
 
@@ -169,26 +180,6 @@ T& ForwardList<T>::operator[](size_t index) {
 template <typename T>
 const T& ForwardList<T>::operator[](size_t index) const {
     return getNodeAt(index)->data;
-};
-
-template <typename T>
-void ForwardList<T>::printInt() const {
-    Node* current = head;
-    while (current != nullptr) {
-        printf(" %d", current->data);
-        current = current->next;
-    }
-    printf("\n");
-};
-
-template <typename T>
-void ForwardList<T>::printToken() const {
-    Node* current = head;
-    while (current != nullptr) {
-        current->data.print();
-        current = current->next;
-    }
-    printf("\n");
 };
 
 template <typename T>

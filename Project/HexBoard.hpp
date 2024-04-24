@@ -45,7 +45,7 @@ class HexBoard {
     int blue_stones = 0;
 
     // evaluators
-    bool isCorrect();
+    bool isCorrect() const;
     bool hasWin(Player player);
     bool isBoardPossible();
     bool canNaivelyWinIn_N(const Player player, const int n);
@@ -54,14 +54,14 @@ class HexBoard {
     bool canPerfectlyWinIn_N(const Player player, const int n);
     bool canPerfectlyWinIn_1(const Player player);
     bool canPerfectlyWinIn_2(const Player player);
-    bool dfs(Hex* start, Edge end, Hex::State player);
+    // bool dfs(Hex* start, Edge end, Hex::State player);
     bool recursiveDfs(Hex* start, Edge end, Hex::State player);
     bool findWiningPath(Player player);
     // -----------
     void readBoardFromInput();
     void reset();
     void setEdges();
-    Player whoStarts();
+    Player whoStarts() const;
     void placeStone(Hex* hex, Player player);
     void removeStone(Hex* hex, Player player);
     void replaceStone(Hex* hex, Player player);

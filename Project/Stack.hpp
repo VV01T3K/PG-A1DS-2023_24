@@ -8,7 +8,7 @@ class Stack {
     int max_size;
 
    public:
-    Stack(int size) : max_size(size) { array = new T[size]; }
+    explicit Stack(int size) : max_size(size) { array = new T[size]; }
     ~Stack() { delete[] array; }
 
     void push(T element) {
@@ -16,5 +16,5 @@ class Stack {
     }
     T pop() { return array[--size]; }
     T& top() { return array[size - 1]; }
-    bool empty() { return size == 0; }
+    bool empty() const { return size == 0; }
 };

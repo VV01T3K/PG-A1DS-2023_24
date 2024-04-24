@@ -96,8 +96,8 @@ Hex* HexBoard::getHex(int q, int r) const {
 
 void HexBoard::readBoardFromInput() {
     int index = 0;
-    char c;
-    while (c = getc(stdin)) {
+    int c;
+    while ((c = getc(stdin))) {
         if (c == EOF || c == -1) break;
         if (c == '<') {
             getc(stdin);
@@ -111,7 +111,7 @@ void HexBoard::readBoardFromInput() {
             break;
         }
     }
-    size = std::sqrt(index);
+    size = static_cast<int>(std::sqrt(index));
 }
 
 void HexBoard::reset() {
@@ -140,7 +140,7 @@ void HexBoard::setEdges() {
     getHex(size - 1, 0)->edge = Edge::BLUE_1;
 }
 
-Player HexBoard::whoStarts() {
+Player HexBoard::whoStarts() const {
     if (red_stones == blue_stones)
         return Player::RED;
     else
@@ -181,32 +181,32 @@ void HexBoard::replaceStone(Hex* hex, Player player) {
 
 void HexBoard::unVisitAll() { visit_id++; }
 
-bool HexBoard::isCorrect() {
+bool HexBoard::isCorrect() const {
     if ((red_stones == blue_stones || red_stones == blue_stones + 1))
         return true;
     return false;
 }
 
-bool HexBoard::dfs(Hex* start, Edge end, Hex::State player) {
-    Stack<Hex*> stack(player == Hex::State::RED ? red_stones : blue_stones);
-    stack.push(start);
-    start->visited = visit_id;
-    while (!stack.empty()) {
-        Hex* hex = stack.pop();
-        if (hex->state == player &&
-            (hex->edge == end || hex->alt_edge == end)) {
-            unVisitAll();
-            return true;
-        }
-        for (auto neighbor : hex->findNeighborsEdge(end)) {
-            if (neighbor->state != player || neighbor->visited == visit_id)
-                continue;
-            stack.push(neighbor);
-            neighbor->visited = visit_id;
-        }
-    }
-    return false;
-}
+// bool HexBoard::dfs(Hex* start, Edge end, Hex::State player) {
+//     Stack<Hex*> stack(player == Hex::State::RED ? red_stones : blue_stones);
+//     stack.push(start);
+//     start->visited = visit_id;
+//     while (!stack.empty()) {
+//         Hex* hex = stack.pop();
+//         if (hex->state == player &&
+//             (hex->edge == end || hex->alt_edge == end)) {
+//             unVisitAll();
+//             return true;
+//         }
+//         for (auto neighbor : hex->findNeighborsEdge(end)) {
+//             if (neighbor->state != player || neighbor->visited == visit_id)
+//                 continue;
+//             stack.push(neighbor);
+//             neighbor->visited = visit_id;
+//         }
+//     }
+//     return false;
+// }
 
 bool HexBoard::recursiveDfs(Hex* start, Edge end, Hex::State player) {
     start->visited = visit_id;
@@ -401,5 +401,4 @@ bool HexBoard::canPerfectlyWinIn_2(const Player player) {
         }
         return true;
     }
-    return false;
 }

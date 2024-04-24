@@ -28,8 +28,7 @@ class Hex {
     Edge alt_edge = Edge::NONE;
     bool found_neighbors = false;
 
-    Hex(HexBoard& board);
-    Hex(int q, int r, HexBoard& board);
+    explicit Hex(HexBoard& board);
 
     Hex* neighbor(Direction direction) const;
     Hex* neighbor(int direct) const;

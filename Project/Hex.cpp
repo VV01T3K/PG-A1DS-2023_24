@@ -3,7 +3,6 @@
 #include "HexBoard.hpp"
 
 Hex::Hex(HexBoard& board) : board(board) {}
-Hex::Hex(int q, int r, HexBoard& board) : board(board) {}
 
 Hex* Hex::neighbor(int direct) const {
     Direction direction = static_cast<Direction>(direct);

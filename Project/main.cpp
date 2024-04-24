@@ -88,9 +88,8 @@ Info getQuery() {
             }
             break;
     }
-    char c;
     while (true) {
-        c = getc(stdin);
+        int c = getc(stdin);
         if (c == '-' || c == EOF || c == '\n') break;
     }
     return query;
