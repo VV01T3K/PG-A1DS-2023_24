@@ -23,6 +23,14 @@ void ignoreChars(int n) {
     for (int i = 0; i < n; i++) getc(stdin);
 }
 
+/**
+ * The function `getQuery` reads input characters from standard input and
+ * determines the type of query based on the characters read.
+ *
+ * @return The function `getQuery()` returns an `Info` enum value based on the
+ * input read from the standard input. The returned `Info` value corresponds to
+ * the type of query being made in the input.
+ */
 Info getQuery() {
     Info query = Info::STOP;
     switch (getc(stdin)) {

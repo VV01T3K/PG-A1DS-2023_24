@@ -39,6 +39,13 @@ Hex* Hex::neighbor(Direction direction) const {
 //     return neighbors;
 // }
 
+/**
+ * The function `findNeighborsEdge` in C++ finds and returns the neighbors of a
+ * Hex towards a specified Edge.
+ *
+ * @return A reference to a ForwardList of pointers to Hex objects is being
+ * returned.
+ */
 ForwardList<Hex*>& Hex::findNeighborsEdge(Edge target_edge) {
     if (found_neighbors) return neighbors;
     for (int i = 0; i < 6; ++i) {

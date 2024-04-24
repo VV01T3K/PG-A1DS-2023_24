@@ -1,5 +1,13 @@
 #include "HexBoard.hpp"
 
+/**
+ * The function `fetch` in the `HexBoard` class prints information based on the
+ * `Info` enum provided as input.
+ *
+ * @param info The `Info` enum class represents different types of information
+ * that can be fetched from the `HexBoard` class. Here are the possible values
+ * for the `info` parameter:
+ */
 void HexBoard::fetch(Info info) {
     switch (info) {
         case Info::BOARD_SIZE:
@@ -59,6 +67,10 @@ void HexBoard::fetch(Info info) {
     }
 }
 
+/**
+ * The function `load` reads a board configuration from input and populates a
+ * Hex board with stones based on the input data.
+ */
 void HexBoard::load() {
     reset();
     readBoardFromInput();
@@ -122,6 +134,13 @@ void HexBoard::reset() {
     visit_id = 0;
 }
 
+/**
+ * The function `setEdges` assigns edge values to hexes on a HexBoard based on
+ * their position.
+ *
+ * @return In the `setEdges` function, if the `size` variable is equal to 0, the
+ * function will return early without executing the rest of the code.
+ */
 void HexBoard::setEdges() {
     if (size == 0) return;
     for (int i = 0; i < size; i++) {
@@ -223,7 +242,11 @@ bool HexBoard::recursiveDfs(Hex* start, Edge end, Hex::State player) {
     return false;
 }
 
-bool HexBoard::findWiningPath(Player player) {
+bool HexBoard::hasWin(Player player) {
+    if (player == Player::RED && red_stones < size) return false;
+    if (player == Player::BLUE && blue_stones < size) return false;
+    if (size == 1 && player == Player::RED && red_stones == 1) return true;
+
     if (player == Player::RED) {
         for (int i = 0; i < size; i++) {
             Hex* hex = getHex(0, i);
@@ -239,14 +262,6 @@ bool HexBoard::findWiningPath(Player player) {
             if (recursiveDfs(hex, Edge::BLUE_2, Hex::State::BLUE)) return true;
         }
     }
-    return false;
-}
-
-bool HexBoard::hasWin(Player player) {
-    if (player == Player::RED && red_stones < size) return false;
-    if (player == Player::BLUE && blue_stones < size) return false;
-    if (size == 1 && player == Player::RED && red_stones == 1) return true;
-    if (findWiningPath(player)) return true;
     return false;
 }
 
