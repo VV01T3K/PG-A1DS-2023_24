@@ -10,23 +10,32 @@ enum MAZE {
 class Cell {
    public:
     int y, x;
+    Cell *parent = nullptr;
     MAZE type;
     bool visited = false;
-    Cell(int y, int x, int type) : y(y), x(x), type((MAZE)type) {}
-    Cell(int y, int x) : y(y), x(x) {}
+    Cell(int y, int x, MAZE type) : y(y), x(x), type(type) {}
     Cell() {}
 };
 
-class Stack {
+class Queue {
    public:
-    Cell *array;
-    int size = 0;
-    int max_size;
-    Stack(int size) : max_size(size) { array = new Cell[size]; }
-    ~Stack() { delete[] array; }
-    void push(Cell data) { array[size++] = data; }
-    Cell pop() { return array[--size]; }
-    bool empty() { return size == 0; }
+    Cell *arr;
+    int capacity, front, rear, count;
+    Queue(int size)
+        : capacity(size), front(0), rear(-1), count(0), arr(new Cell[size]) {}
+    ~Queue() { delete[] arr; }
+    void put(Cell item) {
+        rear = (rear + 1) % capacity;
+        arr[rear] = item;
+        count++;
+    }
+    Cell get() {
+        Cell x = arr[front];
+        front = (front + 1) % capacity;
+        count--;
+        return x;
+    }
+    bool empty() { return count == 0; }
 };
 
 enum Direction {
@@ -36,16 +45,17 @@ enum Direction {
     NORTH = 3,
 };
 
-void dfs(Cell **maze, int **path, int n, int m, Cell start) {
-    Stack stack(m * n);
+void bfs(Cell **maze, int **path, int n, int m, Cell start, Cell &end) {
+    Queue queue(m * n);
     start.visited = true;
-    stack.push(start);
-
-    while (!stack.empty()) {
-        Cell curr = stack.pop();
+    queue.put(start);
+    while (!queue.empty()) {
+        Cell curr = queue.get();
         maze[curr.y][curr.x].visited = true;
-        path[curr.y][curr.x] = 1;
-        if (maze[curr.y][curr.x].type == CHEESE) break;
+        if (maze[curr.y][curr.x].type == CHEESE) {
+            end = curr;
+            break;
+        }
         for (int i = 3; i >= 0; i--) {
             int y = curr.y, x = curr.x;
             switch (i) {
@@ -63,7 +73,8 @@ void dfs(Cell **maze, int **path, int n, int m, Cell start) {
                     break;
             }
             if (maze[y][x].type == WALL || maze[y][x].visited) continue;
-            stack.push({y, x});
+            maze[y][x].parent = &maze[curr.y][curr.x];
+            queue.put(maze[y][x]);
         }
     }
 }
@@ -73,6 +84,7 @@ int main() {
     scanf("%d %d", &m, &n);
 
     Cell start;
+    Cell end;
     Cell **maze = new Cell *[n];
     int **path = new int *[n];
     for (int i = 0; i < n; i++) {
@@ -81,17 +93,31 @@ int main() {
         for (int j = 0; j < m; j++) {
             int tmp;
             scanf("%d", &tmp);
-            maze[i][j] = Cell(i, j, tmp);
-            if (tmp == START) start = {i, j};
+            maze[i][j] = Cell(i, j, (MAZE)tmp);
+            if (tmp == START) start = maze[i][j];
         }
     }
 
-    dfs(maze, path, n, m, start);
+    bfs(maze, path, n, m, start, end);
+
+    Cell *curr = &end;
+    while (curr->parent != nullptr) {
+        path[curr->y][curr->x] = 1;
+        curr = curr->parent;
+    }
+    path[start.y][start.x] = 1;
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) printf("%d ", path[i][j]);
         printf("\n");
     }
+
+    for (int i = 0; i < n; i++) {
+        delete[] maze[i];
+        delete[] path[i];
+    }
+    delete[] maze;
+    delete[] path;
 
     return 0;
 }
