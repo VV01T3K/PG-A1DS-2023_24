@@ -1,8 +1,8 @@
 #include <cstdio>
 
-#include "Array.hpp"
-#include "Graph.cpp"
-#include "HeapSort.hpp"
+#include "array.hpp"
+#include "graph.cpp"
+#include "heapsort.hpp"
 
 int main() {
     int k;
@@ -13,7 +13,7 @@ int main() {
         int n;
         scanf("%d", &n);
         Graph graph(n);
-        Array<int> degrees(n);
+        Array<Vertex *> degrees(n);
         for (int j = 0; j < n; j++) {
             int e;
             scanf("%d", &e);
@@ -23,15 +23,26 @@ int main() {
                 scanf("%d", &v);
                 graph.addEdge(&graph.vertices[j], &graph.vertices[v]);
             }
-            degrees[j] = graph.vertices[j].degree;
+            degrees[j] = &graph.vertices[j];
         }
 
-        heapsort(degrees.data(), n, [](int a, int b) { return a < b; });
-        for (auto degree : degrees) {
-            printf("%d ", degree);
+        heapsort(degrees.data(), n,
+                 [](Vertex *a, Vertex *b) { return a->degree < b->degree; });
+        for (auto vertex : degrees) {
+            printf("%d ", vertex->degree);
         }
         printf("\n");
-        for (int j = 0; j < 9; j++) {
+
+        int components = 0;
+        for (auto &vertex : graph.vertices) {
+            if (!vertex.visited) {
+                graph.BFS(vertex);
+                components++;
+            }
+        }
+        printf("%d\n", components);
+
+        for (int j = 0; j < 8; j++) {
             printf("?\n");
         }
     }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Other.hpp"
+#include "other.hpp"
 
 template <typename T, typename Func>
 class Heap {
