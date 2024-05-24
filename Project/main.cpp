@@ -9,19 +9,23 @@ int main() {
 
     scanf("%d", &k);
 
+    // graph
     for (int i = 0; i < k; i++) {
         int n;
         scanf("%d", &n);
         Graph graph(n);
         Array<Vertex *> degrees(n);
+        // vertex
         for (int j = 0; j < n; j++) {
             int e;
             scanf("%d", &e);
             graph.vertices[j].resizeNeighbors(e);
-            for (int k = 0; k < e; k++) {
+            graph.vertices[j].index = j + 1;  // dodatkowe
+            // neighbors
+            for (int ii = 0; ii < e; ii++) {
                 int v;
                 scanf("%d", &v);
-                graph.addEdge(&graph.vertices[j], &graph.vertices[v]);
+                graph.addEdge(&graph.vertices[j], &graph.vertices[v - 1]);
             }
             degrees[j] = &graph.vertices[j];
         }
@@ -34,9 +38,10 @@ int main() {
         printf("\n");
 
         int components = 0;
+
         for (auto &vertex : graph.vertices) {
             if (!vertex.visited) {
-                graph.BFS(vertex);
+                graph.bfs(&vertex);
                 components++;
             }
         }
