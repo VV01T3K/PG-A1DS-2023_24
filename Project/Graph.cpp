@@ -1,7 +1,8 @@
 #include <cstdint>
 #include <cstdio>
 #include <forward_list>
-#include <vector>
+
+#include "Array.hpp"
 
 enum class Color : uint8_t { WHITE, GRAY, BLACK };
 
@@ -31,9 +32,8 @@ class Vertex {
 class Graph {
    public:
     int V;
-    std::vector<Vertex> vertices;
-    explicit Graph(int V) : V(V) {
-        vertices.resize(V);
+    Array<Vertex> vertices;
+    explicit Graph(int V) : V(V), vertices(Array<Vertex>(V)) {
         for (int i = 0; i < V; i++) {
             vertices[i].id = i;
         }

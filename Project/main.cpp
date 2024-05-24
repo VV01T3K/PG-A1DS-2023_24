@@ -1,6 +1,6 @@
 #include <cstdio>
-#include <vector>
 
+#include "Array.hpp"
 #include "Graph.cpp"
 #include "HeapSort.hpp"
 
@@ -13,7 +13,7 @@ int main() {
         int n;
         scanf("%d", &n);
         Graph graph(n);
-        std::vector<int> degrees(n);
+        Array<int> degrees(n);
         for (int j = 0; j < n; j++) {
             int e;
             scanf("%d", &e);
@@ -22,8 +22,8 @@ int main() {
                 scanf("%d", &v);
                 graph.vertices[j].addEdge(v);
             }
-            for (int v = 0; v < graph.vertices.size(); v++) {
-                degrees[v] = graph.vertices[v].getDegree();
+            for (int v : graph.vertices[j].adjecent) {
+                degrees[j] += graph.vertices[v].degree;
             }
         }
 
