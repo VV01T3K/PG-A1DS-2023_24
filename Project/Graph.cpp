@@ -1,6 +1,5 @@
 #include <cstdint>
 #include <cstdio>
-#include <forward_list>
 
 #include "Array.hpp"
 
@@ -8,38 +7,17 @@ enum class Color : uint8_t { WHITE, GRAY, BLACK };
 
 class Vertex {
    public:
-    int id;
+    Array<Vertex*> neighbors;
     Color color = Color::WHITE;
-    std::forward_list<int> adjecent;
     int degree = 0;
-
-    void addEdge(int v) {
-        adjecent.push_front(v);
-        degree++;
-    }
-
-    int getDegree() const { return degree; }
-
-    void printVertex() {
-        printf("%d: ", id);
-        for (int v : adjecent) {
-            printf("%d ", v);
-        }
-        printf("\n");
-    }
+    void addEdge(Vertex* v) { neighbors[degree++] = v; }
+    void resizeNeighbors(int newSize) { neighbors.resize(newSize); }
 };
 
 class Graph {
    public:
     int V;
     Array<Vertex> vertices;
-    explicit Graph(int V) : V(V), vertices(Array<Vertex>(V)) {
-        for (int i = 0; i < V; i++) {
-            vertices[i].id = i;
-        }
-    }
-
-    void printGraph() {
-        for (Vertex v : vertices) v.printVertex();
-    }
+    explicit Graph(int V) : V(V), vertices(V) {}
+    void addEdge(Vertex* u, Vertex* v) { u->addEdge(v); }
 };

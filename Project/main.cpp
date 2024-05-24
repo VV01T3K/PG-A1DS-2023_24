@@ -17,24 +17,23 @@ int main() {
         for (int j = 0; j < n; j++) {
             int e;
             scanf("%d", &e);
-            for (int l = 0; l < e; l++) {
+            graph.vertices[j].resizeNeighbors(e);
+            for (int k = 0; k < e; k++) {
                 int v;
                 scanf("%d", &v);
-                graph.vertices[j].addEdge(v);
+                graph.addEdge(&graph.vertices[j], &graph.vertices[v]);
             }
-            for (int v : graph.vertices[j].adjecent) {
-                degrees[j] += graph.vertices[v].degree;
-            }
+            degrees[j] = graph.vertices[j].degree;
         }
 
         heapsort(degrees.data(), n, [](int a, int b) { return a < b; });
-        for (int j = 0; j < n; j++) {
-            printf("%d ", degrees[j]);
+        for (auto degree : degrees) {
+            printf("%d ", degree);
         }
+        printf("\n");
         for (int j = 0; j < 9; j++) {
-            printf("? ");
+            printf("?\n");
         }
-        // graph.printGraph();
     }
     return 0;
 }
