@@ -4,8 +4,9 @@ project(OOP)
 set(CMAKE_CXX_STANDARD 17)
 
 file(GLOB_RECURSE  SOURCES
-        "Project/*"
-
+        "Project/*.hpp"
+        "Project/*.cpp"
+        
 )
 
 add_executable(OOP ${SOURCES})

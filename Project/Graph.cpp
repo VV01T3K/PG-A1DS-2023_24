@@ -1,27 +1,30 @@
-#include <iostream>
-#include <list>
+#include <cstdint>
+#include <cstdio>
+#include <forward_list>
 #include <vector>
 
-enum class Color { WHITE, GRAY, BLACK };
+enum class Color : uint8_t { WHITE, GRAY, BLACK };
 
 class Vertex {
    public:
     int id;
-    int degree = 0;
     Color color = Color::WHITE;
-    std::list<int> adjecenty;
+    std::forward_list<int> adjecent;
+    int degree = 0;
 
     void addEdge(int v) {
-        adjecenty.push_back(v);
+        adjecent.push_front(v);
         degree++;
     }
 
+    int getDegree() const { return degree; }
+
     void printVertex() {
-        std::cout << id << ": ";
-        for (int v : adjecenty) {
-            std::cout << v << " ";
+        printf("%d: ", id);
+        for (int v : adjecent) {
+            printf("%d ", v);
         }
-        std::cout << std::endl;
+        printf("\n");
     }
 };
 
@@ -29,8 +32,7 @@ class Graph {
    public:
     int V;
     std::vector<Vertex> vertices;
-    Graph(int V) {
-        this->V = V;
+    explicit Graph(int V) : V(V) {
         vertices.resize(V);
         for (int i = 0; i < V; i++) {
             vertices[i].id = i;
