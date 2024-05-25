@@ -8,7 +8,7 @@ class Array {
 
    public:
     Array() : array(nullptr), capacity(0) {}
-    Array(size_t size) : capacity(size) { array = new T[size]; }
+    explicit Array(size_t size) : capacity(size) { array = new T[size]; }
     Array(size_t size, const T& initVal) : capacity(size) {
         array = new T[size];
         for (size_t i = 0; i < size; ++i) array[i] = initVal;

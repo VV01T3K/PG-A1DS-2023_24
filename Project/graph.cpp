@@ -1,14 +1,14 @@
 #include <cstdint>
 #include <cstdio>
+#include <vector>
 
 #include "array.hpp"
-
-enum class Color : uint8_t { WHITE, GRAY, BLACK };
+#include "heapsort.hpp"
 
 class Vertex {
    public:
     Array<Vertex*> neighbors;
-    Color color = Color::WHITE;
+    int color = 0;
     int index = 0;
     int degree = 0;
     uint8_t visited = 0;
@@ -58,5 +58,21 @@ class Graph {
     }
     uint64_t numOfcomplementEdges() {
         return V * (V - 1) / 2 - doubled_number_of_edges / 2;
+    }
+
+    void colorize() {
+        for (auto& vertex : vertices) {
+            Array<bool> usedColors(vertex.degree + 2, false);
+            for (int i = 0; i < vertex.degree; i++) {
+                if (vertex.neighbors[i]->color < vertex.degree + 1)
+                    usedColors[vertex.neighbors[i]->color] = true;
+            }
+            for (int color = 1; color <= vertex.degree + 1; color++) {
+                if (!usedColors[color]) {
+                    vertex.color = color;
+                    break;
+                }
+            }
+        }
     }
 };

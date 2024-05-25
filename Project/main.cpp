@@ -47,9 +47,24 @@ int main() {
         }
         printf("%d\n", components);  // 2
 
-        for (int ii = 0; ii < 7; ii++) printf("?\n");
+        // printf("?\n");  // 1
+        // printf("?\n");  // 2
+        printf("?\n");  // 3
+        printf("?\n");  // 4
+        printf("?\n");  // 5
+        // printf("?\n");  // 6a
+        graph.colorize();
+        for (auto &vertex : graph.vertices) {
+            printf("%d ", vertex.color);
+        }
+        printf("\n");  // 6a
 
-        printf("%lld\n", graph.numOfcomplementEdges());  // 8
+        printf("?\n");  // 6b
+        printf("?\n");  // 6c
+        printf("?\n");  // 7
+        printf("?\n");  // 8
+
+        // printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
     return 0;
 }
