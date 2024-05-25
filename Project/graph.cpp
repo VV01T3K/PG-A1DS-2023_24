@@ -1,6 +1,5 @@
 #include <cstdint>
 #include <cstdio>
-#include <vector>
 
 #include "array.hpp"
 #include "heapsort.hpp"
@@ -27,7 +26,9 @@ class Vertex {
 
 class Graph {
    public:
+    uint8_t current_visit = 1;
     bool isBipartite = true;
+    uint64_t cyclesOf4 = 0;
     uint64_t V;
     uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
@@ -47,7 +48,7 @@ class Graph {
         Array<Vertex*> queue(V);
         int front = 0, back = 0;
         queue[back++] = s;
-        s->visited = true;
+        s->visited = current_visit;
         s->side = Side::LEFT;
         while (front < back) {
             Vertex* u = queue[front++];
@@ -57,12 +58,32 @@ class Graph {
                     v->side = nextSide;
                 else if (v->side == u->side)
                     isBipartite = false;
-                if (!v->visited) {
-                    v->visited = true;
+                if (v->visited != current_visit) {
+                    v->visited = current_visit;
                     queue[back++] = v;
                 }
             }
         }
+    }
+
+    void recursivedfs(Vertex* start, Vertex* current, int depth = 1) {
+        if (depth == 4) {
+            for (auto neighbor : current->neighbors) {
+                if (neighbor == start) {
+                    cyclesOf4++;
+                    break;
+                }
+            }
+            current->visited = 0;
+            return;
+        }
+        current->visited = current_visit;
+        for (auto neighbor : current->neighbors) {
+            if (!neighbor->visited && neighbor != start) {
+                recursivedfs(start, neighbor, depth + 1);
+            }
+        }
+        current->visited = 0;
     }
 
     uint64_t numOfcomplementEdges() {

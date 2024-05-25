@@ -74,8 +74,16 @@ int main() {
         printf("\n");  // 6b
 
         printf("?\n");  // 6c
-        printf("?\n");  // 7
+
+        // printf("?\n");  // 7
         // printf("?\n");  // 8
+
+        graph.current_visit++;
+        for (auto &vertex : graph.vertices) {
+            graph.recursivedfs(&vertex, &vertex);
+        }
+
+        printf("%lld\n", graph.cyclesOf4 / 2);  // 7
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
