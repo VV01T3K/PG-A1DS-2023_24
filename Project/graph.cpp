@@ -8,7 +8,7 @@
 class Vertex {
    public:
     Array<Vertex*> neighbors;
-    int color = 0;
+    uint16_t color = 0;
     int index = 0;
     int degree = 0;
     uint8_t visited = 0;
@@ -48,7 +48,7 @@ class Graph {
         s->visited = true;
         while (front < back) {
             Vertex* u = queue[front++];
-            for (auto& v : u->neighbors) {
+            for (auto v : u->neighbors) {
                 if (!v->visited) {
                     v->visited = true;
                     queue[back++] = v;
@@ -60,16 +60,16 @@ class Graph {
         return V * (V - 1) / 2 - doubled_number_of_edges / 2;
     }
 
-    void colorize() {
-        for (auto& vertex : vertices) {
-            Array<bool> usedColors(vertex.degree + 2, false);
-            for (int i = 0; i < vertex.degree; i++) {
-                if (vertex.neighbors[i]->color < vertex.degree + 1)
-                    usedColors[vertex.neighbors[i]->color] = true;
+    void colorize(Array<Vertex*>& vertices_ref) {
+        for (auto vertex : vertices_ref) {
+            Array<bool> usedColors(vertex->degree + 2, false);
+            for (int i = 0; i < vertex->degree; i++) {
+                if (vertex->neighbors[i]->color < vertex->degree + 1)
+                    usedColors[vertex->neighbors[i]->color] = true;
             }
-            for (int color = 1; color <= vertex.degree + 1; color++) {
+            for (int color = 1; color <= vertex->degree + 1; color++) {
                 if (!usedColors[color]) {
-                    vertex.color = color;
+                    vertex->color = color;
                     break;
                 }
             }

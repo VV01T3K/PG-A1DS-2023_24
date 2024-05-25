@@ -21,7 +21,7 @@ int main() {
             int e;
             scanf("%d", &e);
             graph.vertices[j].resizeNeighbors(e);
-            graph.vertices[j].index = j + 1;  // dodatkowe
+            graph.vertices[j].index = j + 1;
             // neighbors
             for (int ii = 0; ii < e; ii++) {
                 int v;
@@ -30,12 +30,12 @@ int main() {
             }
             degrees[j] = &graph.vertices[j];
         }
-
+        graph.colorize(degrees);
         heapsort(degrees.data(), n, [](Vertex *a, Vertex *b) {
             if (a->degree != b->degree)
                 return a->degree < b->degree;
             else
-                return a->index < b->index;
+                return a->index > b->index;
         });
         for (auto vertex : degrees) {
             printf("%d ", vertex->degree);
@@ -56,14 +56,22 @@ int main() {
         printf("?\n");  // 3
         printf("?\n");  // 4
         printf("?\n");  // 5
+
         // printf("?\n");  // 6a
-        graph.colorize();
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
+            vertex.color = 0;
         }
         printf("\n");  // 6a
 
-        printf("?\n");  // 6b
+        // printf("?\n");  // 6b
+        graph.colorize(degrees);
+        for (auto &vertex : graph.vertices) {
+            printf("%d ", vertex.color);
+            vertex.color = 0;
+        }
+        printf("\n");  // 6b
+
         printf("?\n");  // 6c
         printf("?\n");  // 7
         // printf("?\n");  // 8
