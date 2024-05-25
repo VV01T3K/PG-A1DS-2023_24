@@ -31,8 +31,12 @@ int main() {
             degrees[j] = &graph.vertices[j];
         }
 
-        heapsort(degrees.data(), n,
-                 [](Vertex *a, Vertex *b) { return a->degree < b->degree; });
+        heapsort(degrees.data(), n, [](Vertex *a, Vertex *b) {
+            if (a->degree != b->degree)
+                return a->degree < b->degree;
+            else
+                return a->index < b->index;
+        });
         for (auto vertex : degrees) {
             printf("%d ", vertex->degree);
         }
