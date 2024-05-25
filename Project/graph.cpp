@@ -26,10 +26,14 @@ class Vertex {
 
 class Graph {
    public:
-    int V;
+    uint64_t V;
+    uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
-    explicit Graph(int V) : V(V), vertices(V) {}
-    void addEdge(Vertex* u, Vertex* v) { u->addEdge(v); }
+    explicit Graph(uint64_t V) : V(V), vertices(V) {}
+    void addEdge(Vertex* u, Vertex* v) {
+        u->addEdge(v);
+        doubled_number_of_edges++;
+    }
 
     void print() {
         for (auto& vertex : vertices) {
@@ -51,5 +55,8 @@ class Graph {
                 }
             }
         }
+    }
+    uint64_t numOfcomplementEdges() {
+        return V * (V - 1) / 2 - doubled_number_of_edges / 2;
     }
 };

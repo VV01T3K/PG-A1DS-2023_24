@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <cstdio>
 
 #include "array.hpp"
@@ -11,8 +12,8 @@ int main() {
 
     // graph
     for (int i = 0; i < k; i++) {
-        int n;
-        scanf("%d", &n);
+        uint64_t n;
+        scanf("%lld", &n);
         Graph graph(n);
         Array<Vertex *> degrees(n);
         // vertex
@@ -35,21 +36,20 @@ int main() {
         for (auto vertex : degrees) {
             printf("%d ", vertex->degree);
         }
-        printf("\n");
+        printf("\n");  // 1
 
         int components = 0;
-
         for (auto &vertex : graph.vertices) {
             if (!vertex.visited) {
                 graph.bfs(&vertex);
                 components++;
             }
         }
-        printf("%d\n", components);
+        printf("%d\n", components);  // 2
 
-        for (int j = 0; j < 8; j++) {
-            printf("?\n");
-        }
+        for (int ii = 0; ii < 7; ii++) printf("?\n");
+
+        printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
     return 0;
 }
