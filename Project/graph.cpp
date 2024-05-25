@@ -4,7 +4,7 @@
 
 #include "array.hpp"
 #include "heapsort.hpp"
-
+enum class Side : uint8_t { NONE, LEFT, RIGHT };
 class Vertex {
    public:
     Array<Vertex*> neighbors;
@@ -12,6 +12,7 @@ class Vertex {
     int index = 0;
     int degree = 0;
     uint8_t visited = 0;
+    Side side = Side::NONE;
 
     void addEdge(Vertex* v) { neighbors[degree++] = v; }
     void resizeNeighbors(int newSize) { neighbors.resize(newSize); }
@@ -26,6 +27,7 @@ class Vertex {
 
 class Graph {
    public:
+    bool isBipartite = true;
     uint64_t V;
     uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
@@ -46,9 +48,15 @@ class Graph {
         int front = 0, back = 0;
         queue[back++] = s;
         s->visited = true;
+        s->side = Side::LEFT;
         while (front < back) {
             Vertex* u = queue[front++];
+            Side nextSide = (u->side == Side::LEFT) ? Side::RIGHT : Side::LEFT;
             for (auto v : u->neighbors) {
+                if (v->side == Side::NONE)
+                    v->side = nextSide;
+                else if (v->side == u->side)
+                    isBipartite = false;
                 if (!v->visited) {
                     v->visited = true;
                     queue[back++] = v;
@@ -56,6 +64,7 @@ class Graph {
             }
         }
     }
+
     uint64_t numOfcomplementEdges() {
         return V * (V - 1) / 2 - doubled_number_of_edges / 2;
     }
