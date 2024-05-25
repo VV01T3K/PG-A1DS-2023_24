@@ -8,9 +8,9 @@ enum class Side : uint8_t { NONE, LEFT, RIGHT };
 class Vertex {
    public:
     Array<Vertex*> neighbors;
-    uint16_t color = 0;
     int index = 0;
     int degree = 0;
+    uint16_t color = 0;
     uint8_t visited = 0;
     Side side = Side::NONE;
 
