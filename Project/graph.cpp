@@ -74,7 +74,6 @@ class Graph {
                     break;
                 }
             }
-            current->visited = 0;
             return;
         }
         current->visited = current_visit;
