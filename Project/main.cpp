@@ -3,7 +3,7 @@
 
 #include "array.hpp"
 #include "graph.cpp"
-#include "heapsort.hpp"
+#include "heap.hpp"
 
 int main() {
     int k;
@@ -28,17 +28,19 @@ int main() {
                 scanf("%d", &v);
                 graph.addEdge(&graph.vertices[j], &graph.vertices[v - 1]);
             }
+            heapsort(graph.vertices[j].neighbors.data(), e,
+                     [](Vertex *a, Vertex *b) { return a->index < b->index; });
             degrees[j] = &graph.vertices[j];
         }
         graph.colorize(degrees);
         heapsort(degrees.data(), n, [](Vertex *a, Vertex *b) {
-            if (a->degree != b->degree)
-                return a->degree < b->degree;
+            if (a->degree() != b->degree())
+                return a->degree() < b->degree();
             else
                 return a->index > b->index;
         });
         for (auto vertex : degrees) {
-            printf("%d ", vertex->degree);
+            printf("%d ", vertex->degree());
         }
         printf("\n");  // 1
 
@@ -75,12 +77,12 @@ int main() {
 
         printf("?\n");  // 6c
 
-        // printf("?\n");  // 7
+        printf("?\n");  // 7
         // printf("?\n");  // 8
 
-        graph.countCyclesOf4();
+        // graph.countCyclesOf4();
 
-        printf("%lld\n", graph.cyclesOf4 / 2);  // 7
+        // printf("%lld\n", graph.cyclesOf4 / 2);  // 7
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }

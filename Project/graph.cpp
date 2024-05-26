@@ -2,21 +2,22 @@
 #include <cstdio>
 
 #include "array.hpp"
-#include "heapsort.hpp"
+#include "heap.hpp"
 enum class Side : uint8_t { NONE, LEFT, RIGHT };
 class Vertex {
    public:
     Array<Vertex*> neighbors;
     int index = 0;
-    int degree = 0;
     uint16_t color = 0;
     bool visited = 0;
     Side side = Side::NONE;
 
-    void addEdge(Vertex* v) { neighbors[degree++] = v; }
+    void addEdge(Vertex* v) { neighbors[neighbors.top++] = v; }
     void resizeNeighbors(int newSize) { neighbors.resize(newSize); }
 
-    void print() {
+    int degree() const { return neighbors.capacity; }
+
+    void print() const {
         for (auto& neighbor : neighbors) {
             printf("%d ", neighbor->index);
         }
@@ -96,12 +97,12 @@ class Graph {
 
     void colorize(Array<Vertex*>& vertices_ref) {
         for (auto vertex : vertices_ref) {
-            Array<bool> usedColors(vertex->degree + 2, false);
-            for (int i = 0; i < vertex->degree; i++) {
-                if (vertex->neighbors[i]->color < vertex->degree + 1)
+            Array<bool> usedColors(vertex->degree() + 2, false);
+            for (int i = 0; i < vertex->degree(); i++) {
+                if (vertex->neighbors[i]->color < vertex->degree() + 1)
                     usedColors[vertex->neighbors[i]->color] = true;
             }
-            for (int color = 1; color <= vertex->degree + 1; color++) {
+            for (int color = 1; color <= vertex->degree() + 1; color++) {
                 if (!usedColors[color]) {
                     vertex->color = color;
                     break;

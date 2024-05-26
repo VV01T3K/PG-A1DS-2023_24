@@ -3,17 +3,25 @@
 template <typename T>
 class Array {
    private:
-    T* array;
-    size_t capacity;
+    T* array = nullptr;
+    bool isOwner = true;
 
    public:
-    Array() : array(nullptr), capacity(0) {}
+    size_t capacity = 0;
+    size_t top = 0;
+
+    Array() = default;
     explicit Array(size_t size) : capacity(size) { array = new T[size]; }
+    Array(T* array, size_t size) : array(array), capacity(size) {
+        isOwner = false;
+    }
     Array(size_t size, const T& initVal) : capacity(size) {
         array = new T[size];
         for (size_t i = 0; i < size; ++i) array[i] = initVal;
     }
-    ~Array() { delete[] array; }
+    ~Array() {
+        if (isOwner) delete[] array;
+    }
     T& operator[](size_t index) { return array[index]; }
     const T& operator[](size_t index) const { return array[index]; }
     T* data() { return array; }

@@ -32,15 +32,19 @@ class Heap {
     void buildHeap() {
         for (int i = size - 1; i >= 0; i--) heapify(i);
     }
+
+    void sort() {
+        buildHeap();
+        for (int i = size - 1; i > 0; i--) {
+            swap(data[0], data[i]);
+            size--;
+            heapify(0);
+        }
+    }
 };
 
 template <typename T, typename Func>
 void heapsort(T array[], int size, Func compare = Func()) {
     Heap<T, Func> heap(array, size, compare);
-    heap.buildHeap();
-    for (int i = size - 1; i > 0; i--) {
-        swap(array[0], array[i]);
-        heap.size--;
-        heap.heapify(0);
-    }
+    heap.sort();
 }
