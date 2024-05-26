@@ -10,7 +10,7 @@ class Vertex {
     int index = 0;
     int degree = 0;
     uint16_t color = 0;
-    uint8_t visited = 0;
+    bool visited = 0;
     Side side = Side::NONE;
 
     void addEdge(Vertex* v) { neighbors[degree++] = v; }
@@ -26,7 +26,6 @@ class Vertex {
 
 class Graph {
    public:
-    uint8_t current_visit = 1;
     bool isBipartite = true;
     uint64_t cyclesOf4 = 0;
     uint64_t V;
@@ -48,7 +47,7 @@ class Graph {
         Array<Vertex*> queue(V);
         int front = 0, back = 0;
         queue[back++] = s;
-        s->visited = current_visit;
+        s->visited = true;
         s->side = Side::LEFT;
         while (front < back) {
             Vertex* u = queue[front++];
@@ -58,11 +57,17 @@ class Graph {
                     v->side = nextSide;
                 else if (v->side == u->side)
                     isBipartite = false;
-                if (v->visited != current_visit) {
-                    v->visited = current_visit;
+                if (!v->visited) {
+                    v->visited = true;
                     queue[back++] = v;
                 }
             }
+        }
+    }
+
+    void countCyclesOf4() {
+        for (auto& vertex : vertices) {
+            recursivedfs(&vertex, &vertex);
         }
     }
 
@@ -76,13 +81,13 @@ class Graph {
             }
             return;
         }
-        current->visited = current_visit;
+        current->visited = true;
         for (auto neighbor : current->neighbors) {
             if (!neighbor->visited && neighbor != start) {
                 recursivedfs(start, neighbor, depth + 1);
             }
         }
-        current->visited = 0;
+        current->visited = false;
     }
 
     uint64_t numOfcomplementEdges() {

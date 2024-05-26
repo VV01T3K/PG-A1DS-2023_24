@@ -78,10 +78,7 @@ int main() {
         // printf("?\n");  // 7
         // printf("?\n");  // 8
 
-        graph.current_visit++;
-        for (auto &vertex : graph.vertices) {
-            graph.recursivedfs(&vertex, &vertex);
-        }
+        graph.countCyclesOf4();
 
         printf("%lld\n", graph.cyclesOf4 / 2);  // 7
 
