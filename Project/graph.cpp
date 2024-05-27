@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstdint>
 #include <cstdio>
 
@@ -68,27 +69,26 @@ class Graph {
 
     void countCyclesOf4() {
         for (auto& vertex : vertices) {
-            recursivedfs(&vertex, &vertex);
-        }
-    }
+            vertex.visited = false;
+            for (int ii = 0; ii < vertex.degree(); ii++) {
+                Vertex* u = vertex.neighbors[ii];
+                if (!u->visited) continue;
+                for (int jj = ii + 1; jj < vertex.degree(); jj++) {
+                    Vertex* v = vertex.neighbors[jj];
+                    if (!v->visited) continue;
 
-    void recursivedfs(Vertex* start, Vertex* current, int depth = 1) {
-        if (depth == 4) {
-            for (auto neighbor : current->neighbors) {
-                if (neighbor == start) {
-                    cyclesOf4++;
-                    break;
+                    for (int kk = 0; kk < u->degree(); kk++) {
+                        Vertex* w = u->neighbors[kk];
+                        if (!w->visited) continue;
+                        for (int ll = 0; ll < v->degree(); ll++) {
+                            Vertex* x = v->neighbors[ll];
+                            if (!x->visited) continue;
+                            if (w == x) cyclesOf4++;
+                        }
+                    }
                 }
             }
-            return;
         }
-        current->visited = true;
-        for (auto neighbor : current->neighbors) {
-            if (!neighbor->visited && neighbor != start) {
-                recursivedfs(start, neighbor, depth + 1);
-            }
-        }
-        current->visited = false;
     }
 
     uint64_t numOfcomplementEdges() {

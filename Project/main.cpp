@@ -29,7 +29,8 @@ int main() {
                 graph.addEdge(&graph.vertices[j], &graph.vertices[v - 1]);
             }
             heapsort(graph.vertices[j].neighbors.data(), e,
-                     [](Vertex *a, Vertex *b) { return a->index < b->index; });
+                     [](Vertex *a, Vertex *b) { return a->index > b->index; });
+
             degrees[j] = &graph.vertices[j];
         }
         graph.colorize(degrees);
@@ -77,12 +78,12 @@ int main() {
 
         printf("?\n");  // 6c
 
-        printf("?\n");  // 7
+        // printf("?\n");  // 7
         // printf("?\n");  // 8
 
-        // graph.countCyclesOf4();
+        graph.countCyclesOf4();
 
-        // printf("%lld\n", graph.cyclesOf4 / 2);  // 7
+        printf("%lld\n", graph.cyclesOf4);  // 7
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
