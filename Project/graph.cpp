@@ -81,22 +81,25 @@ class Graph {
                         bigger = u;
                     }
 
-                    int cursor = 0;
-                    for (auto vertx : smaller->neighbors) {
-                        if (!vertx->visited) continue;
-                        uint64_t index = vertx->index;
-                        while (cursor < bigger->degree()) {
-                            uint64_t current = bigger->neighbors[cursor]->index;
-                            if (current == index) {
-                                cyclesOf4++;
-                                break;
-                            }
-                            if (current > index) {
-                                break;
-                            }
-                            cursor++;
-                        }
-                    }
+                    // need hashtable for this
+
+                    // int cursor = 0;
+                    // for (auto vertx : smaller->neighbors) {
+                    //     if (!vertx->visited) continue;
+                    //     uint64_t index = vertx->index;
+                    //     while (cursor < bigger->degree()) {
+                    //         uint64_t current =
+                    //         bigger->neighbors[cursor]->index; if (current ==
+                    //         index) {
+                    //             cyclesOf4++;
+                    //             break;
+                    //         }
+                    //         if (current > index) {
+                    //             break;
+                    //         }
+                    //         cursor++;
+                    //     }
+                    // }
                 }
             }
         }

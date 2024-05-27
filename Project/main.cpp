@@ -31,19 +31,18 @@ int main() {
             degrees[j] = &graph.vertices[j];
             graph.doubled_number_of_edges += e;
         }
+        printf("?\n");  // 1
+        printf("?\n");  // 2
+        printf("?\n");  // 3
+        printf("?\n");  // 4
+        printf("?\n");  // 5
+        printf("?\n");  // 6
+        printf("?\n");  // 7
+        printf("?\n");  // 8
+        printf("?\n");  // 9
+        printf("?\n");  // 10
 
-        for (auto &vertex : graph.vertices) {
-            heapsort(vertex.neighbors.data(), vertex.neighbors.capacity,
-                     [](Vertex *a, Vertex *b) { return a->index > b->index; });
-        }
-
-        // for (auto &vertex : graph.vertices) {
-        //     for (auto &neighbor : vertex.neighbors) {
-        //         printf("%d ", neighbor->index);
-        //     }
-        //     printf("\n");
-        // }
-        // continue;
+        continue;
 
         graph.colorize(degrees);
         heapsort(degrees.data(), n, [](Vertex *a, Vertex *b) {
