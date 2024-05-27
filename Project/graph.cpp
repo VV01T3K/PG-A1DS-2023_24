@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <cstdint>
 #include <cstdio>
 
@@ -34,10 +33,6 @@ class Graph {
     uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
     explicit Graph(uint64_t V) : V(V), vertices(V) {}
-    void addEdge(Vertex* u, Vertex* v) {
-        u->addEdge(v);
-        doubled_number_of_edges++;
-    }
 
     void print() {
         for (auto& vertex : vertices) {
@@ -77,13 +72,29 @@ class Graph {
                     Vertex* v = vertex.neighbors[jj];
                     if (!v->visited) continue;
 
-                    for (int kk = 0; kk < u->degree(); kk++) {
-                        Vertex* w = u->neighbors[kk];
-                        if (!w->visited) continue;
-                        for (int ll = 0; ll < v->degree(); ll++) {
-                            Vertex* x = v->neighbors[ll];
-                            if (!x->visited) continue;
-                            if (w == x) cyclesOf4++;
+                    Vertex *smaller, *bigger;
+                    if (u->degree() < v->degree()) {
+                        smaller = u;
+                        bigger = v;
+                    } else {
+                        smaller = v;
+                        bigger = u;
+                    }
+
+                    int cursor = 0;
+                    for (auto vertx : smaller->neighbors) {
+                        if (!vertx->visited) continue;
+                        uint64_t index = vertx->index;
+                        while (cursor < bigger->degree()) {
+                            uint64_t current = bigger->neighbors[cursor]->index;
+                            if (current == index) {
+                                cyclesOf4++;
+                                break;
+                            }
+                            if (current > index) {
+                                break;
+                            }
+                            cursor++;
                         }
                     }
                 }

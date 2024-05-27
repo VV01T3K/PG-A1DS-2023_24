@@ -26,13 +26,25 @@ int main() {
             for (int ii = 0; ii < e; ii++) {
                 int v;
                 scanf("%d", &v);
-                graph.addEdge(&graph.vertices[j], &graph.vertices[v - 1]);
+                graph.vertices[j].addEdge(&graph.vertices[v - 1]);
             }
-            heapsort(graph.vertices[j].neighbors.data(), e,
-                     [](Vertex *a, Vertex *b) { return a->index > b->index; });
-
             degrees[j] = &graph.vertices[j];
+            graph.doubled_number_of_edges += e;
         }
+
+        for (auto &vertex : graph.vertices) {
+            heapsort(vertex.neighbors.data(), vertex.neighbors.capacity,
+                     [](Vertex *a, Vertex *b) { return a->index > b->index; });
+        }
+
+        // for (auto &vertex : graph.vertices) {
+        //     for (auto &neighbor : vertex.neighbors) {
+        //         printf("%d ", neighbor->index);
+        //     }
+        //     printf("\n");
+        // }
+        // continue;
+
         graph.colorize(degrees);
         heapsort(degrees.data(), n, [](Vertex *a, Vertex *b) {
             if (a->degree() != b->degree())
