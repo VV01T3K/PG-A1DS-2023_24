@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include "array.hpp"
+#include "forwardlist.hpp"
 #include "heap.hpp"
 enum class Side : uint8_t { NONE, LEFT, RIGHT };
 class Vertex {
@@ -12,7 +13,7 @@ class Vertex {
     uint16_t visited = 0;
     Side side = Side::NONE;
     uint32_t distance = 0;
-    uint16_t eccentricity = 0;
+    uint32_t component = 0;
 
     void addEdge(Vertex* v) { neighbors[neighbors.top++] = v; }
     void resizeNeighbors(int newSize) { neighbors.resize(newSize); }
@@ -23,7 +24,8 @@ class Vertex {
 class Graph {
    public:
     uint16_t currentVisit = 0;
-    int components = 0;
+    ForwardList<uint32_t> componentsList;
+    Array<uint32_t> components;
     bool isBipartite = true;
     uint64_t cyclesOf4 = 0;
     uint64_t V;
@@ -31,12 +33,14 @@ class Graph {
     Array<Vertex> vertices;
     explicit Graph(uint64_t V) : V(V), vertices(V) {}
 
-    void bfs(Vertex* s) {
+    void bfs(Vertex* start) {
+        uint32_t componentSize = 1;
         Array<Vertex*> queue(V);
         int front = 0, back = 0;
-        queue[back++] = s;
-        s->visited = true;
-        s->side = Side::LEFT;
+        queue[back++] = start;
+        start->visited = true;
+        start->side = Side::LEFT;
+        start->component = componentsList.getSize();
         while (front < back) {
             Vertex* u = queue[front++];
             Side nextSide = (u->side == Side::LEFT) ? Side::RIGHT : Side::LEFT;
@@ -48,10 +52,12 @@ class Graph {
                 if (!v->visited) {
                     v->visited = true;
                     queue[back++] = v;
+                    componentSize++;
+                    v->component = componentsList.getSize();
                 }
             }
         }
-        components++;
+        componentsList.push_back(componentSize);
     }
 
     uint64_t numOfcomplementEdges() {
@@ -76,14 +82,15 @@ class Graph {
 
     void eccentricity() {
         currentVisit += 5;
-        if (currentVisit > 1000) currentVisit = 6;
         for (auto& vertex : vertices) {
             currentVisit++;
+            const int currentComponent = components[vertex.component];
             Array<Vertex*> queue(V);
             int front = 0, back = 0;
             queue[back++] = &vertex;
             vertex.visited = currentVisit;
             vertex.distance = 0;
+            int added = 1;
             while (front < back) {
                 Vertex* u = queue[front++];
                 for (auto v : u->neighbors) {
@@ -91,8 +98,10 @@ class Graph {
                         v->visited = currentVisit;
                         queue[back++] = v;
                         v->distance = u->distance + 1;
+                        added++;
                     }
                 }
+                if (added >= currentComponent) break;
             }
             printf("%d ", queue[back - 1]->distance);
         }

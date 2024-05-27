@@ -60,7 +60,13 @@ int main() {
         for (auto &vertex : graph.vertices) {
             if (!vertex.visited) graph.bfs(&vertex);
         }
-        printf("%d\n", graph.components);                 // 2
+        graph.components.resize((graph.componentsList.getSize()));
+
+        for (int j = 0; j < graph.components.size(); j++) {
+            graph.components[j] = graph.componentsList.pop_front();
+        }
+
+        printf("%d\n", graph.components.size());          // 2
         printf("%c\n", (graph.isBipartite ? 'T' : 'F'));  // 3
 
         graph.eccentricity();  // 4
