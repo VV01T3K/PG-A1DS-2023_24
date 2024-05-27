@@ -32,18 +32,18 @@ int main() {
             graph.doubled_number_of_edges += e;
         }
 
-        printf("?\n");  // 1
-        printf("?\n");  // 2
-        printf("?\n");  // 3
-        printf("?\n");  // 4
-        printf("?\n");  // 5
-        printf("?\n");  // 6
-        printf("?\n");  // 7
-        printf("?\n");  // 8
-        printf("?\n");  // 9
-        printf("?\n");  // 10
+        // printf("?\n");  // 1
+        // printf("?\n");  // 2
+        // printf("?\n");  // 3
+        // printf("?\n");  // 4
+        // printf("?\n");  // 5
+        // printf("?\n");  // 6
+        // printf("?\n");  // 7
+        // printf("?\n");  // 8
+        // printf("?\n");  // 9
+        // printf("?\n");  // 10
 
-        continue;
+        // continue;
 
         graph.colorize(degrees);
         heapsort(degrees.data(), n, [](Vertex *a, Vertex *b) {
@@ -57,20 +57,18 @@ int main() {
         }
         printf("\n");  // 1
 
-        int components = 0;
         for (auto &vertex : graph.vertices) {
-            if (!vertex.visited) {
-                graph.bfs(&vertex);
-                components++;
-            }
+            if (!vertex.visited) graph.bfs(&vertex);
         }
-        printf("%d\n", components);                       // 2
+        printf("%d\n", graph.components);                 // 2
         printf("%c\n", (graph.isBipartite ? 'T' : 'F'));  // 3
+
+        graph.eccentricity();  // 4
 
         // printf("?\n");  // 1
         // printf("?\n");  // 2
         // printf("?\n");  // 3
-        printf("?\n");  // 4
+        // printf("?\n");  // 4
         printf("?\n");  // 5
 
         // printf("?\n");  // 6a
@@ -93,7 +91,7 @@ int main() {
         printf("?\n");  // 7
         // printf("?\n");  // 8
 
-        printf("%lld\n", graph.cyclesOf4);  // 7
+        // printf("%lld\n", graph.cyclesOf4);  // 7
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }

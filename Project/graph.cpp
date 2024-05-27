@@ -9,36 +9,27 @@ class Vertex {
     Array<Vertex*> neighbors;
     int index = 0;
     uint16_t color = 0;
-    bool visited = 0;
+    uint16_t visited = 0;
     Side side = Side::NONE;
+    uint32_t distance = 0;
+    uint16_t eccentricity = 0;
 
     void addEdge(Vertex* v) { neighbors[neighbors.top++] = v; }
     void resizeNeighbors(int newSize) { neighbors.resize(newSize); }
 
     int degree() const { return neighbors.capacity; }
-
-    void print() const {
-        for (auto& neighbor : neighbors) {
-            printf("%d ", neighbor->index);
-        }
-        printf("\n");
-    }
 };
 
 class Graph {
    public:
+    uint16_t currentVisit = 0;
+    int components = 0;
     bool isBipartite = true;
     uint64_t cyclesOf4 = 0;
     uint64_t V;
     uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
     explicit Graph(uint64_t V) : V(V), vertices(V) {}
-
-    void print() {
-        for (auto& vertex : vertices) {
-            vertex.print();
-        }
-    }
 
     void bfs(Vertex* s) {
         Array<Vertex*> queue(V);
@@ -60,6 +51,7 @@ class Graph {
                 }
             }
         }
+        components++;
     }
 
     uint64_t numOfcomplementEdges() {
@@ -80,5 +72,30 @@ class Graph {
                 }
             }
         }
+    }
+
+    void eccentricity() {
+        currentVisit += 5;
+        if (currentVisit > 1000) currentVisit = 6;
+        for (auto& vertex : vertices) {
+            currentVisit++;
+            Array<Vertex*> queue(V);
+            int front = 0, back = 0;
+            queue[back++] = &vertex;
+            vertex.visited = currentVisit;
+            vertex.distance = 0;
+            while (front < back) {
+                Vertex* u = queue[front++];
+                for (auto v : u->neighbors) {
+                    if (v->visited != currentVisit) {
+                        v->visited = currentVisit;
+                        queue[back++] = v;
+                        v->distance = u->distance + 1;
+                    }
+                }
+            }
+            printf("%d ", queue[back - 1]->distance);
+        }
+        printf("\n");
     }
 };

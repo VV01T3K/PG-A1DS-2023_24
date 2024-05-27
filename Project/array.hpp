@@ -10,6 +10,8 @@ class Array {
     size_t capacity = 0;
     size_t top = 0;
 
+    size_t size() const { return capacity; }
+
     Array() = default;
     explicit Array(size_t size) : capacity(size) { array = new T[size]; }
     Array(T* array, size_t size) : array(array), capacity(size) {
