@@ -1,19 +1,27 @@
 #include <cstdint>
 #include <cstdio>
-
+// #include <unordered_set>
 #include "array.hpp"
+#include "hashtable.hpp"
 #include "heap.hpp"
 enum class Side : uint8_t { NONE, LEFT, RIGHT };
 class Vertex {
    public:
     Array<Vertex*> neighbors;
+    HashTable* hashTable = nullptr;
+
     int index = 0;
     uint16_t color = 0;
     bool visited = 0;
     Side side = Side::NONE;
 
     void addEdge(Vertex* v) { neighbors[neighbors.top++] = v; }
-    void resizeNeighbors(int newSize) { neighbors.resize(newSize); }
+    void resizeNeighbors(int newSize) {
+        neighbors.resize(newSize);
+        hashTable = new HashTable(newSize);
+    }
+
+    ~Vertex() { delete hashTable; }
 
     int degree() const { return neighbors.capacity; }
 

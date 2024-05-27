@@ -27,10 +27,12 @@ int main() {
                 int v;
                 scanf("%d", &v);
                 graph.vertices[j].addEdge(&graph.vertices[v - 1]);
+                graph.vertices[j].hashTable->insertItem(v);
             }
             degrees[j] = &graph.vertices[j];
             graph.doubled_number_of_edges += e;
         }
+
         printf("?\n");  // 1
         printf("?\n");  // 2
         printf("?\n");  // 3
