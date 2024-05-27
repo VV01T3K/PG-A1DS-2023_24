@@ -46,10 +46,6 @@ class Heap {
     }
 
     T extractRoot() {
-        if (size == 0) {
-            throw std::out_of_range("Heap is empty");
-        }
-
         T root = data[0];
         data[0] = data[size - 1];
         size--;
