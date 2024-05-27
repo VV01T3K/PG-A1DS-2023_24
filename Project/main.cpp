@@ -27,7 +27,6 @@ int main() {
                 int v;
                 scanf("%d", &v);
                 graph.vertices[j].addEdge(&graph.vertices[v - 1]);
-                graph.vertices[j].hashTable->insertItem(v);
             }
             degrees[j] = &graph.vertices[j];
             graph.doubled_number_of_edges += e;
@@ -91,10 +90,8 @@ int main() {
 
         printf("?\n");  // 6c
 
-        // printf("?\n");  // 7
+        printf("?\n");  // 7
         // printf("?\n");  // 8
-
-        graph.countCyclesOf4();
 
         printf("%lld\n", graph.cyclesOf4);  // 7
 

@@ -1,27 +1,19 @@
 #include <cstdint>
 #include <cstdio>
-// #include <unordered_set>
+
 #include "array.hpp"
-#include "hashtable.hpp"
 #include "heap.hpp"
 enum class Side : uint8_t { NONE, LEFT, RIGHT };
 class Vertex {
    public:
     Array<Vertex*> neighbors;
-    HashTable* hashTable = nullptr;
-
     int index = 0;
     uint16_t color = 0;
     bool visited = 0;
     Side side = Side::NONE;
 
     void addEdge(Vertex* v) { neighbors[neighbors.top++] = v; }
-    void resizeNeighbors(int newSize) {
-        neighbors.resize(newSize);
-        hashTable = new HashTable(newSize);
-    }
-
-    ~Vertex() { delete hashTable; }
+    void resizeNeighbors(int newSize) { neighbors.resize(newSize); }
 
     int degree() const { return neighbors.capacity; }
 
@@ -65,49 +57,6 @@ class Graph {
                 if (!v->visited) {
                     v->visited = true;
                     queue[back++] = v;
-                }
-            }
-        }
-    }
-
-    void countCyclesOf4() {
-        for (auto& vertex : vertices) {
-            vertex.visited = false;
-            for (int ii = 0; ii < vertex.degree(); ii++) {
-                Vertex* u = vertex.neighbors[ii];
-                if (!u->visited) continue;
-                for (int jj = ii + 1; jj < vertex.degree(); jj++) {
-                    Vertex* v = vertex.neighbors[jj];
-                    if (!v->visited) continue;
-
-                    Vertex *smaller, *bigger;
-                    if (u->degree() < v->degree()) {
-                        smaller = u;
-                        bigger = v;
-                    } else {
-                        smaller = v;
-                        bigger = u;
-                    }
-
-                    // need hashtable for this
-
-                    // int cursor = 0;
-                    // for (auto vertx : smaller->neighbors) {
-                    //     if (!vertx->visited) continue;
-                    //     uint64_t index = vertx->index;
-                    //     while (cursor < bigger->degree()) {
-                    //         uint64_t current =
-                    //         bigger->neighbors[cursor]->index; if (current ==
-                    //         index) {
-                    //             cyclesOf4++;
-                    //             break;
-                    //         }
-                    //         if (current > index) {
-                    //             break;
-                    //         }
-                    //         cursor++;
-                    //     }
-                    // }
                 }
             }
         }
