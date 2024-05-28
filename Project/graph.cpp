@@ -12,9 +12,9 @@ class Vertex {
     int index = 0;
     uint16_t color = 0;
     uint16_t visited = 0;
-    Side side = Side::NONE;
     uint32_t distance = 0;
     uint32_t component = 0;
+    Side side = Side::NONE;
 
     void addEdge(Vertex* v, int vertIndex) {
         neighbors[neighbors.top++] = v;
@@ -115,7 +115,7 @@ class Graph {
     }
 
     void countCyclesOf4() {
-        long long cyclesOf4 = 0;
+        int64_t cyclesOf4 = 0;
         for (int ii = 0; ii < V; ii++) {
             const Vertex* x = &vertices[ii];
             if (x->degree() < 2 || components[x->component] < 4) continue;
@@ -133,7 +133,7 @@ class Graph {
     }
 
     void bipartiteCountCyclesOf4() {
-        long long cyclesOf4 = 0;
+        int64_t cyclesOf4 = 0;
         for (int ii = 0; ii < V; ii++) {
             const Vertex* x = &vertices[ii];
             if (x->degree() < 2 || components[x->component] < 4) continue;
