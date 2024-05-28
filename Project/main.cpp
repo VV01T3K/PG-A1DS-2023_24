@@ -97,8 +97,10 @@ int main() {
         // printf("?\n");  // 7
         // printf("?\n");  // 8
 
-        graph.countCyclesOf4();  // 7
-        // graph.C4();  // 7
+        if (graph.isBipartite)  // 7
+            graph.bipartiteCountCyclesOf4();
+        else
+            graph.countCyclesOf4();
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }

@@ -35,7 +35,6 @@ class Graph {
     Array<uint32_t> components;
     bool isBipartite = true;
     uint64_t V;
-    uint64_t cyclesOf4 = 0;
     uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
     explicit Graph(uint64_t V) : V(V), vertices(V) {}
@@ -92,7 +91,7 @@ class Graph {
         for (auto& vertex : vertices) {
             currentVisit++;
             const int currentComponent = components[vertex.component];
-            Array<Vertex*> queue(V);
+            Array<Vertex*> queue(currentComponent);
             int front = 0, back = 0;
             queue[back++] = &vertex;
             vertex.visited = currentVisit;
@@ -116,21 +115,38 @@ class Graph {
     }
 
     void countCyclesOf4() {
-        for (size_t ii = 0; ii < V; ii++) {
-            Vertex& x = vertices[ii];
-            if (x.degree() < 2) continue;
+        long long cyclesOf4 = 0;
+        for (int ii = 0; ii < V; ii++) {
+            const Vertex* x = &vertices[ii];
+            if (x->degree() < 2 || components[x->component] < 4) continue;
             Array<bool> neighbormatrix(V, false);
-            for (int y : x.neighborsIndex) {
-                neighbormatrix[y] = true;
-            }
-            for (size_t jj = ii + 1; jj < V; jj++) {
-                Vertex& y = vertices[jj];
-                if (x.component != y.component) continue;
+            for (int y : x->neighborsIndex) neighbormatrix[y] = true;
+            for (int jj = ii + 1; jj < V; jj++) {
+                const Vertex* y = &vertices[jj];
                 int commonNeighbors = 0;
-                for (auto z : y.neighborsIndex) {
+                for (int z : y->neighborsIndex)
                     if (neighbormatrix[z]) commonNeighbors++;
-                }
-                cyclesOf4 += commonNeighbors * (commonNeighbors - 1) / 2;
+                cyclesOf4 += (commonNeighbors * (commonNeighbors - 1) / 2);
+            }
+        }
+        printf("%lld\n", cyclesOf4 / 2);
+    }
+
+    void bipartiteCountCyclesOf4() {
+        long long cyclesOf4 = 0;
+        for (int ii = 0; ii < V; ii++) {
+            const Vertex* x = &vertices[ii];
+            if (x->degree() < 2 || components[x->component] < 4) continue;
+            Array<bool> neighbormatrix(V, false);
+            const Side Xside = x->side;
+            for (int y : x->neighborsIndex) neighbormatrix[y] = true;
+            for (int jj = ii + 1; jj < V; jj++) {
+                const Vertex* y = &vertices[jj];
+                if (Xside != y->side) continue;
+                int commonNeighbors = 0;
+                for (int z : y->neighborsIndex)
+                    if (neighbormatrix[z]) commonNeighbors++;
+                cyclesOf4 += (commonNeighbors * (commonNeighbors - 1) / 2);
             }
         }
         printf("%lld\n", cyclesOf4 / 2);
