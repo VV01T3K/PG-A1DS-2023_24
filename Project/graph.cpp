@@ -107,4 +107,28 @@ class Graph {
         }
         printf("\n");
     }
+
+    void countCyclesOf4() {
+        for (auto& vertex : vertices) {
+            vertex.visited = false;
+            for (int ii = 0; ii < vertex.degree(); ii++) {
+                Vertex* u = vertex.neighbors[ii];
+                if (!u->visited) continue;
+
+                Array<bool> neighbormatrix(V + 1, false);
+                for (auto v : u->neighbors) {
+                    if (v->visited) neighbormatrix[v->index] = true;
+                }
+
+                for (int jj = ii + 1; jj < vertex.degree(); jj++) {
+                    Vertex* v = vertex.neighbors[jj];
+                    if (!v->visited) continue;
+
+                    for (auto w : v->neighbors) {
+                        if (neighbormatrix[w->index]) cyclesOf4++;
+                    }
+                }
+            }
+        }
+    }
 };
