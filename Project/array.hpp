@@ -40,15 +40,7 @@ class Array {
         capacity = newSize;
     }
 
-    T& binFind(const T& key, bool (*cmp)(const T&, const T&)) {
-        size_t left = 0, right = top;
-        while (left < right) {
-            size_t mid = left + (right - left) / 2;
-            if (cmp(array[mid], key))
-                left = mid + 1;
-            else
-                right = mid;
-        }
-        return array[left];
+    void setinitVal(const T& initVal) {
+        for (size_t i = 0; i < capacity; ++i) array[i] = initVal;
     }
 };

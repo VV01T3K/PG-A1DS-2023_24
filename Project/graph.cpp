@@ -27,7 +27,6 @@ class Graph {
     ForwardList<uint32_t> componentsList;
     Array<uint32_t> components;
     bool isBipartite = true;
-    uint64_t cyclesOf4 = 0;
     uint64_t V;
     uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
@@ -108,22 +107,62 @@ class Graph {
         printf("\n");
     }
 
-    void countCyclesOf4() {
-        for (int ii = 0; ii < V; ii++) {
-            Vertex& x = vertices[ii];
-            if (x.degree() < 2 || components[x.component] < 4) continue;
-            Array<bool> neighbormatrix(V + 1, false);
-            for (auto y : x.neighbors) {
-                neighbormatrix[y->index] = true;
+    // void countCyclesOf4() {
+    //     int64_t cyclesOf4 = 0;
+    //     for (int ii = 0; ii < V; ii++) {
+    //         Vertex& x = vertices[ii];
+    //         if (x.degree() < 2) continue;
+    //         // if (components[x.component] < 4) continue;
+    //         Array<bool> neighbormatrix(V + 1, false);
+    //         for (auto y : x.neighbors) {
+    //             neighbormatrix[y->index] = true;
+    //         }
+    //         for (int jj = ii + 1; jj < V; jj++) {
+    //             int commonNeighbors = 0;
+    //             for (auto z : vertices[jj].neighbors) {
+    //                 if (neighbormatrix[z->index]) commonNeighbors++;
+    //             }
+    //             cyclesOf4 += commonNeighbors * (commonNeighbors - 1) / 2;
+    //         }
+    //     }
+    //     printf("%lld\n", cyclesOf4);
+    // }
+
+    void C4() {
+        int v = V;
+        long long result = 0;
+        for (int i = 0; i < v; i++) {
+            if ((vertices[i].degree() < 2)) continue;
+            bool* firstneigh = new bool[v + 1]();
+            getfirst(i, firstneigh);
+            for (int j = i + 1; j < v; j++) {
+                result += findLoops(i, j, firstneigh);
             }
-            for (int jj = ii + 1; jj < V; jj++) {
-                int commonNeighbors = 0;
-                for (auto z : vertices[jj].neighbors) {
-                    if (neighbormatrix[z->index]) commonNeighbors++;
-                }
-                cyclesOf4 += commonNeighbors * (commonNeighbors - 1) / 2;
+            delete[] firstneigh;
+        }
+
+        printf("%lld\n", result / 2);
+    }
+
+    void getfirst(int index, bool* firstneigh) {
+        Vertex* v1 = &vertices[index];
+        for (int i = 0; i < v1->degree(); i++) {
+            firstneigh[v1->neighbors[i]->index] = true;
+        }
+    }
+    int findLoops(int first, int second, bool* firstnei) {
+        Vertex* v2 = &vertices[second];
+        int mutual = getMutual(firstnei, first, v2);
+        return ((mutual) * (mutual - 1) / 2);
+    }
+    int getMutual(bool* firstnei, int first, Vertex* v2) {
+        int result = 0;
+        for (int i = 0; i < v2->degree(); i++) {
+            int neigh = v2->neighbors[i]->index;
+            if (firstnei[neigh]) {
+                result++;
             }
         }
-        cyclesOf4 /= 2;
+        return result;
     }
 };

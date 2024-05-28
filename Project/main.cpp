@@ -69,12 +69,12 @@ int main() {
         printf("%d\n", graph.components.size());          // 2
         printf("%c\n", (graph.isBipartite ? 'T' : 'F'));  // 3
 
-        graph.eccentricity();  // 4
+        // graph.eccentricity();  // 4
 
         // printf("?\n");  // 1
         // printf("?\n");  // 2
         // printf("?\n");  // 3
-        // printf("?\n");  // 4
+        printf("?\n");  // 4
         printf("?\n");  // 5
 
         // printf("?\n");  // 6a
@@ -97,9 +97,8 @@ int main() {
         // printf("?\n");  // 7
         // printf("?\n");  // 8
 
-        graph.countCyclesOf4();
-
-        printf("%lld\n", graph.cyclesOf4);  // 7
+        // graph.countCyclesOf4();  // 7
+        graph.C4();  // 7
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
