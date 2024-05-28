@@ -38,9 +38,12 @@ class Array {
         delete[] array;
         array = newArray;
         capacity = newSize;
+        top = 0;
     }
 
     void setinitVal(const T& initVal) {
         for (size_t i = 0; i < capacity; ++i) array[i] = initVal;
     }
+
+    void push_back(const T& value) { array[top++] = value; }
 };
