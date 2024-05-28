@@ -109,26 +109,23 @@ class Graph {
     }
 
     void countCyclesOf4() {
-        for (auto& vertex : vertices) {
-            vertex.visited = false;
-            for (int ii = 0; ii < vertex.degree(); ii++) {
-                Vertex* u = vertex.neighbors[ii];
-                if (!u->visited) continue;
-
-                Array<bool> neighbormatrix(V + 1, false);
-                for (auto v : u->neighbors) {
-                    if (v->visited) neighbormatrix[v->index] = true;
+        for (size_t ii = 0; ii < V; ii++) {
+            Vertex& x = vertices[ii];
+            if (x.degree() < 2) continue;
+            Array<bool> neighbormatrix(V + 1, false);
+            for (auto y : x.neighbors) {
+                neighbormatrix[y->index] = true;
+            }
+            for (size_t jj = ii + 1; jj < V; jj++) {
+                Vertex& y = vertices[jj];
+                if (x.component != y.component) continue;
+                int commonNeighbors = 0;
+                for (auto z : y.neighbors) {
+                    if (neighbormatrix[z->index]) commonNeighbors++;
                 }
-
-                for (int jj = ii + 1; jj < vertex.degree(); jj++) {
-                    Vertex* v = vertex.neighbors[jj];
-                    if (!v->visited) continue;
-
-                    for (auto w : v->neighbors) {
-                        if (neighbormatrix[w->index]) cyclesOf4++;
-                    }
-                }
+                cyclesOf4 += commonNeighbors * (commonNeighbors - 1) / 2;
             }
         }
+        cyclesOf4 /= 2;
     }
 };
