@@ -26,7 +26,7 @@ int main() {
             for (int ii = 0; ii < e; ii++) {
                 int v;
                 scanf("%d", &v);
-                graph.vertices[j].addEdge(&graph.vertices[v - 1]);
+                graph.vertices[j].addEdge(&graph.vertices[v - 1], v - 1);
             }
             degrees[j] = &graph.vertices[j];
             graph.doubled_number_of_edges += e;
@@ -97,8 +97,8 @@ int main() {
         // printf("?\n");  // 7
         // printf("?\n");  // 8
 
-        // graph.countCyclesOf4();  // 7
-        graph.C4();  // 7
+        graph.countCyclesOf4();  // 7
+        // graph.C4();  // 7
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
