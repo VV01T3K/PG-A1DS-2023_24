@@ -6,17 +6,17 @@
 #include "heap.hpp"
 
 int main() {
-    Array<int> tests(10);
-    tests[0] = true;  // 1
-    tests[1] = true;  // 2
-    tests[2] = true;  // 3
-    tests[3] = true;  // 4
-    tests[4] = true;  // 5
-    tests[5] = true;  // 6a
-    tests[6] = true;  // 6b
-    tests[7] = true;  // 6c
-    tests[8] = true;  // 7
-    tests[9] = true;  // 8
+    // Array<int> tests(10);
+    // tests[0] = true;  // 1
+    // tests[1] = true;  // 2
+    // tests[2] = true;  // 3
+    // tests[3] = true;  // 4
+    // tests[4] = true;  // 5
+    // tests[5] = true;  // 6a
+    // tests[6] = true;  // 6b
+    // tests[7] = true;  // 6c
+    // tests[8] = true;  // 7
+    // tests[9] = true;  // 8
 
     int k;
 
@@ -70,20 +70,14 @@ int main() {
 
         graph.eccentricity();  // 4
 
-        // printf("?\n");  // 1
-        // printf("?\n");  // 2
-        // printf("?\n");  // 3
-        // printf("?\n");  // 4
-        printf("?\n");  // 5
+        printf("?\n");  // 5 - Planarność
 
-        // printf("?\n");  // 6a
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
             vertex.color = 0;
         }
         printf("\n");  // 6a
 
-        // printf("?\n");  // 6b
         graph.colorize(sortedByDegreeDesc);
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
@@ -93,8 +87,6 @@ int main() {
                 vertex.color = 0;
         }
         printf("\n");  // 6b
-
-        // printf("?\n");  // 6c
 
         Array<Array<Vertex *>> components(graph.components.size());
         for (int j = 0; j < graph.components.size(); j++) {
@@ -112,9 +104,6 @@ int main() {
             printf("%d ", vertex.color);
         }
         printf("\n");  // 6c
-
-        // printf("?\n");  // 7
-        // printf("?\n");  // 8
 
         if (graph.isBipartite)  // 7
             graph.bipartiteCountCyclesOf4();

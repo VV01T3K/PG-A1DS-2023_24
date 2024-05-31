@@ -2,6 +2,8 @@
 #include <cstddef>
 #include <utility>
 
+#include "other.hpp"
+
 template <typename T>
 class ForwardList {
    private:
@@ -83,13 +85,13 @@ ForwardList<T>::ForwardList(ForwardList&& orig)
 template <typename T>
 ForwardList<T>& ForwardList<T>::operator=(const ForwardList& right) {
     ForwardList temp(right);
-    swap(temp);
+    my::swap(temp);
     return *this;
 };
 
 template <typename T>
 ForwardList<T>& ForwardList<T>::operator=(ForwardList&& right) {
-    swap(right);
+    my::swap(right);
     return *this;
 };
 

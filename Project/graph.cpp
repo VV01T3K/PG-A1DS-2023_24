@@ -74,22 +74,6 @@ class Graph {
         return V * (V - 1) / 2 - doubled_number_of_edges / 2;
     }
 
-    void colorize(Array<Vertex*>& vertices_ref) {
-        for (auto vertex : vertices_ref) {
-            Array<bool> usedColors(vertex->degree() + 2, false);
-            for (int i = 0; i < vertex->degree(); i++) {
-                if (vertex->neighbors[i]->color < vertex->degree() + 1)
-                    usedColors[vertex->neighbors[i]->color] = true;
-            }
-            for (int color = 1; color <= vertex->degree() + 1; color++) {
-                if (!usedColors[color]) {
-                    vertex->color = color;
-                    break;
-                }
-            }
-        }
-    }
-
     void eccentricity() {
         currentVisit += 5;
         for (auto& vertex : vertices) {
@@ -156,13 +140,17 @@ class Graph {
         printf("%lld\n", cyclesOf4 / 2);
     }
 
+    void colorize(Array<Vertex*>& vertices_ref) {
+        for (auto vertex : vertices_ref) colorizeVertex(vertex);
+    }
+
     void colorizeSLF(Array<Vertex*>& vertices_ref) {
         uint16_t maxColor = 0;
         for (int i = 0; i < vertices_ref.size(); i++) {
-            Vertex* vertex = pick_best_vertex(vertices_ref);
+            Vertex* vertex = pickBestVertex(vertices_ref);
             if (!vertex) break;
             bool newMaxColor = false;
-            colorize_vertex(vertex);
+            colorizeVertex(vertex);
             if (vertex->color > maxColor) {
                 maxColor = vertex->color;
                 newMaxColor = true;
@@ -183,7 +171,7 @@ class Graph {
         }
     }
 
-    Vertex* pick_best_vertex(Array<Vertex*>& vertices_ref) {
+    Vertex* pickBestVertex(Array<Vertex*>& vertices_ref) {
         Vertex* best_vertex = nullptr;
         int currentBestColors = 0;
         int currentBestDegree = 0;
@@ -208,7 +196,7 @@ class Graph {
         return best_vertex;
     }
 
-    void colorize_vertex(Vertex* vertex) {
+    void colorizeVertex(Vertex* vertex) {
         Array<bool> usedColors(vertex->degree() + 2, false);
         for (int i = 0; i < vertex->degree(); i++) {
             if (vertex->neighbors[i]->color < vertex->degree() + 1)

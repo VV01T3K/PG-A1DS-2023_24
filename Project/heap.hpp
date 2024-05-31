@@ -18,17 +18,16 @@ class Heap {
         : data(array), size(size), compare(compare) {}
 
     void heapify(int i) {
-        int largest = i;
+        int best = i;
         int left = Left(i);
         int right = Right(i);
 
-        if (left < size && compare(data[left], data[largest])) largest = left;
-        if (right < size && compare(data[right], data[largest]))
-            largest = right;
+        if (left < size && compare(data[left], data[best])) best = left;
+        if (right < size && compare(data[right], data[best])) best = right;
 
-        if (largest != i) {
-            my::swap(data[i], data[largest]);
-            heapify(largest);
+        if (best != i) {
+            my::swap(data[i], data[best]);
+            heapify(best);
         }
     }
 
@@ -43,34 +42,6 @@ class Heap {
             size--;
             heapify(0);
         }
-    }
-
-    T extractRoot() {
-        T root = data[0];
-        data[0] = data[size - 1];
-        size--;
-        heapify(0);
-
-        return root;
-    }
-
-    void remove(int i) {
-        data[i] = data[--size];
-        heapify(i);
-    }
-
-    void bulkUpdate(Array<int>& indices) {
-        for (int i : indices) {
-            update(i);
-        }
-    }
-
-    void update(int i) {
-        while (i != 0 && compare(data[Parent(i)], data[i])) {
-            my::swap(data[i], data[Parent(i)]);
-            i = Parent(i);
-        }
-        heapify(i);
     }
 };
 
