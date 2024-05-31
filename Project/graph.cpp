@@ -9,12 +9,12 @@ class Vertex {
    public:
     Array<Vertex*> neighbors;
     Array<int> neighborsIndex;
+    Array<uint16_t> neighborsUniqueColors;
     int index = 0;
     uint16_t color = 0;
     uint16_t visited = 0;
     uint32_t distance = 0;
     uint32_t component = 0;
-    uint32_t saturation = 0;
     Side side = Side::NONE;
 
     void addEdge(Vertex* v, int vertIndex) {
@@ -24,9 +24,12 @@ class Vertex {
     void resizeNeighbors(int newSize) {
         neighbors.resize(newSize);
         neighborsIndex.resize(newSize);
+        neighborsUniqueColors.resize(newSize);
     }
 
     int degree() const { return neighbors.capacity; }
+
+    int saturation() const { return neighborsUniqueColors.top; }
 };
 
 class Graph {
@@ -169,21 +172,20 @@ class Graph {
         for (int i = 0; i < V; i++) {
             Vertex* vertex = pick_best_vertex(vertices_ref);
             colorize_vertex(vertex);
-            saturate_neighbors(vertex);
+            saturate_neighbors(vertex, vertex->color);
         }
     }
 
-    void saturate_neighbors(Vertex* vertex) {
+    void saturate_neighbors(Vertex* vertex, uint16_t color) {
         for (auto neighbor : vertex->neighbors) {
             if (neighbor->color) continue;
-            Array<uint16_t> usedColors(neighbor->degree() + 1, 0);
-            // add color only if not present in usedColors
             for (auto colorNeighbor : neighbor->neighbors) {
-                if (!usedColors.contains(colorNeighbor->color)) {
-                    usedColors.push_back(colorNeighbor->color);
+                if (!neighbor->neighborsUniqueColors.contains(
+                        colorNeighbor->color)) {
+                    neighbor->neighborsUniqueColors.push_back(
+                        colorNeighbor->color);
                 }
             }
-            neighbor->saturation = usedColors.top;
         }
     }
 
@@ -194,10 +196,10 @@ class Graph {
             if (vertex->color) continue;
 
             if (best_vertex == nullptr ||
-                vertex->saturation > best_vertex->saturation ||
-                (vertex->saturation == best_vertex->saturation &&
+                vertex->saturation() > best_vertex->saturation() ||
+                (vertex->saturation() == best_vertex->saturation() &&
                  vertex->degree() > best_vertex->degree()) ||
-                (vertex->saturation == best_vertex->saturation &&
+                (vertex->saturation() == best_vertex->saturation() &&
                  vertex->degree() == best_vertex->degree() &&
                  vertex->index < best_vertex->index)) {
                 best_vertex = vertex;
