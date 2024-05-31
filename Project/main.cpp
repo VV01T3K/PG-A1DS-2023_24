@@ -6,17 +6,17 @@
 #include "heap.hpp"
 
 int main() {
-    Array<int> tests(10);
-    tests[0] = true;  // 1
-    tests[1] = true;  // 2
-    tests[2] = true;  // 3
-    tests[3] = true;  // 4
-    tests[4] = true;  // 5
-    tests[5] = true;  // 6a
-    tests[6] = true;  // 6b
-    tests[7] = true;  // 6c
-    tests[8] = true;  // 7
-    tests[9] = true;  // 8
+    // Array<int> tests(10);
+    // tests[0] = true;  // 1
+    // tests[1] = true;  // 2
+    // tests[2] = true;  // 3
+    // tests[3] = true;  // 4
+    // tests[4] = true;  // 5
+    // tests[5] = true;  // 6a
+    // tests[6] = true;  // 6b
+    // tests[7] = true;  // 6c
+    // tests[8] = true;  // 7
+    // tests[9] = true;  // 8
 
     int k;
 
@@ -43,19 +43,6 @@ int main() {
             sortedByDegreeDesc[j] = &graph.vertices[j];
             graph.doubled_number_of_edges += e;
         }
-
-        // printf("?\n");  // 1
-        // printf("?\n");  // 2
-        // printf("?\n");  // 3
-        // printf("?\n");  // 4
-        // printf("?\n");  // 5
-        // printf("?\n");  // 6
-        // printf("?\n");  // 7
-        // printf("?\n");  // 8
-        // printf("?\n");  // 9
-        // printf("?\n");  // 10
-
-        // continue;
 
         graph.colorize(sortedByDegreeDesc);
         heapsort(sortedByDegreeDesc.data(), n, [](Vertex *a, Vertex *b) {
@@ -108,17 +95,19 @@ int main() {
         printf("\n");  // 6b
 
         // printf("?\n");  // 6c
-        for (int blockIndex = 0; blockIndex < graph.components.size();
-             blockIndex++) {
-            Array<Vertex *> block = graph.getComponent(blockIndex);
-            heapsort(block.data(), block.size(), [](Vertex *a, Vertex *b) {
-                if (a->degree() != b->degree())
-                    return a->degree() < b->degree();
-                else
-                    return a->index > b->index;
-            });
-            graph.colorizeSLF(block);
+
+        Array<Array<Vertex *>> components(graph.components.size());
+        for (int j = 0; j < graph.components.size(); j++) {
+            components[j].resize(graph.components[j]);
         }
+        for (auto vertex : sortedByDegreeDesc) {
+            components[vertex->component].push_back(vertex);
+        }
+
+        for (auto &component : components) {
+            graph.colorizeSLF(component);
+        }
+
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
         }

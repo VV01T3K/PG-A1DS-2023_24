@@ -35,16 +35,13 @@ class Vertex {
 class Graph {
    public:
     uint16_t currentVisit = 0;
-    Array<Vertex*> componentBlocks;
     ForwardList<uint32_t> componentsList;
     Array<uint32_t> components;
     bool isBipartite = true;
     uint64_t V;
     uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
-    explicit Graph(uint64_t V) : V(V), vertices(V) {
-        componentBlocks.resize(V);
-    }
+    explicit Graph(uint64_t V) : V(V), vertices(V) {}
 
     void bfs(Vertex* start) {
         uint32_t componentSize = 1;
@@ -53,7 +50,6 @@ class Graph {
         queue[back++] = start;
         start->visited = true;
         start->side = Side::LEFT;
-        componentBlocks.push_back(start);
         start->component = componentsList.getSize();
         while (front < back) {
             Vertex* u = queue[front++];
@@ -67,7 +63,6 @@ class Graph {
                     v->visited = true;
                     queue[back++] = v;
                     componentSize++;
-                    componentBlocks.push_back(v);
                     v->component = componentsList.getSize();
                 }
             }
@@ -159,13 +154,6 @@ class Graph {
             }
         }
         printf("%lld\n", cyclesOf4 / 2);
-    }
-
-    Array<Vertex*> getComponent(uint32_t blockIndex) {
-        uint32_t start = 0;
-        for (uint32_t i = 0; i < blockIndex; i++) start += components[i];
-        return Array<Vertex*>(componentBlocks.data() + start,
-                              components[blockIndex]);
     }
 
     void colorizeSLF(Array<Vertex*>& vertices_ref) {
