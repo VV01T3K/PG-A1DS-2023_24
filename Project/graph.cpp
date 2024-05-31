@@ -49,6 +49,7 @@ class Graph {
         queue[back++] = start;
         start->visited = true;
         start->side = Side::LEFT;
+        componentBlocks.push_back(start);
         start->component = componentsList.getSize();
         while (front < back) {
             Vertex* u = queue[front++];
@@ -156,9 +157,10 @@ class Graph {
         printf("%lld\n", cyclesOf4 / 2);
     }
 
-    Vertex** getComponentBlock(uint32_t blockIndex) {
+    Array<Vertex*> getComponent(uint32_t blockIndex) {
         uint32_t start = 0;
         for (uint32_t i = 0; i < blockIndex; i++) start += components[i];
-        return componentBlocks.data() + start;
+        return Array<Vertex*>(componentBlocks.data() + start,
+                              components[blockIndex]);
     }
 };

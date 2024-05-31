@@ -11,7 +11,7 @@ int main() {
     scanf("%d", &k);
 
     // graph
-    for (int i = 0; i < k; i++) {
+    for (int i = 0; i < 1; i++) {
         uint64_t n;
         scanf("%lld", &n);
         Graph graph(n);
@@ -53,43 +53,24 @@ int main() {
             graph.components[j] = graph.componentsList.pop_front();
         }
 
-        // printf("%d\n", graph.components.size());          // 2
-        // printf("%c\n", (graph.isBipartite ? 'T' : 'F'));  // 3
+        for (auto vertex : graph.componentBlocks) {
+            printf("%d ", vertex->index);
+        }
+        printf("\n");
 
-        // graph.eccentricity();  // 4
+        for (int j = 0; j < graph.components.size(); j++) {
+            printf("%d ", graph.components[j]);
+        }
+        printf("\n");
 
-        // printf("?\n");  // 1
-        // printf("?\n");  // 2
-        // printf("?\n");  // 3
-        // printf("?\n");  // 4
-        // printf("?\n");  // 5
-
-        // // printf("?\n");  // 6a
-        // for (auto &vertex : graph.vertices) {
-        //     printf("%d ", vertex.color);
-        //     vertex.color = 0;
-        // }
-        // printf("\n");  // 6a
-
-        // // printf("?\n");  // 6b
-        // graph.colorize(sortedByDegreeDesc);
-        // for (auto &vertex : graph.vertices) {
-        //     printf("%d ", vertex.color);
-        //     vertex.color = 0;
-        // }
-        // printf("\n");  // 6b
-
-        // printf("?\n");  // 6c
-
-        // printf("?\n");  // 7
-        // printf("?\n");  // 8
-
-        // if (graph.isBipartite)  // 7
-        //     graph.bipartiteCountCyclesOf4();
-        // else
-        //     graph.countCyclesOf4();
-
-        // printf("%lld\n", graph.numOfcomplementEdges());  // 8
+        for (int blockIndex = 0; blockIndex < graph.components.size();
+             blockIndex++) {
+            Array<Vertex *> block = graph.getComponent(blockIndex);
+            for (auto vertex : block) {
+                printf("%d ", vertex->index);
+            }
+            printf("\n");
+        }
     }
     return 0;
 }
