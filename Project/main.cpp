@@ -11,7 +11,7 @@ int main() {
     scanf("%d", &k);
 
     // graph
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < k; i++) {
         uint64_t n;
         scanf("%lld", &n);
         Graph graph(n);
@@ -53,24 +53,37 @@ int main() {
             graph.components[j] = graph.componentsList.pop_front();
         }
 
-        for (auto vertex : graph.componentBlocks) {
-            printf("%d ", vertex->index);
+        graph.colorizeSLF(sortedByDegreeDesc);
+        for (auto &vertex : graph.vertices) {
+            printf("%d ", vertex.color);
         }
         printf("\n");
 
-        for (int j = 0; j < graph.components.size(); j++) {
-            printf("%d ", graph.components[j]);
-        }
-        printf("\n");
+        // for (auto vertex : graph.componentBlocks) {
+        //     printf("%d ", vertex->index);
+        // }
+        // printf("\n");
 
-        for (int blockIndex = 0; blockIndex < graph.components.size();
-             blockIndex++) {
-            Array<Vertex *> block = graph.getComponent(blockIndex);
-            for (auto vertex : block) {
-                printf("%d ", vertex->index);
-            }
-            printf("\n");
-        }
+        // for (int j = 0; j < graph.components.size(); j++) {
+        //     printf("%d ", graph.components[j]);
+        // }
+        // printf("\n");
+
+        // for (int blockIndex = 0; blockIndex < graph.components.size();
+        //      blockIndex++) {
+        //     Array<Vertex *> block = graph.getComponent(blockIndex);
+        //     heapsort(block.data(), block.size(), [](Vertex *a, Vertex *b) {
+        //         if (a->degree() != b->degree())
+        //             return a->degree() < b->degree();
+        //         else
+        //             return a->index > b->index;
+        //     });
+
+        //     for (auto vertex : block) {
+        //         printf("%d ", vertex->index);
+        //     }
+        //     printf("\n");
+        // }
     }
     return 0;
 }

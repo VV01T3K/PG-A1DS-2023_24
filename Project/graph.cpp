@@ -14,6 +14,7 @@ class Vertex {
     uint16_t visited = 0;
     uint32_t distance = 0;
     uint32_t component = 0;
+    uint32_t saturation = 0;
     Side side = Side::NONE;
 
     void addEdge(Vertex* v, int vertIndex) {
@@ -162,5 +163,48 @@ class Graph {
         for (uint32_t i = 0; i < blockIndex; i++) start += components[i];
         return Array<Vertex*>(componentBlocks.data() + start,
                               components[blockIndex]);
+    }
+
+    void colorizeSLF(Array<Vertex*>& vertices_ref) {
+        for (int i = 0; i < V; i++) {
+            Vertex* vertex = pick_best_vertex(vertices_ref);
+            colorize_vertex(vertex);
+        }
+    }
+
+    Vertex* pick_best_vertex(Array<Vertex*>& vertices_ref) {
+        heapsort(vertices_ref.data(), vertices_ref.size(),
+                 [](Vertex* a, Vertex* b) {
+                     if (a->saturation != b->saturation)
+                         return a->saturation < b->saturation;
+                     else if (a->degree() != b->degree())
+                         return a->degree() < b->degree();
+                     else
+                         return a->index > b->index;
+                 });
+
+        for (auto vertex : vertices_ref) {
+            if (vertex->color) continue;
+            return vertex;
+        }
+        return nullptr;
+    }
+
+    void colorize_vertex(Vertex* vertex) {
+        if (vertex->neighbors.size() == 0) {
+            vertex->color = 1;
+            return;
+        }
+        Array<bool> usedColors(vertex->degree() + 2, false);
+        for (int i = 0; i < vertex->degree(); i++) {
+            if (vertex->neighbors[i]->color < vertex->degree() + 1)
+                usedColors[vertex->neighbors[i]->color] = true;
+        }
+        for (int color = 1; color <= vertex->degree() + 1; color++) {
+            if (!usedColors[color]) {
+                vertex->color = color;
+                break;
+            }
+        }
     }
 };
