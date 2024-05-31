@@ -83,15 +83,20 @@ int main() {
         for (auto vertex : sortedByDegreeDesc) {
             components[vertex->component].push_back(vertex);
         }
+
         for (auto &component : components) {
             graph.colorizeSLF(component);
         }
+
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
         }
         printf("\n");  // 6c
 
-        graph.countCyclesOf4();  // 7
+        if (graph.isBipartite)  // 7
+            graph.bipartiteCountCyclesOf4();
+        else
+            graph.countCyclesOf4();
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }

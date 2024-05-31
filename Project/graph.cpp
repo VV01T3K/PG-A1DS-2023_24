@@ -43,16 +43,6 @@ class Graph {
     Array<Vertex> vertices;
     explicit Graph(uint64_t V) : V(V), vertices(V) {}
 
-    /**
-     * The function performs a breadth-first search (BFS) traversal on a graph
-     * starting from a specified vertex, assigning sides to vertices and
-     * checking for bipartiteness.
-     *
-     * @param start The `start` parameter in the `bfs` function represents the
-     * starting vertex from which the breadth-first search algorithm will begin
-     * traversing the graph. It is the initial vertex from which the algorithm
-     * will explore its neighbors and components.
-     */
     void bfs(Vertex* start) {
         uint32_t componentSize = 1;
         Array<Vertex*> queue(V);
@@ -80,20 +70,10 @@ class Graph {
         componentsList.push_back(componentSize);
     }
 
-    /**
-     * The function calculates the number of complement edges in a graph.
-     *
-     * @return The function `numOfcomplementEdges()` returns the number of
-     * complement edges in a graph.
-     */
     uint64_t numOfcomplementEdges() {
         return V * (V - 1) / 2 - doubledNumberOfEdges / 2;
     }
 
-    /**
-     * The function `eccentricity` calculates the eccentricity of each vertex in
-     * a graph.
-     */
     void eccentricity() {
         currentVisit += 5;
         for (auto& vertex : vertices) {
@@ -122,22 +102,7 @@ class Graph {
         printf("\n");
     }
 
-    /**
-     * The function countCyclesOf4 checks if the graph is bipartite and then
-     * calls the appropriate function to count cycles of length 4.
-     */
     void countCyclesOf4() {
-        if (isBipartite)
-            bipartiteCountCyclesOf4();
-        else
-            countCyclesOf4();
-    }
-
-    /**
-     * The function `nonBipartiteCountCyclesOf4` calculates the number of cycles
-     * of length 4 in a non-bipartite graph.
-     */
-    void nonBipartiteCountCyclesOf4() {
         int64_t cyclesOf4 = 0;
         for (int ii = 0; ii < V; ii++) {
             const Vertex* x = &vertices[ii];
@@ -155,10 +120,6 @@ class Graph {
         printf("%lld\n", cyclesOf4 / 2);
     }
 
-    /**
-     * The function `bipartiteCountCyclesOf4` calculates the number of cycles of
-     * length 4 in a bipartite graph.
-     */
     void bipartiteCountCyclesOf4() {
         int64_t cyclesOf4 = 0;
         for (int ii = 0; ii < V; ii++) {
@@ -179,29 +140,10 @@ class Graph {
         printf("%lld\n", cyclesOf4 / 2);
     }
 
-    /**
-     * The function colorize takes an array of Vertex pointers and calls
-     * colorizeVertex on each vertex in the array.
-     *
-     * @param vertices_ref The `vertices_ref` parameter is an array of pointers
-     * to `Vertex` objects. The `colorize` function takes this array as input
-     * and iterates through each `Vertex` object in the array, calling the
-     * `colorizeVertex` function on each `Vertex` object.
-     */
     void colorize(Array<Vertex*>& vertices_ref) {
         for (auto vertex : vertices_ref) colorizeVertex(vertex);
     }
 
-    /**
-     * The function colorizeSLF assigns colors to vertices in a graph while
-     * ensuring neighboring vertices have unique colors.
-     *
-     * @param vertices_ref The `vertices_ref` parameter is a reference to an
-     * array of pointers to `Vertex` objects. The function `colorizeSLF` takes
-     * this array as input and performs colorization on the vertices based on
-     * certain conditions. Each `Vertex` object represents a node in a graph,
-     * and the function
-     */
     void colorizeSLF(Array<Vertex*>& vertices_ref) {
         uint16_t maxColor = 0;
         for (int i = 0; i < vertices_ref.size(); i++) {
@@ -229,19 +171,6 @@ class Graph {
         }
     }
 
-    /**
-     * The function `pickBestVertex` selects the best vertex from an array based
-     * on saturation and degree criteria.
-     *
-     * @param vertices_ref The function `pickBestVertex` takes an array of
-     * pointers to `Vertex` objects as input. The array is passed by reference,
-     * meaning any changes made to the array inside the function will affect the
-     * original array in the calling code.
-     *
-     * @return The function `pickBestVertex` returns a pointer to the best
-     * vertex among the input array of vertices based on certain criteria such
-     * as saturation and degree.
-     */
     Vertex* pickBestVertex(Array<Vertex*>& vertices_ref) {
         Vertex* bestVertex = nullptr;
         int currentBestSaturation = 0;
@@ -267,15 +196,6 @@ class Graph {
         return bestVertex;
     }
 
-    /**
-     * The function colorizeVertex assigns a color to a vertex based on the
-     * colors of its neighboring vertices.
-     *
-     * @param vertex The `colorizeVertex` function takes a pointer to a `Vertex`
-     * object as a parameter. The function assigns a color to the vertex based
-     * on the colors of its neighboring vertices. The vertex is assigned the
-     * smallest available color that is not used by its neighbors.
-     */
     void colorizeVertex(Vertex* vertex) {
         Array<bool> usedColors(vertex->degree() + 2, false);
         for (int i = 0; i < vertex->degree(); i++) {
