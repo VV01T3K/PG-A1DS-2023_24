@@ -52,6 +52,11 @@ class ForwardList {
         head = tail = nullptr;
         size = 0;
     }
+    bool contains(const T& data) const {
+        for (Node* current = head; current != nullptr; current = current->next)
+            if (current->data == data) return true;
+        return false;
+    }
 };
 
 // typename to tell the compiler that SingleLinkedList<T>::Node is a type
