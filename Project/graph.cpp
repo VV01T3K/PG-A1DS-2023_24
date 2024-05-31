@@ -176,14 +176,14 @@ class Graph {
     void saturate_neighbors(Vertex* vertex) {
         for (auto neighbor : vertex->neighbors) {
             if (neighbor->color) continue;
-            ForwardList<uint16_t> usedColors;
+            Array<uint16_t> usedColors(neighbor->degree() + 1, 0);
             // add color only if not present in usedColors
             for (auto colorNeighbor : neighbor->neighbors) {
                 if (!usedColors.contains(colorNeighbor->color)) {
-                    usedColors.push_front(colorNeighbor->color);
+                    usedColors.push_back(colorNeighbor->color);
                 }
             }
-            neighbor->saturation = usedColors.getSize();
+            neighbor->saturation = usedColors.top;
         }
     }
 

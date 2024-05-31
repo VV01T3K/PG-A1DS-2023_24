@@ -46,4 +46,10 @@ class Array {
     }
 
     void push_back(const T& value) { array[top++] = value; }
+
+    bool contains(const T& value) const {
+        for (size_t i = 0; i < top; ++i)
+            if (array[i] == value) return true;
+        return false;
+    }
 };
