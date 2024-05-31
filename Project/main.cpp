@@ -6,6 +6,18 @@
 #include "heap.hpp"
 
 int main() {
+    Array<int> tests(10);
+    tests[0] = true;  // 1
+    tests[1] = true;  // 2
+    tests[2] = true;  // 3
+    tests[3] = true;  // 4
+    tests[4] = true;  // 5
+    tests[5] = true;  // 6a
+    tests[6] = true;  // 6b
+    tests[7] = true;  // 6c
+    tests[8] = true;  // 7
+    tests[9] = true;  // 8
+
     int k;
 
     scanf("%d", &k);
@@ -32,17 +44,30 @@ int main() {
             graph.doubled_number_of_edges += e;
         }
 
-        // graph.colorize(sortedByDegreeDesc);
+        // printf("?\n");  // 1
+        // printf("?\n");  // 2
+        // printf("?\n");  // 3
+        // printf("?\n");  // 4
+        // printf("?\n");  // 5
+        // printf("?\n");  // 6
+        // printf("?\n");  // 7
+        // printf("?\n");  // 8
+        // printf("?\n");  // 9
+        // printf("?\n");  // 10
+
+        // continue;
+
+        graph.colorize(sortedByDegreeDesc);
         heapsort(sortedByDegreeDesc.data(), n, [](Vertex *a, Vertex *b) {
             if (a->degree() != b->degree())
                 return a->degree() < b->degree();
             else
                 return a->index > b->index;
         });
-        // for (auto vertex : sortedByDegreeDesc) {
-        //     printf("%d ", vertex->degree());
-        // }
-        // printf("\n");  // 1
+        for (auto vertex : sortedByDegreeDesc) {
+            printf("%d ", vertex->degree());
+        }
+        printf("\n");  // 1
 
         for (auto &vertex : graph.vertices) {
             if (!vertex.visited) graph.bfs(&vertex);
@@ -53,37 +78,48 @@ int main() {
             graph.components[j] = graph.componentsList.pop_front();
         }
 
+        printf("%d\n", graph.components.size());          // 2
+        printf("%c\n", (graph.isBipartite ? 'T' : 'F'));  // 3
+
+        graph.eccentricity();  // 4
+
+        // printf("?\n");  // 1
+        // printf("?\n");  // 2
+        // printf("?\n");  // 3
+        // printf("?\n");  // 4
+        printf("?\n");  // 5
+
+        // printf("?\n");  // 6a
+        for (auto &vertex : graph.vertices) {
+            printf("%d ", vertex.color);
+            vertex.color = 0;
+        }
+        printf("\n");  // 6a
+
+        // printf("?\n");  // 6b
+        graph.colorize(sortedByDegreeDesc);
+        for (auto &vertex : graph.vertices) {
+            printf("%d ", vertex.color);
+            vertex.color = 0;
+        }
+        printf("\n");  // 6b
+
+        // printf("?\n");  // 6c
         graph.colorizeSLF(sortedByDegreeDesc);
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
         }
-        printf("\n");
+        printf("\n");  // 6c
 
-        // for (auto vertex : graph.componentBlocks) {
-        //     printf("%d ", vertex->index);
-        // }
-        // printf("\n");
+        // printf("?\n");  // 7
+        // printf("?\n");  // 8
 
-        // for (int j = 0; j < graph.components.size(); j++) {
-        //     printf("%d ", graph.components[j]);
-        // }
-        // printf("\n");
+        if (graph.isBipartite)  // 7
+            graph.bipartiteCountCyclesOf4();
+        else
+            graph.countCyclesOf4();
 
-        // for (int blockIndex = 0; blockIndex < graph.components.size();
-        //      blockIndex++) {
-        //     Array<Vertex *> block = graph.getComponent(blockIndex);
-        //     heapsort(block.data(), block.size(), [](Vertex *a, Vertex *b) {
-        //         if (a->degree() != b->degree())
-        //             return a->degree() < b->degree();
-        //         else
-        //             return a->index > b->index;
-        //     });
-
-        //     for (auto vertex : block) {
-        //         printf("%d ", vertex->index);
-        //     }
-        //     printf("\n");
-        // }
+        printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
     return 0;
 }
