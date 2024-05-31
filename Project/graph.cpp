@@ -169,25 +169,35 @@ class Graph {
         for (int i = 0; i < V; i++) {
             Vertex* vertex = pick_best_vertex(vertices_ref);
             colorize_vertex(vertex);
+            saturate_neighbors(vertex);
+        }
+    }
+
+    void saturate_neighbors(Vertex* vertex) {
+        for (auto neighbor : vertex->neighbors) {
+            if (neighbor->color) continue;
+            neighbor->saturation++;
         }
     }
 
     Vertex* pick_best_vertex(Array<Vertex*>& vertices_ref) {
-        heapsort(vertices_ref.data(), vertices_ref.size(),
-                 [](Vertex* a, Vertex* b) {
-                     if (a->saturation != b->saturation)
-                         return a->saturation < b->saturation;
-                     else if (a->degree() != b->degree())
-                         return a->degree() < b->degree();
-                     else
-                         return a->index > b->index;
-                 });
+        Vertex* best_vertex = nullptr;
 
         for (auto vertex : vertices_ref) {
             if (vertex->color) continue;
-            return vertex;
+
+            if (best_vertex == nullptr ||
+                vertex->saturation > best_vertex->saturation ||
+                (vertex->saturation == best_vertex->saturation &&
+                 vertex->degree() > best_vertex->degree()) ||
+                (vertex->saturation == best_vertex->saturation &&
+                 vertex->degree() == best_vertex->degree() &&
+                 vertex->index < best_vertex->index)) {
+                best_vertex = vertex;
+            }
         }
-        return nullptr;
+
+        return best_vertex;
     }
 
     void colorize_vertex(Vertex* vertex) {
