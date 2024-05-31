@@ -7,9 +7,7 @@
 
 int main() {
     int k;
-
     scanf("%d", &k);
-
     // graph
     for (int i = 0; i < k; i++) {
         uint64_t n;
@@ -48,7 +46,6 @@ int main() {
             if (!vertex.visited) graph.bfs(&vertex);
         }
         graph.components.resize((graph.componentsList.getSize()));
-
         for (int j = 0; j < graph.components.size(); j++) {
             graph.components[j] = graph.componentsList.pop_front();
         }
@@ -83,20 +80,15 @@ int main() {
         for (auto vertex : sortedByDegreeDesc) {
             components[vertex->component].push_back(vertex);
         }
-
         for (auto &component : components) {
             graph.colorizeSLF(component);
         }
-
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
         }
         printf("\n");  // 6c
 
-        if (graph.isBipartite)  // 7
-            graph.bipartiteCountCyclesOf4();
-        else
-            graph.countCyclesOf4();
+        graph.cyclesOf4();  // 7
 
         printf("%lld\n", graph.numOfcomplementEdges());  // 8
     }
