@@ -169,21 +169,23 @@ class Graph {
     }
 
     void colorizeSLF(Array<Vertex*>& vertices_ref) {
-        for (int i = 0; i < V; i++) {
+        uint16_t maxColor = 0;
+        for (int i = 0; i < vertices_ref.size(); i++) {
+            bool newMaxColor = false;
             Vertex* vertex = pick_best_vertex(vertices_ref);
             colorize_vertex(vertex);
-            saturate_neighbors(vertex, vertex->color);
-        }
-    }
-
-    void saturate_neighbors(Vertex* vertex, uint16_t color) {
-        for (auto neighbor : vertex->neighbors) {
-            if (neighbor->color) continue;
-            for (auto colorNeighbor : neighbor->neighbors) {
-                if (!neighbor->neighborsUniqueColors.contains(
-                        colorNeighbor->color)) {
-                    neighbor->neighborsUniqueColors.push_back(
-                        colorNeighbor->color);
+            if (vertex->color > maxColor) {
+                maxColor = vertex->color;
+                newMaxColor = true;
+            }
+            if (newMaxColor) {
+                for (auto neighbor : vertex->neighbors)
+                    neighbor->neighborsUniqueColors.push_back(maxColor);
+            } else {
+                uint16_t color = vertex->color;
+                for (auto neighbor : vertex->neighbors) {
+                    if (!neighbor->neighborsUniqueColors.contains(color))
+                        neighbor->neighborsUniqueColors.push_back(color);
                 }
             }
         }
