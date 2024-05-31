@@ -171,17 +171,21 @@ class Graph {
     void colorizeSLF(Array<Vertex*>& vertices_ref) {
         uint16_t maxColor = 0;
         for (int i = 0; i < vertices_ref.size(); i++) {
-            bool newMaxColor = false;
             Vertex* vertex = pick_best_vertex(vertices_ref);
+            if (vertex->neighbors.size() == 0) {
+                vertex->color = 1;
+                continue;
+            }
+            bool newMaxColor = false;
             colorize_vertex(vertex);
             if (vertex->color > maxColor) {
                 maxColor = vertex->color;
                 newMaxColor = true;
             }
-            if (newMaxColor) {
+            if (newMaxColor)
                 for (auto neighbor : vertex->neighbors)
                     neighbor->neighborsUniqueColors.push_back(maxColor);
-            } else {
+            else {
                 uint16_t color = vertex->color;
                 for (auto neighbor : vertex->neighbors) {
                     if (!neighbor->neighborsUniqueColors.contains(color))
@@ -212,10 +216,6 @@ class Graph {
     }
 
     void colorize_vertex(Vertex* vertex) {
-        if (vertex->neighbors.size() == 0) {
-            vertex->color = 1;
-            return;
-        }
         Array<bool> usedColors(vertex->degree() + 2, false);
         for (int i = 0; i < vertex->degree(); i++) {
             if (vertex->neighbors[i]->color < vertex->degree() + 1)
