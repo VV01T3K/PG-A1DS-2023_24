@@ -6,6 +6,18 @@
 #include "heap.hpp"
 
 int main() {
+    // Array<int> tests(10);
+    // tests[0] = true;  // 1
+    // tests[1] = true;  // 2
+    // tests[2] = true;  // 3
+    // tests[3] = true;  // 4
+    // tests[4] = true;  // 5
+    // tests[5] = true;  // 6a
+    // tests[6] = true;  // 6b
+    // tests[7] = true;  // 6c
+    // tests[8] = true;  // 7
+    // tests[9] = true;  // 8
+
     int k;
 
     scanf("%d", &k);
@@ -29,7 +41,7 @@ int main() {
                 graph.vertices[j].addEdge(&graph.vertices[v - 1], v - 1);
             }
             sortedByDegreeDesc[j] = &graph.vertices[j];
-            graph.doubledNumberOfEdges += e;
+            graph.doubled_number_of_edges += e;
         }
 
         graph.colorize(sortedByDegreeDesc);

@@ -39,7 +39,7 @@ class Graph {
     Array<uint32_t> components;
     bool isBipartite = true;
     uint64_t V;
-    uint64_t doubledNumberOfEdges = 0;
+    uint64_t doubled_number_of_edges = 0;
     Array<Vertex> vertices;
     explicit Graph(uint64_t V) : V(V), vertices(V) {}
 
@@ -87,7 +87,7 @@ class Graph {
      * complement edges in a graph.
      */
     uint64_t numOfcomplementEdges() {
-        return V * (V - 1) / 2 - doubledNumberOfEdges / 2;
+        return V * (V - 1) / 2 - doubled_number_of_edges / 2;
     }
 
     /**
@@ -243,28 +243,28 @@ class Graph {
      * as saturation and degree.
      */
     Vertex* pickBestVertex(Array<Vertex*>& vertices_ref) {
-        Vertex* bestVertex = nullptr;
-        int currentBestSaturation = 0;
+        Vertex* best_vertex = nullptr;
+        int currentBestColors = 0;
         int currentBestDegree = 0;
 
         for (int x = vertices_ref.size() - 1; x >= 0; x--) {
             Vertex* vertex = vertices_ref[x];
             if (!vertex->color) {
-                int currentDegree = vertex->degree();
-                int saturation = vertex->saturation();
-                if (saturation == currentBestSaturation) {
-                    if (currentDegree >= currentBestDegree) {
-                        currentBestDegree = currentDegree;
-                        bestVertex = vertex;
+                int currdeg = vertex->degree();
+                int differentColors = vertex->saturation();
+                if (differentColors == currentBestColors) {
+                    if (currdeg >= currentBestDegree) {
+                        currentBestDegree = currdeg;
+                        best_vertex = vertex;
                     }
-                } else if (saturation > currentBestSaturation) {
-                    currentBestSaturation = saturation;
-                    currentBestDegree = currentDegree;
-                    bestVertex = vertex;
+                } else if (differentColors > currentBestColors) {
+                    currentBestColors = differentColors;
+                    currentBestDegree = currdeg;
+                    best_vertex = vertex;
                 }
             }
         }
-        return bestVertex;
+        return best_vertex;
     }
 
     /**
