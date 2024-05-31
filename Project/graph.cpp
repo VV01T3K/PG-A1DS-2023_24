@@ -172,10 +172,7 @@ class Graph {
         uint16_t maxColor = 0;
         for (int i = 0; i < vertices_ref.size(); i++) {
             Vertex* vertex = pick_best_vertex(vertices_ref);
-            if (vertex->neighbors.size() == 0) {
-                vertex->color = 1;
-                continue;
-            }
+            if (!vertex) break;
             bool newMaxColor = false;
             colorize_vertex(vertex);
             if (vertex->color > maxColor) {
@@ -183,11 +180,14 @@ class Graph {
                 newMaxColor = true;
             }
             if (newMaxColor)
-                for (auto neighbor : vertex->neighbors)
+                for (auto neighbor : vertex->neighbors) {
+                    if (neighbor->color) continue;
                     neighbor->neighborsUniqueColors.push_back(maxColor);
+                }
             else {
                 uint16_t color = vertex->color;
                 for (auto neighbor : vertex->neighbors) {
+                    if (neighbor->color) continue;
                     if (!neighbor->neighborsUniqueColors.contains(color))
                         neighbor->neighborsUniqueColors.push_back(color);
                 }
@@ -197,21 +197,26 @@ class Graph {
 
     Vertex* pick_best_vertex(Array<Vertex*>& vertices_ref) {
         Vertex* best_vertex = nullptr;
+        int currentBestColors = 0;
+        int currentBestDegree = 0;
 
-        for (auto vertex : vertices_ref) {
-            if (vertex->color) continue;
-
-            if (best_vertex == nullptr ||
-                vertex->saturation() > best_vertex->saturation() ||
-                (vertex->saturation() == best_vertex->saturation() &&
-                 vertex->degree() > best_vertex->degree()) ||
-                (vertex->saturation() == best_vertex->saturation() &&
-                 vertex->degree() == best_vertex->degree() &&
-                 vertex->index < best_vertex->index)) {
-                best_vertex = vertex;
+        for (int x = vertices_ref.size() - 1; x >= 0; x--) {
+            Vertex* vertex = vertices_ref[x];
+            if (!vertex->color) {
+                int currdeg = vertex->degree();
+                int differentColors = vertex->saturation();
+                if (differentColors == currentBestColors) {
+                    if (currdeg >= currentBestDegree) {
+                        currentBestDegree = currdeg;
+                        best_vertex = vertex;
+                    }
+                } else if (differentColors > currentBestColors) {
+                    currentBestColors = differentColors;
+                    currentBestDegree = currdeg;
+                    best_vertex = vertex;
+                }
             }
         }
-
         return best_vertex;
     }
 

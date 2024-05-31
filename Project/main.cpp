@@ -100,12 +100,25 @@ int main() {
         graph.colorize(sortedByDegreeDesc);
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
-            vertex.color = 0;
+            if (!vertex.neighbors.size())
+                vertex.color = 1;
+            else
+                vertex.color = 0;
         }
         printf("\n");  // 6b
 
         // printf("?\n");  // 6c
-        graph.colorizeSLF(sortedByDegreeDesc);
+        for (int blockIndex = 0; blockIndex < graph.components.size();
+             blockIndex++) {
+            Array<Vertex *> block = graph.getComponent(blockIndex);
+            heapsort(block.data(), block.size(), [](Vertex *a, Vertex *b) {
+                if (a->degree() != b->degree())
+                    return a->degree() < b->degree();
+                else
+                    return a->index > b->index;
+            });
+            graph.colorizeSLF(block);
+        }
         for (auto &vertex : graph.vertices) {
             printf("%d ", vertex.color);
         }
